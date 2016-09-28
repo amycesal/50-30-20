@@ -1,6 +1,8 @@
 
-var allScenarios, data, dataideal, dataneeds, dataactual;
+// set global variables
+var allScenarios, data, dataIdeal, dataNeeds, dataActual;
 
+// read in data from csv
 d3.csv("csv/data.csv", function(csv) {
   // read numerical values as numbers not strings
   csv.forEach(function(d){ d['income'] = +d['income']; });
@@ -15,7 +17,8 @@ d3.csv("csv/data.csv", function(csv) {
   csv.forEach(function(d){ d['twenty'] = +d['twenty']; });
   csv.forEach(function(d){ d['population'] = +d['population']; });
   csv.forEach(function(d){ d['difference'] = +d['difference']; });
-  data = csv; // pass csv values to the global 'data' object
+
+  data = csv; // pass csv values to the global data object
   allScenarios = csv; // also pass them to this object that -doesn't- get changed in scenario setup
 
   // get unique values for all three dropdowns and populate them
@@ -34,17 +37,6 @@ d3.selectAll('select')
     d3.selectAll("svg.graph").remove(); // clear any existing graphs
     setupAndDraw();
 });
-
-function setupAndDraw() {
-  setScenario(); // get current value of dropdowns and set 'data' to the selected scenario
-  setProps(); // set derivative properties
-  setupData(); // create a stacked array for each graph
-
-  // draw each graph
-  drawIdeal();
-  drawNeeds();
-  drawActual();
-}
 
 function getUniques(dd) {
   var unique = {};
@@ -65,18 +57,31 @@ function getUniques(dd) {
   $('#' + dd).append(option);    
 };
 
+
+function setupAndDraw() {
+  setScenario(); // get current value of dropdowns and set 'data' to the selected scenario
+  setProps(); // set derivative properties
+  setupData(); // create a stacked array for each graph
+  addNumbers(); // overwrite numbers in HTML with correct values per scenario
+  // draw each graph
+  drawIdeal();
+  drawNeeds();
+  drawActual();
+}
+
 function setScenario() {
   var selected = {};
     selected.city = $('select#city option:selected').val();
     selected.household = $('select#household option:selected').val();
     selected.level = $('select#level option:selected').val();
-  console.log(selected);
   // select data row based on value
   for (i=0;i<data.length;i++) {
     if (data[i].city == selected.city) {
-      console.log(selected.city);
-      if (data[i].household == selected.household) 
-        data = data[i];   // reduce data object to selected row
+      if (data[i].household == selected.household) {
+        if (data[i].level == selected.level) {
+          data = data[i];   // reduce data object to selected row
+        }
+      }
     }
   }
 };
@@ -94,13 +99,13 @@ function setProps() {
   data.wantsperc = Math.round((data.lowants / data.takehome)*100);
   data.savesperc = Math.round((data.losaves / data.takehome)*100);
   data.overneeds = Math.round(data.needs - data.fifty);
-  data.overneedsperc = (Math.round((data.needsperc - 0.5)*100))/100;
+  data.overneedsperc = Math.round(data.needsperc-50);
 };
 
 function setupData() {
 
   // setup an array for each graph
-  dataideal = [
+  dataIdeal = [
     [
       { x: 0, y: data.fifty, t1: "50%", t2: "Needs:" }
     ],
@@ -112,7 +117,7 @@ function setupData() {
     ]
   ];
 
-  dataneeds = [
+  dataNeeds = [
     [
         { x: 0, y: 0 },                          
         { x: 1, y: data.housing },              
@@ -136,7 +141,7 @@ function setupData() {
     ]
   ];
 
-  dataactual = [
+  dataActual = [
     [
       { x: 0, y: data.needs, t1: data.needsperc, t2: "Needs:" }
     ],
@@ -150,12 +155,24 @@ function setupData() {
 
   // stack each array
   var stack = d3.layout.stack();
-  stack(dataideal);
-  stack(dataactual);
-  stack(dataneeds);
+  stack(dataIdeal);
+  stack(dataActual);
+  stack(dataNeeds);
 };
 
+function addNumbers() {
+  $('span.population').html(numberWithCommas(data.population));
+  $('span.area').html(data.area);
+  $('span.income').html(numberWithCommas(data.income));
+  $('span.takehome').html(numberWithCommas(data.takehome));
+  $('span.difference').html(numberWithCommas(data.difference));
+  $('span.overneeds').html(numberWithCommas(data.overneeds));
+  $('span.overneedsperc').html(data.overneedsperc);
+}
 
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 // set global dimenions
 var w = d3.select("div.row").node().getBoundingClientRect().width - 30;  // global width - pull from foundation row width
@@ -186,7 +203,7 @@ d3.selection.prototype.moveToBack = function() {
 // DRAW IDEAL BUDGET GRAPH
 function drawIdeal() {
 
-  var dataset = dataideal; 
+  var dataset = dataIdeal; 
   var h = 100; 
   var lineHeight = 220;  // height of solid lines
 
@@ -291,7 +308,7 @@ function drawIdeal() {
 function drawNeeds() {
 
   var h = 720; 
-  var dataset = dataneeds;
+  var dataset = dataNeeds;
   var bottomOffset = 34;
 
   // reset scales 
@@ -470,7 +487,7 @@ function drawNeeds() {
 // DRAW ACTUAL BUDGET GRAPH
 function drawActual() {
 
-  var dataset = dataactual;
+  var dataset = dataActual;
   var h = 100; 
   var barOffset = 160;
 

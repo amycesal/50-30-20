@@ -65,6 +65,7 @@
       .graph-label {font-weight:400; font-size:1.7em; color:#231f20;}
       .actual-label {font-weight:400; font-size:1.8em; color:#231f20;}
       .needs-label {font-weight:400; font-size:1.5em; color:#231f20;}
+      .strong {font-weight:700;}
 
       img {display: block; margin: 0.5em auto 1em auto;}
 
@@ -96,8 +97,8 @@
           <option value="Baltimore, MD">Baltimore, MD</option>
         </select>
         <img class="map" src="./img/map.png" />
-        <p>Population: 622,793 
-        <p>Area: 92.98 mi&sup2;</p>
+        <p>Population: <span class="population">622,793</span></p>
+        <p>Area: <span class="area">92.98</span> mi&sup2;</p>
       </div>
       <div class="small-12 medium-12 large-4 columns">
         <h3>HOUSEHOLD:</h3>
@@ -113,9 +114,9 @@
         <select name="level" id="level">
           <option value="average">Average</option>
         </select>
-        <p class="blue">$69,402</p>
-        <p class="blue">$4,577<span class="money-label">/month</span></p>
-        <p>$45,552 above federal poverty level.</p>
+        <p class="blue">$<span class="income">69,402</span></p>
+        <p class="blue">$<span class="takehome">4,577</span><span class="money-label">/month</span></p>
+        <p>$<span class="difference">45,552</span> above federal poverty level.</p>
       </div>
     </div>
 
@@ -123,7 +124,7 @@
   <div class="row ideal">
     <div class="small-12 medium-12 large-12 columns">
       <h2>Ideal Budget:</h2>
-      <p>Monthly pay ($4,577) divided into what you should be spending in each category.</p>
+      <p>Monthly pay ($<span class="takehome">4,577</span>) divided into what you should be spending in each category.</p>
     </div>
     <div class="small-12 medium-12 large-12 columns">
       <div id="graph-ideal"></div>
@@ -149,7 +150,7 @@
       <div id="graph-actual"></div>
     </div>
     <div class="small-12 medium-12 large-12 columns">
-      <p><br />Needs are <strong>$1,759</strong> and <strong>38%</strong> over the ideal budget which leaves this family little room for items they may want like a car or a cell phone or having any money to put towards savings or debt repayment.</p>
+      <p><br />Needs are <span class="strong">$<span class="overneeds">1,759</span></span> and <span class="strong overneedsperc">38</span><span class="strong">%</span> over the ideal budget which leaves this family little room for items they may want like a car or a cell phone or having any money to put towards savings or debt repayment.</p>
     </div>
   </div>
 
