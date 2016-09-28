@@ -5,38 +5,36 @@ var w, h;
 
 // called on page load and on resize
 function init(){
-
   // get new page width on each resize
-  w = d3.select("div.row").node().getBoundingClientRect().width - 30;  // global width - pull from foundation row width
-
+  w = d3.select("div.row").node().getBoundingClientRect().width - 30; 
   // since graphs are redrawn on resize, remove all old graphs so you don't get multiples
   d3.selectAll("svg.graph").remove()
-
-  d3.csv("csv/data.csv", function(csv) {
-    // read numerical values as numbers not strings
-    csv.forEach(function(d){ d['income'] = +d['income']; });
-    csv.forEach(function(d){ d['takehome'] = +d['takehome']; });
-    csv.forEach(function(d){ d['housing'] = +d['housing']; });
-    csv.forEach(function(d){ d['health'] = +d['health']; });
-    csv.forEach(function(d){ d['grocery'] = +d['grocery']; });
-    csv.forEach(function(d){ d['transit'] = +d['transit']; });
-    csv.forEach(function(d){ d['childcare'] = +d['childcare']; });
-    csv.forEach(function(d){ d['fifty'] = +d['fifty']; });
-    csv.forEach(function(d){ d['thirty'] = +d['thirty']; });
-    csv.forEach(function(d){ d['twenty'] = +d['twenty']; });
-    csv.forEach(function(d){ d['population'] = +d['population']; });
-    csv.forEach(function(d){ d['difference'] = +d['difference']; });
-    data = csv; // pass csv values to the global 'data' object
-    allScenarios = csv; // also pass them to this object that -doesn't- get changed in scenario setup
-
-    // get unique values for all three dropdowns and populate them
-    getUniques('city');
-    getUniques('household');
-    getUniques('level');
-
+  if(!data) {
+    d3.csv("csv/data.csv", function(csv) {  
+      // read numerical values as numbers not strings
+      csv.forEach(function(d){ d['income'] = +d['income']; });
+      csv.forEach(function(d){ d['takehome'] = +d['takehome']; });
+      csv.forEach(function(d){ d['housing'] = +d['housing']; });
+      csv.forEach(function(d){ d['health'] = +d['health']; });
+      csv.forEach(function(d){ d['grocery'] = +d['grocery']; });
+      csv.forEach(function(d){ d['transit'] = +d['transit']; });
+      csv.forEach(function(d){ d['childcare'] = +d['childcare']; });
+      csv.forEach(function(d){ d['fifty'] = +d['fifty']; });
+      csv.forEach(function(d){ d['thirty'] = +d['thirty']; });
+      csv.forEach(function(d){ d['twenty'] = +d['twenty']; });
+      csv.forEach(function(d){ d['population'] = +d['population']; });
+      csv.forEach(function(d){ d['difference'] = +d['difference']; });
+      data = csv; // pass csv values to the global 'data' object
+      allScenarios = csv; // also pass them to this object that -doesn't- get changed in scenario setup
+      getUniques('city');      // get unique values for all three dropdowns and populate them
+      getUniques('household');
+      getUniques('level');
+      setupAndDraw(); // draw the graphs
+    });
+  }
+  else {
     setupAndDraw(); // draw the graphs
-
-  });
+  }
 }
 
 // load data and draw graphs
