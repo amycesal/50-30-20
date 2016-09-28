@@ -1,34 +1,49 @@
 
-// set global variables
-var allScenarios, data, dataIdeal, dataNeeds, dataActual;
+var allScenarios, data, dataideal, dataneeds, dataactual;
+// declare global dimenions
+var w, h;
 
-// read in data from csv
-d3.csv("csv/data.csv", function(csv) {
-  // read numerical values as numbers not strings
-  csv.forEach(function(d){ d['income'] = +d['income']; });
-  csv.forEach(function(d){ d['takehome'] = +d['takehome']; });
-  csv.forEach(function(d){ d['housing'] = +d['housing']; });
-  csv.forEach(function(d){ d['health'] = +d['health']; });
-  csv.forEach(function(d){ d['grocery'] = +d['grocery']; });
-  csv.forEach(function(d){ d['transit'] = +d['transit']; });
-  csv.forEach(function(d){ d['childcare'] = +d['childcare']; });
-  csv.forEach(function(d){ d['fifty'] = +d['fifty']; });
-  csv.forEach(function(d){ d['thirty'] = +d['thirty']; });
-  csv.forEach(function(d){ d['twenty'] = +d['twenty']; });
-  csv.forEach(function(d){ d['population'] = +d['population']; });
-  csv.forEach(function(d){ d['difference'] = +d['difference']; });
+// called on page load and on resize
+function init(){
 
-  data = csv; // pass csv values to the global data object
-  allScenarios = csv; // also pass them to this object that -doesn't- get changed in scenario setup
+  // get new page width on each resize
+  w = d3.select("div.row").node().getBoundingClientRect().width - 30;  // global width - pull from foundation row width
 
-  // get unique values for all three dropdowns and populate them
-  getUniques('city');
-  getUniques('household');
-  getUniques('level');
+  // since graphs are redrawn on resize, remove all old graphs so you don't get multiples
+  d3.selectAll("svg.graph").remove()
 
-  setupAndDraw(); // draw the graphs
+  d3.csv("csv/data.csv", function(csv) {
+    // read numerical values as numbers not strings
+    csv.forEach(function(d){ d['income'] = +d['income']; });
+    csv.forEach(function(d){ d['takehome'] = +d['takehome']; });
+    csv.forEach(function(d){ d['housing'] = +d['housing']; });
+    csv.forEach(function(d){ d['health'] = +d['health']; });
+    csv.forEach(function(d){ d['grocery'] = +d['grocery']; });
+    csv.forEach(function(d){ d['transit'] = +d['transit']; });
+    csv.forEach(function(d){ d['childcare'] = +d['childcare']; });
+    csv.forEach(function(d){ d['fifty'] = +d['fifty']; });
+    csv.forEach(function(d){ d['thirty'] = +d['thirty']; });
+    csv.forEach(function(d){ d['twenty'] = +d['twenty']; });
+    csv.forEach(function(d){ d['population'] = +d['population']; });
+    csv.forEach(function(d){ d['difference'] = +d['difference']; });
+    data = csv; // pass csv values to the global 'data' object
+    allScenarios = csv; // also pass them to this object that -doesn't- get changed in scenario setup
 
-});
+    // get unique values for all three dropdowns and populate them
+    getUniques('city');
+    getUniques('household');
+    getUniques('level');
+
+    setupAndDraw(); // draw the graphs
+
+  });
+}
+
+// load data and draw graphs
+init()
+
+// on resize, reload data and redraw graphs
+window.onresize = init
 
 // listen for dropdown selections and update graphs
 d3.selectAll('select')
@@ -63,9 +78,8 @@ function setupAndDraw() {
   setProps(); // set derivative properties
   setupData(); // create a stacked array for each graph
   addNumbers(); // overwrite numbers in HTML with correct values per scenario
-  // draw each graph
-  drawIdeal();
-  drawNeeds();
+  drawIdeal();   // draw each graph
+  drawNeeds();  
   drawActual();
 }
 
@@ -173,10 +187,6 @@ function addNumbers() {
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
-
-// set global dimenions
-var w = d3.select("div.row").node().getBoundingClientRect().width - 30;  // global width - pull from foundation row width
-var h;
 
 // select first in a series - useful for appending lines
 d3.selection.prototype.first = function() {     
@@ -433,8 +443,8 @@ function drawNeeds() {
     .attr("class", "needs-label")
     .text(function(d) { 
       if (d.section != null) { return d.section; } // only add label if 'section' exists in the object
-      else { return null; }                                      // TODO: destroy the text element instead of return null
-    })                                                           // also: maybe don't need this conditional anymore?
+      else { return null; }                        // TODO: destroy the text element instead of return null
+    })                                             // also: maybe don't need this conditional anymore?
 
   var textLabelTwo = d3.selectAll(".needs-label")
     .append("tspan")
@@ -702,7 +712,7 @@ function arrangeLabels() {
     var thisRect = document.getElementsByClassName('actual-rect')[2].getBBox();
     var tspanWidth = document.getElementsByClassName('labelThree')[2].getComputedTextLength();
 
-    // draw lines from 2nd label
+    // draw lines from 3rd label
     d3.select("svg.ok") // horizontal
       .append("line")
       .attr("x1", thisLabel.x + tspanWidth+10) 
