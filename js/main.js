@@ -33,7 +33,7 @@ function init(){
     });
   }
   else {
-    setupAndDraw(); // draw the graphs
+    setupAndDraw(); 
   }
 }
 
