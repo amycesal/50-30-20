@@ -1,7 +1,6 @@
-
-var allScenarios, data, dataExplain, dataIdeal, dataNeeds, dataActual;
-// declare global dimenions
+// declare global dimenions and variables
 var w, h;
+var allScenarios, data, dataExplain, dataIdeal, dataNeeds, dataActual;
 
 // called on page load and on resize
 function init(){
@@ -30,18 +29,30 @@ function init(){
       getUniques('household');
       getUniques('level');
       setupAndDraw(); // draw the graphs
+      hideGraphs();
     });
   }
   else {
-    setupAndDraw(); 
+    setupAndDraw();
+    hideGraphs();
   }
 }
 
 // load data and draw graphs
-init()
+init();
 
 // on resize, reload data and redraw graphs
-window.onresize = init
+window.onresize = init;
+
+function hideGraphs() {
+  d3.selectAll(".post")
+    .style("visibility", "hidden");
+}
+
+function showGraphs() {
+  d3.selectAll(".post")
+    .style("visibility", "visible");
+}
 
 // listen for dropdown selections and update graphs
 d3.selectAll('select')
@@ -49,6 +60,7 @@ d3.selectAll('select')
     data = allScenarios; // reset 'data' to include all scenarios 
     d3.selectAll("svg.graph").remove(); // clear any existing graphs
     setupAndDraw();
+    showGraphs();
 });
 
 function getUniques(dd) {
@@ -120,13 +132,13 @@ function setupData() {
   // setup an array for each graph
   dataExplain = [
     [
-      { x: 0, y: data.fifty, t1: "50%", t2: "Needs:" }
+      { x: 0, y: 50 }
     ],
     [ 
-      { x: 0, y: data.thirty, t1: "30%", t2: "Wants:"  }
+      { x: 0, y: 30 }
     ],
     [
-      { x: 0, y: data.twenty, t1: "20%", t2: "Saves:"  }
+      { x: 0, y: 20 }
     ]
   ];
 
@@ -299,7 +311,6 @@ function drawExplain() {
   var lineFix = svg.selectAll('line'); 
   lineFix.first()
     .attr('transform', 'translate(2,0)');
-
 
 }
 
