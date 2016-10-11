@@ -1,5 +1,5 @@
 
-var allScenarios, data, dataideal, dataneeds, dataactual;
+var allScenarios, data, dataExplain, dataIdeal, dataNeeds, dataActual;
 // declare global dimenions
 var w, h;
 
@@ -76,7 +76,8 @@ function setupAndDraw() {
   setProps(); // set derivative properties
   setupData(); // create a stacked array for each graph
   addNumbers(); // overwrite numbers in HTML with correct values per scenario
-  drawIdeal();   // draw each graph
+  drawExplain();  // draw each graph
+  drawIdeal();   
   drawNeeds();  
   drawActual();
 }
@@ -117,6 +118,18 @@ function setProps() {
 function setupData() {
 
   // setup an array for each graph
+  dataExplain = [
+    [
+      { x: 0, y: data.fifty, t1: "50%", t2: "Needs:" }
+    ],
+    [ 
+      { x: 0, y: data.thirty, t1: "30%", t2: "Wants:"  }
+    ],
+    [
+      { x: 0, y: data.twenty, t1: "20%", t2: "Saves:"  }
+    ]
+  ];
+
   dataIdeal = [
     [
       { x: 0, y: data.fifty, t1: "50%", t2: "Needs:" }
@@ -167,6 +180,7 @@ function setupData() {
 
   // stack each array
   var stack = d3.layout.stack();
+  stack(dataExplain);
   stack(dataIdeal);
   stack(dataActual);
   stack(dataNeeds);
@@ -207,6 +221,90 @@ d3.selection.prototype.moveToBack = function() {
         } 
     });
 };
+
+
+// DRAW EXPLAINER GRAPH
+function drawExplain() {
+
+  var dataset = dataExplain; 
+  var h = 100; 
+  var lineHeight = 100;  // height of solid lines
+
+  // set up scales 
+  var xScale = d3.scale.ordinal()      // actually y scale, since we're doing horizontal bars
+    .domain(d3.range(dataset[0].length))
+    .rangeRoundBands([0, h]);
+
+  var yScale = d3.scale.linear()       // actually x scale
+    .domain([0,       
+      d3.max(dataset, function(d) {
+        return d3.max(d, function(d) {
+          return d.y0 + d.y;
+        });
+      })
+    ])
+    .range([0, w]);
+  
+  // create SVG element
+  var svg = d3.select("#graph-explain")
+        .append("svg")
+        .attr("class", "graph")
+        .attr("width", w)        
+        .attr("height", h);   
+
+  // add a group for each row of data
+  var groups = svg.selectAll("g")
+    .data(dataset)
+    .enter().append("g")
+    .style("fill", function(d, i) {                  
+      var fillColor;                                  
+        if (i == 0) { fillColor = "#f8bc50";}         // yellow
+        else if (i == 1) { fillColor = "#c66728";}    // orange
+        else if (i == 2) { fillColor = "#ab4949";}    // red
+      return fillColor;      
+    });
+
+  // add a rect for each data value
+  var rects = groups.selectAll("rect")
+    .data(function(d) { return d; })
+    .enter().append("rect")
+      .attr("x", function(d) { return yScale(d.y0); }) 
+      .attr("y", 0)   // 128 is to shift chart down to make way for annotation
+      .attr("width", function(d) { return yScale(d.y); })
+      .attr("height", xScale.rangeBand());
+
+  // draw a line over the start of each rect
+  var lines = groups.selectAll("line")
+    .data(function(d) { return d; })
+    .enter().append("line")
+    .attr("y1", 0) 
+    .attr("y2", lineHeight) 
+    .attr("x1", function(d) { return yScale(d.y0); }) 
+    .attr("x2", function(d) { return yScale(d.y0); })        
+    .style("stroke-width", 4)
+    .style("stroke", "white")
+    .style("fill", "none");
+
+  // add the last line at the end of the graph
+  svg.append("line") 
+    .attr("y1", 0) 
+    .attr("y2", lineHeight) 
+    .attr("x1", w-2)
+    .attr("x2", w-2) 
+    .style("stroke-width", 4)
+    .style("stroke", "white")
+    .style("fill", "none");
+
+  // fix the position of the first line of the graph
+  var lineFix = svg.selectAll('line'); 
+  lineFix.first()
+    .attr('transform', 'translate(2,0)');
+
+
+}
+
+
+
 
 // DRAW IDEAL BUDGET GRAPH
 function drawIdeal() {
