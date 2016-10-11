@@ -17,8 +17,6 @@
 
 </script>
 
-
-
     <title>50-30-20</title>
 
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -27,66 +25,41 @@
     <link rel="stylesheet" href="css/main.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700" rel="stylesheet">
 
-    <style>
-
-      .scenario, .ideal, .actual, .needs {
-        border-top:solid #010101 3px;
-        border-bottom:solid #010101 3px;
-      }
-
-      .scenario {
-        margin-top:1em;
-      }
-
-      .ideal, .actual {
-        background:#e8e8e8;
-      }
-
-      .needs {
-        background:#d1d3d4;
-      }
-      
-      .row {
-        margin-bottom:1em;
-      }
-
-      h1, h2, h3, p, li, svg text {
-        font-family: 'Roboto Condensed', sans-serif;
-        color: #231f20;}
-
-
-      h1 {font-weight:400; font-size:4.0em;}
-      h2 {font-weight:300; font-size:3.2em; margin:0.4em 0 0.1em 0;}
-      h3 {font-weight:700; font-size:1.2em; text-align:left;}
-      p, li {font-weight:400; font-size:1.2em;}
-
-      .scenario p {margin: 0; text-align:left;}
-      .blue {font-weight:700; font-size:33px; line-height: 43px; color:#00a79d;} 
-      .money-label {font-weight:400; font-size:0.5em; color:#231f20;}
-      .graph-label {font-weight:400; font-size:1.7em; color:#231f20;}
-      .actual-label {font-weight:400; font-size:1.8em; color:#231f20;}
-      .needs-label {font-weight:400; font-size:1.5em; color:#231f20;}
-      .strong {font-weight:700;}
-
-      img {display: block; margin: 0.5em auto 1em auto;}
-
-      .left {float:left;}
-      .right {float:right;}
-      .clear {clear:both;}
-
-      div#graph-ideal, div#graph-needs {margin-bottom: 40px;}
-
-      div.scenario div {padding-bottom: 1em;} /* width of column contents in scenario section */
-      select {max-width:300px;}
-
-
-    </style>
-
-
   </head>
   <body>
 
     <!-- http://foundation.zurb.com/sites/docs/grid.html -->
+
+    <div class="row nav">
+      <div class="small-12 medium-12 large-12 columns">
+        <ul>
+          <li><a href="">About</a></li>
+          <li><a href="">Methodology</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row title">
+      <div class="small-12 medium-12 large-12 columns">
+        <h1>A Financial Litmus Test for American Households</h1>
+          <p>
+            The 50/30/20 rule is a rule of thumb to help people achieve financial security. <br /><br />
+            <span class="emph">Scroll down</span> to learn about the rule, 
+            and test whether different American households are able to follow it.
+          </p>
+      </div>
+    </div>
+
+    <div class="row explain">
+      <div class="small-12 medium-12 large-12 columns">
+        <h2>50/30/20 Rule:<br />People will be in solid financial shape if they use:</h2>
+          <p>
+            The 50/30/20 rule is a rule of thumb to help people achieve financial security. <br /><br />
+            <span class="emph">Scroll down</span> to learn about the rule, 
+            and test whether different American households are able to follow it.
+          </p>
+      </div>
+    </div>
 
     <div class="row scenario">
       <div class="small-12 medium-12 large-12 columns">
@@ -121,16 +94,15 @@
       </div>
     </div>
 
-
-  <div class="row ideal">
-    <div class="small-12 medium-12 large-12 columns">
-      <h2>Ideal Budget:</h2>
-      <p>Monthly pay ($<span class="takehome">4,577</span>) divided into what you should be spending in each category.</p>
+    <div class="row ideal">
+      <div class="small-12 medium-12 large-12 columns">
+        <h2>Ideal Budget:</h2>
+        <p>Monthly pay ($<span class="takehome">4,577</span>) divided into what you should be spending in each category.</p>
+      </div>
+      <div class="small-12 medium-12 large-12 columns">
+        <div id="graph-ideal"></div>
+      </div>
     </div>
-    <div class="small-12 medium-12 large-12 columns">
-      <div id="graph-ideal"></div>
-    </div>
-  </div>
 
   <div class="row needs">
     <div class="small-12 medium-12 large-12 columns">
