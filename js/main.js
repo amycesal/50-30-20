@@ -2,6 +2,7 @@
 var w, h;
 var allScenarios, data, dataExplain, dataIdeal, dataNeeds, dataActual;
 
+
 // called on page load and on resize
 function init(){
   // get new page width on each resize
@@ -60,6 +61,8 @@ d3.selectAll('select')
     data = allScenarios; // reset 'data' to include all scenarios 
     d3.selectAll("svg.graph").remove(); // clear any existing graphs
     setupAndDraw();
+    $('html, body').animate({
+      scrollTop: $(".scenario").offset().top}, 1200);
     showGraphs();
 });
 
@@ -282,8 +285,13 @@ function drawExplain() {
     .enter().append("rect")
       .attr("x", function(d) { return yScale(d.y0); }) 
       .attr("y", 0)   // 128 is to shift chart down to make way for annotation
-      .attr("width", function(d) { return yScale(d.y); })
-      .attr("height", xScale.rangeBand());
+      .attr("height", xScale.rangeBand())
+      .attr("width", 0)
+      .transition()
+      .duration(1200)
+      .attr("width", function(d) { return yScale(d.y); });
+
+  rects.transition();
 
   // draw a line over the start of each rect
   var lines = groups.selectAll("line")
@@ -364,8 +372,11 @@ function drawIdeal() {
     .enter().append("rect")
       .attr("x", function(d) { return yScale(d.y0); }) 
       .attr("y", 128)   // 128 is to shift chart down to make way for annotation
-      .attr("width", function(d) { return yScale(d.y); })
-      .attr("height", xScale.rangeBand());
+      .attr("height", xScale.rangeBand())
+      .attr("width", 0)
+      .transition()
+      .duration(1200)      
+      .attr("width", function(d) { return yScale(d.y); });
 
   // draw a line over the start of each rect
   var lines = groups.selectAll("line")

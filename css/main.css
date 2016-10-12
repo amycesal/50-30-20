@@ -1,3 +1,4 @@
+
 .title, .explain, .scenario, .ideal, .actual, .needs {
   border-top:solid #010101 3px;
   border-bottom:solid #010101 3px;
@@ -36,8 +37,9 @@ a {
   margin-left:1em;}
 
 
-h1 {font-weight:400; font-size:3.2em;}
-h2 {font-weight:300; font-size:3.2em; margin:0.4em 0 0.1em 0;}
+h1 {font-weight:400; font-size:3.2em; }
+.title p {font-size: 1.6em; margin-bottom:2em;}
+h2 {font-weight:300; font-size:2.4em; margin:0.4em 0 0.1em 0;}
 h3 {font-weight:700; font-size:1.2em; text-align:left;}
 p, li {font-weight:400; font-size:1.2em;}
 
@@ -74,3 +76,13 @@ div#graph-ideal, div#graph-needs {margin-bottom: 40px;}
 
 div.scenario div {padding-bottom: 1em;} /* width of column contents in scenario section */
 select {max-width:300px;}
+
+
+
+
+
+
+
+
+
+
