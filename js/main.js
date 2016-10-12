@@ -23,7 +23,7 @@ function init(){
       csv.forEach(function(d){ d['twenty'] = +d['twenty']; });
       csv.forEach(function(d){ d['population'] = +d['population']; });
       csv.forEach(function(d){ d['difference'] = +d['difference']; });
-      data = csv; // pass csv values to the global 'data' object
+      data = csv;         // pass csv values to the global 'data' object
       allScenarios = csv; // also pass them to this object that -doesn't- get changed in scenario setup
       getUniques('city');      // get unique values for all three dropdowns and populate them
       getUniques('household');
@@ -270,9 +270,9 @@ function drawExplain() {
     .enter().append("g")
     .style("fill", function(d, i) {                  
       var fillColor;                                  
-        if (i == 0) { fillColor = "#f8bc50";}         // yellow
-        else if (i == 1) { fillColor = "#c66728";}    // orange
-        else if (i == 2) { fillColor = "#ab4949";}    // red
+        if (i == 0) { fillColor = "#65B68A";}         // yellow
+        else if (i == 1) { fillColor = "#297676";}    // orange
+        else if (i == 2) { fillColor = "#0C3758";}    // red
       return fillColor;      
     });
 
@@ -352,9 +352,9 @@ function drawIdeal() {
     .enter().append("g")
     .style("fill", function(d, i) {                  
       var fillColor;                                  
-        if (i == 0) { fillColor = "#f8bc50";}         // yellow
-        else if (i == 1) { fillColor = "#c66728";}    // orange
-        else if (i == 2) { fillColor = "#ab4949";}    // red
+        if (i == 0) { fillColor = "#65B68A";}         // yellow
+        else if (i == 1) { fillColor = "#297676";}    // orange
+        else if (i == 2) { fillColor = "#0C3758";}    // red
       return fillColor;      
     });
 
@@ -456,7 +456,7 @@ function drawNeeds() {
     .attr("y", 0) 
     .attr("width", function(d) { return yScale(data.fifty); })
     .attr("height", h-bottomOffset)
-    .style("fill", "#f8bc50")
+    .style("fill", "#65B68A")
     .style("fill-opacity", 0.18);
 
   svg.append("rect")
@@ -464,7 +464,7 @@ function drawNeeds() {
     .attr("y", 0) 
     .attr("width", function(d) { return yScale(data.thirty); })
     .attr("height", h-bottomOffset)
-    .style("fill", "#c66728")
+    .style("fill", "#297676")
     .style("fill-opacity", 0.18);
 
   svg.append("rect")
@@ -472,7 +472,7 @@ function drawNeeds() {
     .attr("y", 0) 
     .attr("width", function(d) { return yScale(data.twenty); })
     .attr("height", h-bottomOffset)
-    .style("fill", "#ab4949")
+    .style("fill", "#0C3758")
     .style("fill-opacity", 0.18);
 
   // add a group for each row of data
@@ -481,7 +481,7 @@ function drawNeeds() {
     .enter().append("g")
     .style("fill", function(d, i) {                   
       var fillColor;                                  
-        if (i == 0) { fillColor = "#f8bc50" ;}         // solid yellow
+        if (i == 0) { fillColor = "#65B68A" ;}         // solid yellow
         else if (i == 1) { fillColor = "url(#diagonal-stripe-2)" ;}    // pattern fill defined in svg in html
         else if (i == 2) { fillColor = "#e8e8e8" ;}    // gray
       return fillColor;      
@@ -636,9 +636,9 @@ function drawActual() {
     .enter().append("g")
     .style("fill", function(d, i) {                   
       var fillColor;                                  
-        if (i == 0) { fillColor = "#f8bc50";}         // yellow
-        else if (i == 1) { fillColor = "#c66728";}    // orange
-        else if (i == 2) { fillColor = "#ab4949";}    // red
+        if (i == 0) { fillColor = "#65B68A";}         // yellow
+        else if (i == 1) { fillColor = "#297676";}    // orange
+        else if (i == 2) { fillColor = "#0C3758";}    // red
       return fillColor;      
     });
 
