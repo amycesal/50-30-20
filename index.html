@@ -32,9 +32,6 @@
 
     <script type="text/javascript">
 
-      $(document).ready(function() {  
-              $(".slide").css("height", $(window).height() + "px"); 
-      });
 
 
     </script>
@@ -65,7 +62,7 @@
             <span class="strong">Scroll down</span> to learn about the rule, 
             and test whether American households are able to follow it.
           </p>
-          <input type="button" onclick="scrollMe1()" value="Scroll!"></input>
+          <input type="button" onclick="scrollMe1()" value="Scroll!" class="scrollyscroll"></input>
       </div>
     </div>
 
@@ -151,7 +148,7 @@
         <p class="blue">$<span class="income">69,402</span></p>
         <p class="blue">$<span class="takehome">4,577</span><span class="money-label">/month</span></p>
         <p>$<span class="difference">45,552</span> above federal poverty level.</p>
-          <input type="button" onclick="scrollMe3()" value="Scroll!"></input>
+          <input type="button" onclick="runScenario()" value="RUN SCENARIO"></input>
       </div>
     </div>
 
@@ -162,7 +159,6 @@
       </div>
       <div class="small-12 medium-12 large-12 columns">
         <div id="graph-ideal"></div>
-          <input type="button" onclick="scrollMe4()" value="Scroll!"></input>
       </div>
     </div>
 

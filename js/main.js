@@ -1,93 +1,71 @@
-// declare global dimenions and variables
-var w, h;
-var allScenarios, data, dataExplain, dataIdeal, dataNeeds, dataActual;
+// declare global variables
+var w, h, allScenarios, data, dataExplain, dataIdeal, dataNeeds, dataActual;
 
-function scrollMe1() {
+// get page width and store in global variable for graph sizing
+w = d3.select("div.row").node().getBoundingClientRect().width - 30; 
+
+// set height of each section to screen height
+$("div.slide").css("height", $(window).height()+"px");  
+
+// one-time data loading and setup
+d3.csv("csv/data.csv", function(csv) {  // pull data from csv
+  // read numerical values as numbers not strings
+  csv.forEach(function(d){ d['income'] = +d['income']; });
+  csv.forEach(function(d){ d['takehome'] = +d['takehome']; });
+  csv.forEach(function(d){ d['housing'] = +d['housing']; });
+  csv.forEach(function(d){ d['health'] = +d['health']; });
+  csv.forEach(function(d){ d['grocery'] = +d['grocery']; });
+  csv.forEach(function(d){ d['transit'] = +d['transit']; });
+  csv.forEach(function(d){ d['childcare'] = +d['childcare']; });
+  csv.forEach(function(d){ d['fifty'] = +d['fifty']; });
+  csv.forEach(function(d){ d['thirty'] = +d['thirty']; });
+  csv.forEach(function(d){ d['twenty'] = +d['twenty']; });
+  csv.forEach(function(d){ d['population'] = +d['population']; });
+  csv.forEach(function(d){ d['difference'] = +d['difference']; });
+  data = csv;         // pass csv values to the global 'data' object
+  allScenarios = csv; // also pass them to this object that -doesn't- get changed in scenario setup
+  // get unique values for all three dropdowns and populate them
+  getUniques('city');      
+  getUniques('household');
+  getUniques('level');
+});
+
+// select first in a series - useful for appending a line to the start of a graph
+d3.selection.prototype.first = function() {     
+  return d3.select(this[0][0]);
+};
+
+// draw the explainer graph
+drawExplain();
+
+function runScenario() {
+  data = allScenarios; // reset 'data' to include all scenarios 
+  d3.selectAll("svg.graph").remove(); // clear any existing graphs
+  setupAndDraw();
   $('html, body').animate({
-  scrollTop: $(".explain").offset().top}, 1200);
+    scrollTop: $(".ideal").offset().top}, 1200);
 }
 
-function scrollMe2() {
-  $('html, body').animate({
-  scrollTop: $(".scenario").offset().top}, 1200);
-}
-
-function scrollMe3() {
-  $('html, body').animate({
-  scrollTop: $(".ideal").offset().top}, 1200);
-}
-
-function scrollMe4() {
-  $('html, body').animate({
-  scrollTop: $(".actual").offset().top}, 1200);
-}
-
-// called on page load and on resize
-function init(){
-  // get new page width on each resize
+function reDrawAll() {
+  // get page width and update global width variable for graph sizing
   w = d3.select("div.row").node().getBoundingClientRect().width - 30; 
-  // since graphs are redrawn on resize, remove all old graphs so you don't get multiples
+  // reset height of each section to screen height
+  $("div.slide").css("height", $(window).height()+"px");  
+  // redraw the explainer graph
+  d3.select("svg.explainer").remove()
+  drawExplain();  // TODO: no need to do the transitions on resize...
+  // redraw the post-scenario graphs, only if they've been drawn already
   d3.selectAll("svg.graph").remove()
-  if(!data) {
-    d3.csv("csv/data.csv", function(csv) {  
-      // read numerical values as numbers not strings
-      csv.forEach(function(d){ d['income'] = +d['income']; });
-      csv.forEach(function(d){ d['takehome'] = +d['takehome']; });
-      csv.forEach(function(d){ d['housing'] = +d['housing']; });
-      csv.forEach(function(d){ d['health'] = +d['health']; });
-      csv.forEach(function(d){ d['grocery'] = +d['grocery']; });
-      csv.forEach(function(d){ d['transit'] = +d['transit']; });
-      csv.forEach(function(d){ d['childcare'] = +d['childcare']; });
-      csv.forEach(function(d){ d['fifty'] = +d['fifty']; });
-      csv.forEach(function(d){ d['thirty'] = +d['thirty']; });
-      csv.forEach(function(d){ d['twenty'] = +d['twenty']; });
-      csv.forEach(function(d){ d['population'] = +d['population']; });
-      csv.forEach(function(d){ d['difference'] = +d['difference']; });
-      data = csv;         // pass csv values to the global 'data' object
-      allScenarios = csv; // also pass them to this object that -doesn't- get changed in scenario setup
-      getUniques('city');      // get unique values for all three dropdowns and populate them
-      getUniques('household');
-      getUniques('level');
-      setupAndDraw(); // draw the graphs
-      hideGraphs();
-    });
-  }
-  else {
-    setupAndDraw();
-    hideGraphs();
-  }
+  setupAndDraw();
 }
-
-// load data and draw graphs
-init();
 
 // on resize, reload data and redraw graphs
-window.onresize = init;
-
-function hideGraphs() {
-  d3.selectAll(".post")
-    .style("visibility", "hidden");
-}
-
-function showGraphs() {
-  d3.selectAll(".post")
-    .style("visibility", "visible");
-}
-
-// listen for dropdown selections and update graphs
-d3.selectAll('select')
-  .on('change', function() {
-    data = allScenarios; // reset 'data' to include all scenarios 
-    d3.selectAll("svg.graph").remove(); // clear any existing graphs
-    setupAndDraw();
-    $('html, body').animate({
-      scrollTop: $(".scenario").offset().top}, 1200);
-    showGraphs();
-});
+window.onresize = reDrawAll;
 
 function getUniques(dd) {
   var unique = {};
   var distinct = [];
+  console.log(data);
   for (var i in data) {
     if (typeof(unique[data[i][dd]]) == "undefined") {
       distinct.push(data[i][dd]);
@@ -110,7 +88,7 @@ function setupAndDraw() {
   setProps(); // set derivative properties
   setupData(); // create a stacked array for each graph
   addNumbers(); // overwrite numbers in HTML with correct values per scenario
-  drawExplain();  // draw each graph
+  // draw each graph
   drawIdeal();   
   drawNeeds();  
   drawActual();
@@ -152,17 +130,6 @@ function setProps() {
 function setupData() {
 
   // setup an array for each graph
-  dataExplain = [
-    [
-      { x: 0, y: 50 }
-    ],
-    [ 
-      { x: 0, y: 30 }
-    ],
-    [
-      { x: 0, y: 20 }
-    ]
-  ];
 
   dataIdeal = [
     [
@@ -214,7 +181,6 @@ function setupData() {
 
   // stack each array
   var stack = d3.layout.stack();
-  stack(dataExplain);
   stack(dataIdeal);
   stack(dataActual);
   stack(dataNeeds);
@@ -234,31 +200,24 @@ function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-// select first in a series - useful for appending lines
-d3.selection.prototype.first = function() {     
-  return d3.select(this[0][0]);
-};
-
-// move selection to front
-d3.selection.prototype.moveToFront = function() {  
-  return this.each(function(){
-    this.parentNode.appendChild(this);
-  });
-};
-
-// move selection to back
-d3.selection.prototype.moveToBack = function() {  
-    return this.each(function() { 
-        var firstChild = this.parentNode.firstChild; 
-        if (firstChild) { 
-            this.parentNode.insertBefore(this, firstChild); 
-        } 
-    });
-};
-
-
 // DRAW EXPLAINER GRAPH
 function drawExplain() {
+
+  // setup data — static so removed from rest of control flow
+  dataExplain = [
+    [
+      { x: 0, y: 50 }
+    ],
+    [ 
+      { x: 0, y: 30 }
+    ],
+    [
+      { x: 0, y: 20 }
+    ]
+  ];
+
+  var stack = d3.layout.stack();
+  stack(dataExplain);
 
   var dataset = dataExplain; 
   var h = 100; 
@@ -282,7 +241,7 @@ function drawExplain() {
   // create SVG element
   var svg = d3.select("#graph-explain")
         .append("svg")
-        .attr("class", "graph")
+        .attr("class", "explainer")
         .attr("width", w)        
         .attr("height", h);   
 
@@ -864,4 +823,28 @@ function arrangeLabels() {
       .style("stroke", "#231f20")
       .style("fill", "none");
   }
+}
+
+
+
+
+// this is obviously dumb
+function scrollMe1() {
+  $('html, body').animate({
+  scrollTop: $(".explain").offset().top}, 1200);
+}
+
+function scrollMe2() {
+  $('html, body').animate({
+  scrollTop: $(".scenario").offset().top}, 1200);
+}
+
+function scrollMe3() {
+  $('html, body').animate({
+  scrollTop: $(".ideal").offset().top}, 1200);
+}
+
+function scrollMe4() {
+  $('html, body').animate({
+  scrollTop: $(".actual").offset().top}, 1200);
 }
