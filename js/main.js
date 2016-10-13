@@ -2,6 +2,25 @@
 var w, h;
 var allScenarios, data, dataExplain, dataIdeal, dataNeeds, dataActual;
 
+function scrollMe1() {
+  $('html, body').animate({
+  scrollTop: $(".explain").offset().top}, 1200);
+}
+
+function scrollMe2() {
+  $('html, body').animate({
+  scrollTop: $(".scenario").offset().top}, 1200);
+}
+
+function scrollMe3() {
+  $('html, body').animate({
+  scrollTop: $(".ideal").offset().top}, 1200);
+}
+
+function scrollMe4() {
+  $('html, body').animate({
+  scrollTop: $(".actual").offset().top}, 1200);
+}
 
 // called on page load and on resize
 function init(){
@@ -287,11 +306,10 @@ function drawExplain() {
       .attr("y", 0)   // 128 is to shift chart down to make way for annotation
       .attr("height", xScale.rangeBand())
       .attr("width", 0)
-      .transition()
-      .duration(1200)
+    .transition()
+      .delay(function(d, i) {console.log(d, i); return i * 1000;}) // this i always returns 0, so delay doesn't work...
+      .duration(2000)
       .attr("width", function(d) { return yScale(d.y); });
-
-  rects.transition();
 
   // draw a line over the start of each rect
   var lines = groups.selectAll("line")
@@ -321,8 +339,6 @@ function drawExplain() {
     .attr('transform', 'translate(2,0)');
 
 }
-
-
 
 
 // DRAW IDEAL BUDGET GRAPH
@@ -373,9 +389,6 @@ function drawIdeal() {
       .attr("x", function(d) { return yScale(d.y0); }) 
       .attr("y", 128)   // 128 is to shift chart down to make way for annotation
       .attr("height", xScale.rangeBand())
-      .attr("width", 0)
-      .transition()
-      .duration(1200)      
       .attr("width", function(d) { return yScale(d.y); });
 
   // draw a line over the start of each rect

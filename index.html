@@ -20,10 +20,25 @@
     <title>50-30-20</title>
 
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/what-input.js"></script>
+    <script src="js/vendor/foundation.js"></script>
+    <script src="js/app.js"></script>
+
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="css/main.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700" rel="stylesheet">
+
+    <script type="text/javascript">
+
+      $(document).ready(function() {  
+              $(".slide").css("height", $(window).height() + "px"); 
+      });
+
+
+    </script>
+
 
   </head>
   <body>
@@ -39,7 +54,7 @@
       </div>
     </div>
 
-    <div class="row title">
+    <div class="row title slide">
       <div class="small-12 medium-12 large-12 columns">
         <h1>A Financial Litmus Test for American Households</h1>
           <p>
@@ -50,10 +65,11 @@
             <span class="strong">Scroll down</span> to learn about the rule, 
             and test whether American households are able to follow it.
           </p>
+          <input type="button" onclick="scrollMe1()" value="Scroll!"></input>
       </div>
     </div>
 
-    <div class="row explain">
+    <div class="row explain slide">
       <div class="small-12 medium-12 large-12 columns">
         <h2>The 50/30/20 Rule</h2>
           <p>People will be in solid financial shape if they use:</p>
@@ -72,10 +88,11 @@
       </div>
       <div class="small-12 medium-12 large-12 columns">
         <p>But how feasible is this for households in America?</p>
+          <input type="button" onclick="scrollMe2()" value="Scroll!"></input>
       </div>
     </div>
 
-    <div class="row scenario">
+    <div class="row scenario slide">
       <div class="small-12 medium-12 large-12 columns">
         <h2>Select a scenario</h2>
         <p>Pick a location, household size and income level to see how the average household stacks up:</p>
@@ -106,20 +123,22 @@
         <p class="blue">$<span class="income">69,402</span></p>
         <p class="blue">$<span class="takehome">4,577</span><span class="money-label">/month</span></p>
         <p>$<span class="difference">45,552</span> above federal poverty level.</p>
+          <input type="button" onclick="scrollMe3()" value="Scroll!"></input>
       </div>
     </div>
 
-    <div class="row ideal post">
+    <div class="row ideal post slide">
       <div class="small-12 medium-12 large-12 columns">
         <h2>Ideal Budget:</h2>
         <p>This household's monthly pay ($<span class="takehome">4,577</span>) divided into what they should be spending in each category if they were following the 50/30/20 rule.</p>
       </div>
       <div class="small-12 medium-12 large-12 columns">
         <div id="graph-ideal"></div>
+          <input type="button" onclick="scrollMe4()" value="Scroll!"></input>
       </div>
     </div>
 
-  <div class="row needs post">
+  <div class="row needs post slide">
     <div class="small-12 medium-12 large-12 columns">
       <h2>Needs Total:</h2>
       <p>Adding each item in the needs category to find out what is being spend on average on necessities.</p>
@@ -129,7 +148,7 @@
     </div>
   </div>
 
-  <div class="row actual post">
+  <div class="row actual post slide">
     <div class="small-12 medium-12 large-12 columns">
       <h2>Actual Budget:</h2>
       <p>Taking the total amount spent on needs then figuring out if needs are under budget and what is left for wants and savings.</p>
@@ -150,17 +169,12 @@
         <rect width='10' height='10' fill='#65B68A'/>
         <path d='M-1,1 l2,-2
                  M0,10 l10,-10
-                 M9,11 l2,-2' stroke='#77D6A2' stroke-width='2.5'/>
+                 M9,11 l2,-2' stroke='#B8DBC7' stroke-width='2.5'/>
         </image> 
       </pattern> 
     </defs> 
   </svg>
 
-
-    <script src="js/vendor/jquery.js"></script>
-    <script src="js/vendor/what-input.js"></script>
-    <script src="js/vendor/foundation.js"></script>
-    <script src="js/app.js"></script>
     <script src="js/main.js"></script>
 
   </body>
