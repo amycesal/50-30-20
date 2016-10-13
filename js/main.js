@@ -49,14 +49,19 @@ function runScenario() {
 function reDrawAll() {
   // get page width and update global width variable for graph sizing
   w = d3.select("div.row").node().getBoundingClientRect().width - 30; 
+
   // reset height of each section to screen height
   $("div.slide").css("height", $(window).height()+"px");  
+
   // redraw the explainer graph
   d3.select("svg.explainer").remove()
   drawExplain();  // TODO: no need to do the transitions on resize...
-  // redraw the post-scenario graphs, only if they've been drawn already
-  d3.selectAll("svg.graph").remove()
-  setupAndDraw();
+
+  // redraw the post-scenario graphs, but only if they've been drawn already
+  if (d3.selectAll("svg.graph").empty() == false) {
+    d3.selectAll("svg.graph").remove()
+    setupAndDraw();
+  }
 }
 
 // on resize, reload data and redraw graphs
@@ -65,7 +70,6 @@ window.onresize = reDrawAll;
 function getUniques(dd) {
   var unique = {};
   var distinct = [];
-  console.log(data);
   for (var i in data) {
     if (typeof(unique[data[i][dd]]) == "undefined") {
       distinct.push(data[i][dd]);
@@ -266,7 +270,7 @@ function drawExplain() {
       .attr("height", xScale.rangeBand())
       .attr("width", 0)
     .transition()
-      .delay(function(d, i) {console.log(d, i); return i * 1000;}) // this i always returns 0, so delay doesn't work...
+      .delay(function(d, i) {return i * 1000;}) // this i always returns 0, so delay doesn't work...
       .duration(2000)
       .attr("width", function(d) { return yScale(d.y); });
 
