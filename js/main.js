@@ -90,7 +90,7 @@ function reDrawAll() {
     d3.selectAll("svg.graph").remove()
     setupAndDraw();
   }
-}
+};
 
 // when user clicks run scenario button...
 function runScenario() {
@@ -102,7 +102,7 @@ function runScenario() {
   setupAndDraw(); // get the selected scenario, setup the data, draw the graphs
   $('html, body').animate({ // send user to first post-scenario graph section
     scrollTop: $(".ideal").offset().top}, 1200);
-}
+};
 
 function getUniques(dd) {
   var unique = {};
@@ -113,16 +113,18 @@ function getUniques(dd) {
     }
     unique[data[i][dd]] = 0;
   }
-  $('#' + dd + ' option').each(function() {     // clear dropdown options
-    $(this).remove();     
+  $('#' + dd + ' option').each(function(i) {     // clear dropdown options
+    if (i > 0) {
+      $(this).remove();  
+    }        
   });
   var option = '';
+  console.log(distinct);
   for (var i = 0; i < distinct.length; i++) {   // populate dropdown with unique values
     option += '<option value="' + distinct[i] + '">' + distinct[i] + '</option>';
   }
   $('#' + dd).append(option);    
 };
-
 
 function setupAndDraw() {
   setScenario(); // get current value of dropdowns and set 'data' to the selected scenario
@@ -132,7 +134,7 @@ function setupAndDraw() {
   drawIdeal(); // draw each post-scenario graph
   drawNeeds();  
   drawActual();
-}
+};
 
 function setScenario() {
   var selected = {};
