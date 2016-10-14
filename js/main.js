@@ -1,3 +1,8 @@
+
+$(window).on('load', function() {
+   $("#cover").fadeOut(1200);
+});
+
 // declare global variables
 var w, h, allScenarios, data, dataExplain, dataIdeal, dataNeeds, dataActual;
 
