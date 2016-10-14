@@ -50,7 +50,6 @@ p, li {font-weight:400; font-size:1.2em;}
 .nav ul {list-style: none; margin: 0; padding:0;}
 .nav ul li {display:inline;} 
 
-
 .scenario p {margin: 0; text-align:left;}
 .blue {font-weight:700; font-size:33px; line-height: 43px; color:#00a79d;} 
 .money-label {font-weight:400; font-size:0.5em; color:#231f20;}
@@ -66,7 +65,7 @@ p, li {font-weight:400; font-size:1.2em;}
 .explain-30 {width:30%;}
 .explain-20 {width:20%;}
 
-.scrollyscroll {margin:0 auto;}
+.scrollcue {margin:0 auto;}
 
 img {display: block; margin: 0.5em auto 1em auto;}
 

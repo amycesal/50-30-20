@@ -38,6 +38,16 @@ d3.selection.prototype.first = function() {
 // draw the explainer graph
 drawExplain();
 
+// on resize, reload data and redraw graphs
+window.onresize = reDrawAll;
+
+// listen for scroll cue click and send to next section
+d3.selectAll('.scrollcue')
+  .on('click', function() {
+    $('html, body').animate({
+      scrollTop: $(this).parent().parent().next(".row").offset().top}, 1600);
+});
+
 function runScenario() {
   data = allScenarios; // reset 'data' to include all scenarios 
   d3.selectAll("svg.graph").remove(); // clear any existing graphs
@@ -64,9 +74,6 @@ function reDrawAll() {
   }
 }
 
-// on resize, reload data and redraw graphs
-window.onresize = reDrawAll;
-
 function getUniques(dd) {
   var unique = {};
   var distinct = [];
@@ -89,11 +96,10 @@ function getUniques(dd) {
 
 function setupAndDraw() {
   setScenario(); // get current value of dropdowns and set 'data' to the selected scenario
-  setProps(); // set derivative properties
+  setProps(); // set calculated properties
   setupData(); // create a stacked array for each graph
   addNumbers(); // overwrite numbers in HTML with correct values per scenario
-  // draw each graph
-  drawIdeal();   
+  drawIdeal(); // draw each post-scenario graph
   drawNeeds();  
   drawActual();
 }
@@ -300,9 +306,7 @@ function drawExplain() {
   var lineFix = svg.selectAll('line'); 
   lineFix.first()
     .attr('transform', 'translate(2,0)');
-
 }
-
 
 // DRAW IDEAL BUDGET GRAPH
 function drawIdeal() {
@@ -827,28 +831,4 @@ function arrangeLabels() {
       .style("stroke", "#231f20")
       .style("fill", "none");
   }
-}
-
-
-
-
-// this is obviously dumb
-function scrollMe1() {
-  $('html, body').animate({
-  scrollTop: $(".explain").offset().top}, 1200);
-}
-
-function scrollMe2() {
-  $('html, body').animate({
-  scrollTop: $(".scenario").offset().top}, 1200);
-}
-
-function scrollMe3() {
-  $('html, body').animate({
-  scrollTop: $(".ideal").offset().top}, 1200);
-}
-
-function scrollMe4() {
-  $('html, body').animate({
-  scrollTop: $(".actual").offset().top}, 1200);
 }
