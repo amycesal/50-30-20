@@ -308,10 +308,12 @@ function drawExplain() {
       .attr("x", function(d) { return yScale(d.y0); }) 
       .attr("y", 0)   // 128 is to shift chart down to make way for annotation
       .attr("height", xScale.rangeBand())
-      .attr("width", 0)
-    .transition()
-      .delay(function(d, i) {return i * 1000;}) // this i always returns 0, so delay doesn't work...
-      .duration(2000)
+      .attr("width", 0);
+
+  // stepped transition for bars
+  d3.selectAll(".explainer rect").transition()
+      .delay(function(d, i) {console.log(i); return i * 2000;}) 
+      .duration(1600)
       .attr("width", function(d) { return yScale(d.y); });
 
   // draw a line over the start of each rect
