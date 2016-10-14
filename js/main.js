@@ -1,6 +1,9 @@
 
 $(window).on('load', function() {
    $("#cover").fadeOut(1200);
+   $(".ideal").css("display", "none");
+   $(".needs").css("display", "none");
+   $(".actual").css("display", "none");
 });
 
 // declare global variables
@@ -55,6 +58,9 @@ d3.selectAll('.scrollcue')
 
 function runScenario() {
   data = allScenarios; // reset 'data' to include all scenarios 
+  $(".ideal").css("display", "block");
+  $(".needs").css("display", "block");
+  $(".actual").css("display", "block");  
   d3.selectAll("svg.graph").remove(); // clear any existing graphs
   setupAndDraw();
   $('html, body').animate({
