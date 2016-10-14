@@ -1,9 +1,12 @@
 
+// on load completion, hide scenario sections and post-scenario graph sections, and reveal the page 
 $(window).on('load', function() {
-   $("#cover").fadeOut(1200);
+   $(".scenario .household").css("display", "none");
+   $(".scenario .income").css("display", "none");
    $(".ideal").css("display", "none");
    $(".needs").css("display", "none");
    $(".actual").css("display", "none");
+   $("#cover").fadeOut(1200);
 });
 
 // declare global variables
@@ -38,7 +41,7 @@ d3.csv("csv/data.csv", function(csv) {  // pull data from csv
   getUniques('level');
 });
 
-// select first in a series - useful for appending a line to the start of a graph
+// add to d3 selection - select first in a series, used for appending a line to the start of a graph
 d3.selection.prototype.first = function() {     
   return d3.select(this[0][0]);
 };
@@ -46,26 +49,30 @@ d3.selection.prototype.first = function() {
 // draw the explainer graph
 drawExplain();
 
-// on resize, reload data and redraw graphs
-window.onresize = reDrawAll;
-
-// listen for scroll cue click and send to next section
+// listen for scroll-cue click and send to next section
 d3.selectAll('.scrollcue')
   .on('click', function() {
     $('html, body').animate({
-      scrollTop: $(this).parent().parent().next(".row").offset().top}, 1600);
+      scrollTop: $(this).parent().parent().next(".row").offset().top}, 1200);
 });
 
-function runScenario() {
-  data = allScenarios; // reset 'data' to include all scenarios 
-  $(".ideal").css("display", "block");
-  $(".needs").css("display", "block");
-  $(".actual").css("display", "block");  
-  d3.selectAll("svg.graph").remove(); // clear any existing graphs
-  setupAndDraw();
-  $('html, body').animate({
-    scrollTop: $(".ideal").offset().top}, 1200);
-}
+// listen for scenario selection events and reveal scenario sections
+d3.selectAll('.scenario .location select')
+  .on('change', function() {
+     $(".scenario .household").css("display", "block");
+});
+
+d3.selectAll('.scenario .household select')
+  .on('change', function() {
+     $(".scenario .income").css("display", "block");
+});
+
+
+
+
+
+// on resize, redraw all present graphs
+window.onresize = reDrawAll;
 
 function reDrawAll() {
   // get page width and update global width variable for graph sizing
@@ -83,6 +90,18 @@ function reDrawAll() {
     d3.selectAll("svg.graph").remove()
     setupAndDraw();
   }
+}
+
+// when user clicks run scenario button...
+function runScenario() {
+  data = allScenarios; // reset 'data' to include all scenarios 
+  $(".ideal").css("display", "block"); // display all post-scenario sections
+  $(".needs").css("display", "block");
+  $(".actual").css("display", "block");  
+  d3.selectAll("svg.graph").remove(); // clear any existing graphs (redundant?)
+  setupAndDraw(); // get the selected scenario, setup the data, draw the graphs
+  $('html, body').animate({ // send user to first post-scenario graph section
+    scrollTop: $(".ideal").offset().top}, 1200);
 }
 
 function getUniques(dd) {
@@ -207,6 +226,7 @@ function setupData() {
   stack(dataNeeds);
 };
 
+// update various display numbers with the correct values for selected scenario
 function addNumbers() {
   $('span.population').html(numberWithCommas(data.population));
   $('span.area').html(data.area);
@@ -217,6 +237,7 @@ function addNumbers() {
   $('span.overneedsperc').html(data.overneedsperc);
 }
 
+// add commas to display numbers
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
