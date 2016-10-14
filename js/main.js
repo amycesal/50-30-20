@@ -295,9 +295,9 @@ function drawExplain() {
     .enter().append("g")
     .style("fill", function(d, i) {                  
       var fillColor;                                  
-        if (i == 0) { fillColor = "#65B68A";}         // yellow
-        else if (i == 1) { fillColor = "#297676";}    // orange
-        else if (i == 2) { fillColor = "#0C3758";}    // red
+        if (i == 0) { fillColor = "#65B68A";}         // mint
+        else if (i == 1) { fillColor = "#297676";}    // teal
+        else if (i == 2) { fillColor = "#0C3758";}    // blue
       return fillColor;      
     });
 
@@ -311,10 +311,30 @@ function drawExplain() {
       .attr("width", 0);
 
   // stepped transition for bars
-  d3.selectAll(".explainer rect").transition()
+  d3.selectAll(".explainer rect")
+    .transition()
       .delay(function(d, i) {console.log(i); return i * 2000;}) 
       .duration(1600)
-      .attr("width", function(d) { return yScale(d.y); });
+      .attr("width", function(d) { return yScale(d.y); })
+      .each("end", fadeInText);
+
+  // corresponding transition for text blocks
+  var count = 0;
+  function fadeInText() {
+    count++;
+    switch(count) {
+      case 1:
+        $(".explain-50").animate( { opacity: 1 }, 600);
+        break;
+      case 2:
+        $(".explain-30").animate( { opacity: 1 }, 600);
+        break;
+      case 3:
+        $(".explain-20").animate( { opacity: 1 }, 600);
+        break;
+    }
+
+  }
 
   // draw a line over the start of each rect
   var lines = groups.selectAll("line")
