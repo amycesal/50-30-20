@@ -67,9 +67,21 @@ d3.selectAll('.scenario .household select')
      $(".scenario .income").css("display", "block");
 });
 
+// used for graph-specific, window postion-based events
+function isElementInViewport(elem) {
+    var $elem = $(elem);
 
+    // Get the scroll position of the page.
+    var scrollElem = ((navigator.userAgent.toLowerCase().indexOf('webkit') != -1) ? 'body' : 'html');
+    var viewportTop = $(scrollElem).scrollTop();
+    var viewportBottom = viewportTop + $(window).height();
 
+    // Get the position of the element on the page.
+    var elemTop = Math.round( $elem.offset().top );
+    var elemBottom = elemTop + $elem.height();
 
+    return ((elemTop < viewportBottom) && (elemBottom > viewportTop));
+}
 
 // on resize, redraw all present graphs
 window.onresize = reDrawAll;
@@ -310,31 +322,41 @@ function drawExplain() {
       .attr("height", xScale.rangeBand())
       .attr("width", 0);
 
-  // stepped transition for bars
-  d3.selectAll(".explainer rect")
-    .transition()
-      .delay(function(d, i) {console.log(i); return i * 2000;}) 
-      .duration(1600)
-      .attr("width", function(d) { return yScale(d.y); })
-      .each("end", fadeInText);
-
-  // corresponding transition for text blocks
-  var count = 0;
-  function fadeInText() {
-    count++;
-    switch(count) {
-      case 1:
-        $(".explain-50").animate( { opacity: 1 }, 600);
-        break;
-      case 2:
-        $(".explain-30").animate( { opacity: 1 }, 600);
-        break;
-      case 3:
-        $(".explain-20").animate( { opacity: 1 }, 600);
-        break;
+  // TODO: kill listener on success?
+  // trigger transitions when svg is in viewport
+  $(window).scroll(function(){
+    var $elem = $("svg.explainer");
+    if (isElementInViewport($elem)) {
+      // stepped transition for bars
+      d3.selectAll(".explainer rect")
+        .transition()
+          .delay(function(d, i) {console.log(i); return i * 2000;}) 
+          .duration(1600)
+          .attr("width", function(d) { return yScale(d.y); })
+          .each("end", fadeInText);
+      // corresponding transition for text blocks
+      var count = 0;
+      function fadeInText() {
+        count++;
+        switch(count) {
+          case 1:
+            $(".explain-50").animate( { opacity: 1 }, 600);
+            break;
+          case 2:
+            $(".explain-30").animate( { opacity: 1 }, 600);
+            break;
+          case 3:
+            $(".explain-20").animate( { opacity: 1 }, 600);
+            break;
+        }
+      }
     }
+  });
 
-  }
+
+
+
+    
 
   // draw a line over the start of each rect
   var lines = groups.selectAll("line")
