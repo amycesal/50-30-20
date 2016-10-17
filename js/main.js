@@ -780,7 +780,8 @@ function drawActual() {
 function getVerdict() {
   if (data.needs > data.fifty) {
     setTimeout(function() {
-      $(".verdict p")
+      $(".verdict .icon").html("<img src='img/verdict.png' />");
+      $(".verdict .text")
       .html("Following 50-30-20 isn't possible in this situation. The needs of this household exceed 50% of its income by " + 
         data.overneedsperc + "%, which reduces this household's ability to save for the future.");
       $(".verdict").animate( { opacity: 1 }, 600);

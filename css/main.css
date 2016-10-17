@@ -85,6 +85,30 @@ select {max-width:300px;}
 
 .verdict {opacity:0;}
 
+.icon {
+	float: left;
+	width: 10%;
+}
+
+.icon img {
+	width:30px;
+	height:30px;
+}
+
+.text {
+	float: right;
+	width: 90%;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
