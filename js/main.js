@@ -69,6 +69,9 @@ d3.selectAll('.scenario .household select')
       drawIncome(); // draw the income graph, but only if it doesn't exist yet
     };
 });
+// TODO: update income numbers based on scenario changes
+
+
 
 // used for graph-specific, window postion-based events
 function isElementInViewport(elem) {
