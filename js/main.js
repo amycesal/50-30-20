@@ -260,7 +260,9 @@ function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+// ****************
 // DRAW TITLE GRAPH
+// ****************
 function drawTitle() {
 
   // setup data — static so removed from rest of control flow
@@ -331,7 +333,9 @@ function drawTitle() {
         .attr("width", function(d) { return yScale(d.y); });  
 }
 
+// ********************
 // DRAW EXPLAINER GRAPH
+// ********************
 function drawExplain() {
 
   // setup data — static so removed from rest of control flow
@@ -458,7 +462,9 @@ function drawExplain() {
     .attr('transform', 'translate(2,0)');
 }
 
+// ********************
 // DRAW INCOME GRAPH
+// ********************
 function drawIncome() {
 
   dataset = [20, 18, 36, 34, 40, 48, 38, 32, 24, 21, 14, 9, 4];
@@ -498,7 +504,9 @@ function drawIncome() {
 
 }
 
+// ***********************
 // DRAW IDEAL BUDGET GRAPH
+// ***********************
 function drawIdeal() {
 
   var dataset = dataIdeal; 
@@ -608,8 +616,9 @@ function drawIdeal() {
     .text(function(d) { return "$" + d[0].y; });
 }
 
-
+// ************************
 // DRAW ACTUAL BUDGET GRAPH
+// ************************
 function drawActual() {
 
   var dataset = dataActual;
@@ -871,13 +880,9 @@ function arrangeLabels() {
   }
 }
 
-
-
-
-
-
-
+// ***********************
 // DRAW NEEDS GRAPH 
+// ***********************
 function drawNeeds() {
 
   var h = 720; 
@@ -949,8 +954,12 @@ function drawNeeds() {
     .enter().append("rect")
     .attr("x", function(d) { return yScale(d.y0); })
     .attr("y", function(d, i) { return xScale(i)+50; })   // value adjusts vertical position of rects
-    .attr("width", function(d) { return yScale(d.y); })
-    .attr("height", 60);                                  // value sets height of each bar, no effect on position
+    .attr("width", 0)
+    .attr("height", 60)                                  // value sets height of each bar, no effect on position
+    .transition()
+      .delay(function(d, i) {return (i+0.5) * 1600;}) 
+      .duration(1200)
+      .attr("width", function(d) { return yScale(d.y); });
 
   // first dashed line
   svg.append("line")
