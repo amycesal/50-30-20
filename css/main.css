@@ -9,11 +9,6 @@
 	z-index:9999;
 }
 
-.title, .explain, .scenario, .ideal, .actual, .needs {
-  border-top:solid #010101 3px;
-  border-bottom:solid #010101 3px;
-}
-
 .graph-title {
 	margin: 1em 0;
 }
@@ -26,12 +21,8 @@ input.runScenario {
   margin-top:1em;
 }
 
-.explain, .ideal, .actual, .income {
+.income {
   background:#e8e8e8;
-}
-
-.needs {
-  background:#d1d3d4;
 }
 
 .row {

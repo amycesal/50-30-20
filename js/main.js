@@ -70,10 +70,9 @@ d3.selectAll('.scenario .household select')
       drawIncome(); // draw the income graph, but only if it doesn't exist yet
     };
 });
+
 // TODO: update income numbers based on scenario changes
 //       actually, this for population and household too...
-
-
 
 // used for graph-specific, window postion-based events
 function isElementInViewport(elem) {
@@ -327,50 +326,6 @@ function drawTitle() {
         .attr("width", function(d) { return yScale(d.y); });  
 }
 
-
-// DRAW INCOME GRAPH
-function drawIncome() {
-
-  dataset = [20, 18, 36, 34, 40, 48, 38, 32, 24, 21, 14, 9, 4];
-  var width = d3.select("div.income").node().getBoundingClientRect().width - 30;
-  var height = 100;
-  var barPadding = 1;
-
-  var svg = d3.select(".graph-income")
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height+20);
-
-  svg.selectAll('rect')
-    .data(dataset)
-    .enter().append('rect')
-    .attr('x', function(d,i) { return i * (width / dataset.length); })
-    .attr('y', function(d) { return height - d; })
-    .attr("width", width / dataset.length - barPadding)
-    .attr("height", function(d) { return d; })
-    .attr("fill", function(d) {
-      if (d == 38) { return "orange"; }
-      else { return "white"; }
-    });
-
-/*
-  var textLabels = svg.selectAll() 
-    .data(dataset)
-    .enter().append("text")
-    .attr("class", "income-label")
-    .style("font-weight", 300)
-    .attr("fill", "#231f20")
-    .attr('x', function(d,i) { return i * (width / dataset.length); })  
-    .attr('y', height + 16)                                       
-    .text(function(d) { return d; });
-*/ 
-// TODO: make text vert, add caption property to data object, use real data, add the poverty line
-
-}
-
-
-
-
 // DRAW EXPLAINER GRAPH
 function drawExplain() {
 
@@ -495,6 +450,46 @@ function drawExplain() {
   var lineFix = svg.selectAll('line'); 
   lineFix.first()
     .attr('transform', 'translate(2,0)');
+}
+
+// DRAW INCOME GRAPH
+function drawIncome() {
+
+  dataset = [20, 18, 36, 34, 40, 48, 38, 32, 24, 21, 14, 9, 4];
+  var width = d3.select("div.income").node().getBoundingClientRect().width - 30;
+  var height = 100;
+  var barPadding = 1;
+
+  var svg = d3.select(".graph-income")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height+20);
+
+  svg.selectAll('rect')
+    .data(dataset)
+    .enter().append('rect')
+    .attr('x', function(d,i) { return i * (width / dataset.length); })
+    .attr('y', function(d) { return height - d; })
+    .attr("width", width / dataset.length - barPadding)
+    .attr("height", function(d) { return d; })
+    .attr("fill", function(d) {
+      if (d == 38) { return "orange"; }
+      else { return "white"; }
+    });
+
+/*
+  var textLabels = svg.selectAll() 
+    .data(dataset)
+    .enter().append("text")
+    .attr("class", "income-label")
+    .style("font-weight", 300)
+    .attr("fill", "#231f20")
+    .attr('x', function(d,i) { return i * (width / dataset.length); })  
+    .attr('y', height + 16)                                       
+    .text(function(d) { return d; });
+*/ 
+// TODO: make text vert, add caption property to data object, use real data, add the poverty line
+
 }
 
 // DRAW IDEAL BUDGET GRAPH
