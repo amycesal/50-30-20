@@ -69,6 +69,7 @@ p, li {font-weight:400; font-size:1.2em;}
 .explain-50 {width:50%; opacity:0;}
 .explain-30 {width:30%; opacity:0;}
 .explain-20 {width:20%; opacity:0;}
+.explain-question {opacity:0;}
 
 .scrollcue {
 	margin:0 auto;

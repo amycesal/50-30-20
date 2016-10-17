@@ -392,7 +392,7 @@ function drawExplain() {
       .attr("height", xScale.rangeBand())
       .attr("width", 0);
 
-  // TODO: kill listener on success?
+  // TODO: kill listener on success? 
   // trigger transitions when svg is in viewport
   $(window).scroll(function(){
     var $elem = $("svg.explainer");
@@ -417,6 +417,7 @@ function drawExplain() {
             break;
           case 3:
             $(".explain-20").animate( { opacity: 1 }, 600);
+            $(".explain-question").delay(600).animate( { opacity: 1 }, 600)
             break;
         }
       }
