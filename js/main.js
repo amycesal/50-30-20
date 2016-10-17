@@ -768,7 +768,7 @@ function getVerdict() {
     setTimeout(function() {
       $(".verdict p")
       .html("Following 50-30-20 isn't possible in this situation. The needs of this household exceed 50% of its income by " + 
-        data.overneedsperc + "%, which reduces this household's ability to save for the future.");
+        data.overneedsperc + "%, which reduces this household's ability to save for the future.").animate( { opacity: 1 }, 600);
     }, 3200);
   }
   else {

@@ -87,7 +87,7 @@ div#graph-ideal, div#graph-needs {margin-bottom: 40px;}
 div.scenario div {padding-bottom: 1em;} /* width of column contents in scenario section */
 select {max-width:300px;}
 
-
+.verdict {opacity:0;}
 
 
 
