@@ -549,7 +549,7 @@ function drawIdeal() {
 
     d3.selectAll("#graph-ideal rect")
       .transition()
-        .delay(function(d, i) {return (i) * 1600;}) 
+        .delay(function(d, i) {return (i+0.5) * 1600;}) 
         .duration(1200)
         .attr("width", function(d) { return yScale(d.y); });  
 
@@ -661,9 +661,10 @@ function drawActual() {
 
     d3.selectAll("#graph-actual rect")
       .transition()
-        .delay(function(d, i) {return (i) * 1600;}) 
+        .delay(function(d, i) {return (i+0.5) * 1600;}) 
         .duration(1200)
-        .attr("width", function(d) { return yScale(d.y); });  
+        .attr("width", function(d) { return yScale(d.y); })
+        .each("end", getVerdict);
 
   // draw a line over the start of every rect
   var lines = groups.selectAll("line")
@@ -764,6 +765,20 @@ function drawActual() {
     .text(function(d) { return "$" + d.y });
 
   arrangeLabels();
+}
+
+function getVerdict() {
+  if (data.needs > data.fifty) {
+    setTimeout(function() {
+      $(".verdict p")
+      .html("Following 50-30-20 isn't possible in this situation. The needs of this household exceed 50% of its income by " + 
+        data.overneedsperc + "%, which reduces this household's ability to save for the future.");
+    }, 3200);
+  }
+  else {
+    $(".verdict p")
+      .html("This household is doing great yay!");
+  }
 
 }
 
