@@ -46,7 +46,8 @@ d3.selection.prototype.first = function() {
   return d3.select(this[0][0]);
 };
 
-// draw the explainer graph
+// draw the title and explainer graphs
+drawTitle();
 drawExplain();
 
 // listen for scroll-cue click and send to next section
@@ -70,6 +71,7 @@ d3.selectAll('.scenario .household select')
     };
 });
 // TODO: update income numbers based on scenario changes
+//       actually, this for population and household too...
 
 
 
@@ -244,9 +246,7 @@ function setupData() {
 // update various display numbers with the correct values for selected scenario
 function addNumbers() {
   $('span.population').html(numberWithCommas(data.population));
-  $('span.area').html(data.area);
   $('span.incomeannual').html(numberWithCommas(data.income));
-  $('span.takehome').html(numberWithCommas(data.takehome));
   $('span.overneeds').html(numberWithCommas(data.overneeds));
   $('span.overneedsperc').html(data.overneedsperc);
 }
@@ -255,6 +255,76 @@ function addNumbers() {
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+// DRAW TITLE GRAPH
+function drawTitle() {
+
+  // setup data — static so removed from rest of control flow
+  dataTitle = [
+    [
+      { x: 0, y: 50 }
+    ],
+    [ 
+      { x: 0, y: 30 }
+    ],
+    [
+      { x: 0, y: 20 }
+    ]
+  ];
+
+  var stack = d3.layout.stack();
+  stack(dataTitle);
+
+  var dataset = dataTitle; 
+  var h = 40; 
+
+  // set up scales 
+  var xScale = d3.scale.ordinal()      // actually y scale, since we're doing horizontal bars
+    .domain(d3.range(dataset[0].length))
+    .rangeRoundBands([0, h]);
+
+  var yScale = d3.scale.linear()       // actually x scale
+    .domain([0,       
+      d3.max(dataset, function(d) {
+        return d3.max(d, function(d) {
+          return d.y0 + d.y;
+        });
+      })
+    ])
+    .range([0, w]);
+  
+  // create SVG element
+  var svg = d3.select(".graph-title")
+        .append("svg")
+        .attr("width", w)        
+        .attr("height", h);   
+
+  // add a group for each row of data
+  var groups = svg.selectAll("g")
+    .data(dataset)
+    .enter().append("g")
+    .style("fill", function(d, i) {                  
+      var fillColor;                                  
+        if (i == 0) { fillColor = "#65B68A";}         // mint
+        else if (i == 1) { fillColor = "#297676";}    // teal
+        else if (i == 2) { fillColor = "#0C3758";}    // blue
+      return fillColor;      
+    });
+
+  // add a rect for each data value
+  var rects = groups.selectAll("rect")
+    .data(function(d) { return d; })
+    .enter().append("rect")
+      .attr("x", function(d) { return yScale(d.y0); }) 
+      .attr("y", 0)   // 128 is to shift chart down to make way for annotation
+      .attr("height", xScale.rangeBand())
+      .attr("width", 0)
+      .transition()
+      .delay(function(d, i) {return i * 1600;}) 
+      .duration(1200)
+      .attr("width", function(d) { return yScale(d.y); });
+}
+
 
 // DRAW INCOME GRAPH
 function drawIncome() {
