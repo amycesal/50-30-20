@@ -57,27 +57,43 @@ d3.selectAll('.scrollcue')
       scrollTop: $(this).parent().parent().next(".row").offset().top}, 1200);
 });
 
+// function for button in end section, sends user to scenario section
 function backToScenario() {
   $('html, body').animate({
   scrollTop: $(".scenario").offset().top}, 1200);
-}
+};
 
-// listen for scenario selection events and reveal scenario sections
+// listen for scenario selection events and reveal scenario sections, update numbers
 d3.selectAll('.scenario .location select')
   .on('change', function() {
-     $(".scenario .household").css("display", "block");
+    var selected = {};
+    selected.city = $('select#city option:selected').val();
+    selected.household = $('select#household option:selected').val();
+    for (i=0;i<allScenarios.length;i++) {
+      if (allScenarios[i].city == selected.city) {
+        $('span.population').html(numberWithCommas(allScenarios[i].population));
+        $('span.incomeannual').html(numberWithCommas(allScenarios[i].income));
+        $('span.takehome').html(numberWithCommas(allScenarios[i].takehome));
+      };
+    };
+    $(".scenario .household").css("display", "block");
 });
 
 d3.selectAll('.scenario .household select')
   .on('change', function() {
+    var selected = {};
+    selected.household = $('select#household option:selected').val();
+    for (i=0;i<allScenarios.length;i++) {
+      if (allScenarios[i].household == selected.household) {
+        $('span.incomeannual').html(numberWithCommas(allScenarios[i].income));
+        $('span.takehome').html(numberWithCommas(allScenarios[i].takehome));
+      };
+    };
     $(".scenario .income").css("display", "block");
     if (!$(".graph-income svg").length) {
       drawIncome(); // draw the income graph, but only if it doesn't exist yet
     };
 });
-
-// TODO: update income numbers based on scenario changes
-//       actually, this for population and household too...
 
 // used for graph-specific, window postion-based events
 function isElementInViewport(elem) {
@@ -122,7 +138,7 @@ function runScenario() {
   $(".ideal").css("display", "block"); // display all post-scenario sections
   $(".needs").css("display", "block");
   $(".actual").css("display", "block");  
-  d3.selectAll("svg.graph").remove(); // clear any existing graphs (redundant?)
+  d3.selectAll("svg.graph").remove(); // clear any existing post-scenario graphs (redundant?)
   setupAndDraw(); // get the selected scenario, setup the data, draw the graphs
   $('html, body').animate({ // send user to first post-scenario graph section
     scrollTop: $(".ideal").offset().top}, 1200);
