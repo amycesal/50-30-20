@@ -473,7 +473,18 @@ function drawIdeal() {
       .attr("x", function(d) { return yScale(d.y0); }) 
       .attr("y", 128)   // 128 is to shift chart down to make way for annotation
       .attr("height", xScale.rangeBand())
-      .attr("width", function(d) { return yScale(d.y); });
+      .attr("width", "0");
+
+    d3.selectAll("#graph-ideal rect")
+      .transition()
+        .delay(function(d, i) {return (i) * 1600;}) 
+        .duration(1200)
+        .attr("width", function(d) { return yScale(d.y); });  
+
+
+
+
+
 
   // draw a line over the start of each rect
   var lines = groups.selectAll("line")
@@ -757,8 +768,15 @@ function drawActual() {
       .attr("x", function(d) { return yScale(d.y0); })
       .attr("y", barOffset)    // set vertical position of bar inside svg
       .attr("class", "actual-rect")    // set vertical position of bar inside svg
-      .attr("width", function(d) { return yScale(d.y); })
+      .attr("width", 0)
       .attr("height", xScale.rangeBand());
+
+    d3.selectAll("#graph-actual rect")
+      .transition()
+        .delay(function(d, i) {return (i) * 1600;}) 
+        .duration(1200)
+        .attr("width", function(d) { return yScale(d.y); });  
+
 
 
   // draw a line over the start of every rect
