@@ -318,11 +318,13 @@ function drawTitle() {
       .attr("x", function(d) { return yScale(d.y0); }) 
       .attr("y", 0)   // 128 is to shift chart down to make way for annotation
       .attr("height", xScale.rangeBand())
-      .attr("width", 0)
+      .attr("width", 0);
+
+    d3.selectAll(".graph-title rect")
       .transition()
-      .delay(function(d, i) {return i * 1600;}) 
-      .duration(1200)
-      .attr("width", function(d) { return yScale(d.y); });
+        .delay(function(d, i) {return (i) * 1600;}) 
+        .duration(1200)
+        .attr("width", function(d) { return yScale(d.y); });  
 }
 
 
@@ -551,11 +553,6 @@ function drawIdeal() {
         .duration(1200)
         .attr("width", function(d) { return yScale(d.y); });  
 
-
-
-
-
-
   // draw a line over the start of each rect
   var lines = groups.selectAll("line")
     .data(function(d) { return d; })
@@ -610,185 +607,6 @@ function drawIdeal() {
     .text(function(d) { return "$" + d[0].y; });
 }
 
-// DRAW NEEDS GRAPH 
-function drawNeeds() {
-
-  var h = 720; 
-  var dataset = dataNeeds;
-  var bottomOffset = 34;
-
-  // reset scales 
-  var xScale = d3.scale.ordinal()              
-    .domain(d3.range(dataset[0].length))
-    .rangeRoundBands([0, h]); 
-
-  var yScale = d3.scale.linear()               
-    .domain([0,
-      d3.max(dataset, function(d) {
-        return d3.max(d, function(d) {
-          return d.y0 + d.y;
-        });
-      })
-    ])
-    .range([0, w]); 
-
-  // create new svg element
-  var svg = d3.select("#graph-needs")
-    .append("svg")
-    .attr("class", "graph")
-    .attr("width", w)
-    .attr("height", h);    
-
-  // add background colors
-  svg.append("rect")
-    .attr("x", 0) 
-    .attr("y", 0) 
-    .attr("width", function(d) { return yScale(data.fifty); })
-    .attr("height", h-bottomOffset)
-    .style("fill", "#65B68A")
-    .style("fill-opacity", 0.18);
-
-  svg.append("rect")
-    .attr("x", function(d) { return yScale(data.fifty); }) 
-    .attr("y", 0) 
-    .attr("width", function(d) { return yScale(data.thirty); })
-    .attr("height", h-bottomOffset)
-    .style("fill", "#297676")
-    .style("fill-opacity", 0.18);
-
-  svg.append("rect")
-    .attr("x", function(d) { return yScale(data.fifty) + yScale(data.thirty); }) 
-    .attr("y", 0) 
-    .attr("width", function(d) { return yScale(data.twenty); })
-    .attr("height", h-bottomOffset)
-    .style("fill", "#0C3758")
-    .style("fill-opacity", 0.18);
-
-  // add a group for each row of data
-  var groups = svg.selectAll("g")
-    .data(dataset)
-    .enter().append("g")
-    .style("fill", function(d, i) {                   
-      var fillColor;                                  
-        if (i == 0) { fillColor = "#65B68A" ;}         // solid yellow
-        else if (i == 1) { fillColor = "url(#diagonal-stripe-2)" ;}    // pattern fill defined in svg in html
-        else if (i == 2) { fillColor = "#e8e8e8" ;}    // gray
-      return fillColor;      
-    });
-
-  // add a rect for each data value
-  var rects = groups.selectAll("rect")
-    .data(function(d) {return d;})
-    .enter().append("rect")
-    .attr("x", function(d) { return yScale(d.y0); })
-    .attr("y", function(d, i) { return xScale(i)+50; })   // value adjusts vertical position of rects
-    .attr("width", function(d) { return yScale(d.y); })
-    .attr("height", 60);                                  // value sets height of each bar, no effect on position
-
-  // first dashed line
-  svg.append("line")
-    .attr("y1", h-bottomOffset) 
-    .attr("y2", 0) 
-    .attr("x1", 2) 
-    .attr("x2", 2) 
-    .style("stroke-width", 4)
-    .style("stroke", "white")
-    .style("fill", "none")
-    .style("stroke-dasharray", ("4, 8"));
-
-  // second dashed line - 50% of ideal budget
-  svg.append("line")
-    .attr("y1", h-bottomOffset) 
-    .attr("y2", 0) 
-    .attr("x1", function(d) { return yScale(data.fifty); })
-    .attr("x2", function(d) { return yScale(data.fifty); })
-    .style("stroke-width", 4)
-    .style("stroke", "white")
-    .style("fill", "none")
-    .style("stroke-dasharray", ("4, 8"));
-
-  // third dashed line - next 30% of ideal budget
-  svg.append("line")
-    .attr("y1", h-bottomOffset) 
-    .attr("y2", 0) 
-    .attr("x1", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
-    .attr("x2", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
-    .style("stroke-width", 4)
-    .style("stroke", "white")
-    .style("fill", "none")
-    .style("stroke-dasharray", ("4, 8"));
-
-  // fourth dashed line
-  svg.append("line")
-    .attr("y1", h-bottomOffset) 
-    .attr("y2", 0) 
-    .attr("x1", w-2)
-    .attr("x2", w-2)
-    .style("stroke-width", 4)
-    .style("stroke", "white")
-    .style("fill", "none")
-    .style("stroke-dasharray", ("4, 8"));
-
-  // add a label to each row, indicating which value (housing, healthcare etc.) is being added to the cumulative total
-  var textLabelOne = svg.selectAll("text")
-    .data(dataset[1])
-    .enter().append("text")
-    .attr("y", function(d, i) { return xScale(i)+35; })     // value adjusts vertical position of labels
-    .attr("x", function(d) { return yScale(d.y0)+32; })      // value adjusts horizontal position of labels
-    .attr("fill", "#231f20")
-    .attr("class", "needs-label")
-    .text(function(d) { 
-      if (d.section != null) { return d.section; } // only add label if 'section' exists in the object
-      else { return null; }                        // TODO: destroy the text element instead of return null
-    })                                             // also: maybe don't need this conditional anymore?
-
-  var textLabelTwo = d3.selectAll(".needs-label")
-    .append("tspan")
-    .style("font-weight", 700)
-    .text(function(d) { return " +$" + d.y })
-
-  // add svg icons to text labels
-  var icons = svg.selectAll("svg") 
-    .data(dataset[1])                     // this now targets the second array in dataset, where caption info is stored
-    .enter().append("svg:image")
-    .attr("xlink:href", function(d) {
-      if(d.icon != null) {                // TODO: probably don't need this conditional anymore
-        return "img/" + d.icon; }
-      else { return null; }
-    })
-    .attr("y", function(d, i) { return xScale(i)+16; })     
-    .attr("x", function(d) { return yScale(d.y0)+6; })
-    .attr("width", 20)      
-    .attr("height", 20);
-
-  // add below-the-bar icons 
-  var subIcons = svg.selectAll("svg")
-    .data(dataset[1])
-    .enter().append("svg:image")    // first add one icon of each type
-    .attr("class", "subicon")
-    .attr("xlink:href", function(d) {
-      if(d.icon != null) {
-        return "img/grey-" + d.icon; }
-      else { return null; }
-    })
-    .attr("y", function(d, i) { return xScale(i)+116; })                // vertical position below the relevant bar
-    .attr("x", function(d) { return yScale(d.y0)+(yScale(d.y)/2)-10; }) // horizontal position in the middle of the relevant bar
-    .attr("width", 20)      
-    .attr("height", 20)
-    .each(function(d,i) {           // then add a corresponding icon for each remaining bar
-      for (n=i; n<4; n++) {
-        svg.selectAll("svg")
-          .data([d])
-          .enter().append("svg:image")
-          .attr("class", "subicon")
-          .attr("xlink:href", "img/grey-" + d.icon)
-          .attr("y", function(d, i) { return xScale(i)+260+(n*144); })  // vert - 260 is 116 + 144 (height of bar etc.)
-          .attr("x", function(d) { return yScale(d.y0)+(yScale(d.y)/2)-10; }) // horz - same as above
-          .attr("width", 20)      
-          .attr("height", 20);
-      }
-    });
-}
 
 // DRAW ACTUAL BUDGET GRAPH
 function drawActual() {
@@ -846,8 +664,6 @@ function drawActual() {
         .delay(function(d, i) {return (i) * 1600;}) 
         .duration(1200)
         .attr("width", function(d) { return yScale(d.y); });  
-
-
 
   // draw a line over the start of every rect
   var lines = groups.selectAll("line")
@@ -1036,4 +852,190 @@ function arrangeLabels() {
       .style("stroke", "#231f20")
       .style("fill", "none");
   }
+}
+
+
+
+
+
+
+
+// DRAW NEEDS GRAPH 
+function drawNeeds() {
+
+  var h = 720; 
+  var dataset = dataNeeds;
+  var bottomOffset = 34;
+
+  // reset scales 
+  var xScale = d3.scale.ordinal()              
+    .domain(d3.range(dataset[0].length))
+    .rangeRoundBands([0, h]); 
+
+  var yScale = d3.scale.linear()               
+    .domain([0,
+      d3.max(dataset, function(d) {
+        return d3.max(d, function(d) {
+          return d.y0 + d.y;
+        });
+      })
+    ])
+    .range([0, w]); 
+
+  // create new svg element
+  var svg = d3.select("#graph-needs")
+    .append("svg")
+    .attr("class", "graph")
+    .attr("width", w)
+    .attr("height", h);    
+
+  // add background colors
+  svg.append("rect")
+    .attr("x", 0) 
+    .attr("y", 0) 
+    .attr("width", function(d) { return yScale(data.fifty); })
+    .attr("height", h-bottomOffset)
+    .style("fill", "#65B68A")
+    .style("fill-opacity", 0.18);
+
+  svg.append("rect")
+    .attr("x", function(d) { return yScale(data.fifty); }) 
+    .attr("y", 0) 
+    .attr("width", function(d) { return yScale(data.thirty); })
+    .attr("height", h-bottomOffset)
+    .style("fill", "#297676")
+    .style("fill-opacity", 0.18);
+
+  svg.append("rect")
+    .attr("x", function(d) { return yScale(data.fifty) + yScale(data.thirty); }) 
+    .attr("y", 0) 
+    .attr("width", function(d) { return yScale(data.twenty); })
+    .attr("height", h-bottomOffset)
+    .style("fill", "#0C3758")
+    .style("fill-opacity", 0.18);
+
+  // add a group for each row of data
+  var groups = svg.selectAll("g")
+    .data(dataset)
+    .enter().append("g")
+    .style("fill", function(d, i) {                   
+      var fillColor;                                  
+        if (i == 0) { fillColor = "#65B68A" ;}         // solid yellow
+        else if (i == 1) { fillColor = "url(#diagonal-stripe-2)" ;}    // pattern fill defined in svg in html
+        else if (i == 2) { fillColor = "#e8e8e8" ;}    // gray
+      return fillColor;      
+    });
+
+  // add a rect for each data value
+  var rects = groups.selectAll("rect")
+    .data(function(d) {return d;})
+    .enter().append("rect")
+    .attr("x", function(d) { return yScale(d.y0); })
+    .attr("y", function(d, i) { return xScale(i)+50; })   // value adjusts vertical position of rects
+    .attr("width", function(d) { return yScale(d.y); })
+    .attr("height", 60);                                  // value sets height of each bar, no effect on position
+
+  // first dashed line
+  svg.append("line")
+    .attr("y1", h-bottomOffset) 
+    .attr("y2", 0) 
+    .attr("x1", 2) 
+    .attr("x2", 2) 
+    .style("stroke-width", 4)
+    .style("stroke", "white")
+    .style("fill", "none")
+    .style("stroke-dasharray", ("4, 8"));
+
+  // second dashed line - 50% of ideal budget
+  svg.append("line")
+    .attr("y1", h-bottomOffset) 
+    .attr("y2", 0) 
+    .attr("x1", function(d) { return yScale(data.fifty); })
+    .attr("x2", function(d) { return yScale(data.fifty); })
+    .style("stroke-width", 4)
+    .style("stroke", "white")
+    .style("fill", "none")
+    .style("stroke-dasharray", ("4, 8"));
+
+  // third dashed line - next 30% of ideal budget
+  svg.append("line")
+    .attr("y1", h-bottomOffset) 
+    .attr("y2", 0) 
+    .attr("x1", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
+    .attr("x2", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
+    .style("stroke-width", 4)
+    .style("stroke", "white")
+    .style("fill", "none")
+    .style("stroke-dasharray", ("4, 8"));
+
+  // fourth dashed line
+  svg.append("line")
+    .attr("y1", h-bottomOffset) 
+    .attr("y2", 0) 
+    .attr("x1", w-2)
+    .attr("x2", w-2)
+    .style("stroke-width", 4)
+    .style("stroke", "white")
+    .style("fill", "none")
+    .style("stroke-dasharray", ("4, 8"));
+
+  // add a label to each row, indicating which value (housing, healthcare etc.) is being added to the cumulative total
+  var textLabelOne = svg.selectAll("text")
+    .data(dataset[1])
+    .enter().append("text")
+    .attr("y", function(d, i) { return xScale(i)+35; })     // value adjusts vertical position of labels
+    .attr("x", function(d) { return yScale(d.y0)+32; })      // value adjusts horizontal position of labels
+    .attr("fill", "#231f20")
+    .attr("class", "needs-label")
+    .text(function(d) { 
+      if (d.section != null) { return d.section; } // only add label if 'section' exists in the object
+      else { return null; }                        // TODO: destroy the text element instead of return null
+    })                                             // also: maybe don't need this conditional anymore?
+
+  var textLabelTwo = d3.selectAll(".needs-label")
+    .append("tspan")
+    .style("font-weight", 700)
+    .text(function(d) { return " +$" + d.y })
+
+  // add svg icons to text labels
+  var icons = svg.selectAll("svg") 
+    .data(dataset[1])                     // this now targets the second array in dataset, where caption info is stored
+    .enter().append("svg:image")
+    .attr("xlink:href", function(d) {
+      if(d.icon != null) {                // TODO: probably don't need this conditional anymore
+        return "img/" + d.icon; }
+      else { return null; }
+    })
+    .attr("y", function(d, i) { return xScale(i)+16; })     
+    .attr("x", function(d) { return yScale(d.y0)+6; })
+    .attr("width", 20)      
+    .attr("height", 20);
+
+  // add below-the-bar icons 
+  var subIcons = svg.selectAll("svg")
+    .data(dataset[1])
+    .enter().append("svg:image")    // first add one icon of each type
+    .attr("class", "subicon")
+    .attr("xlink:href", function(d) {
+      if(d.icon != null) {
+        return "img/grey-" + d.icon; }
+      else { return null; }
+    })
+    .attr("y", function(d, i) { return xScale(i)+116; })                // vertical position below the relevant bar
+    .attr("x", function(d) { return yScale(d.y0)+(yScale(d.y)/2)-10; }) // horizontal position in the middle of the relevant bar
+    .attr("width", 20)      
+    .attr("height", 20)
+    .each(function(d,i) {           // then add a corresponding icon for each remaining bar
+      for (n=i; n<4; n++) {
+        svg.selectAll("svg")
+          .data([d])
+          .enter().append("svg:image")
+          .attr("class", "subicon")
+          .attr("xlink:href", "img/grey-" + d.icon)
+          .attr("y", function(d, i) { return xScale(i)+260+(n*144); })  // vert - 260 is 116 + 144 (height of bar etc.)
+          .attr("x", function(d) { return yScale(d.y0)+(yScale(d.y)/2)-10; }) // horz - same as above
+          .attr("width", 20)      
+          .attr("height", 20);
+      }
+    });
 }
