@@ -114,7 +114,7 @@
           </div>
       </div>
       <div class="small-12 medium-12 large-12 columns">
-        <h3>But how feasible is this for households in America?</h3>
+        <p class="strong">But how feasible is this for households in America?</p>
           <img src="./img/scrollcue.png" class="scrollcue" />
       </div>
     </div>
@@ -143,14 +143,11 @@
         <p>One child is 4, the other is 8.</p>
       </div>
       <div class="small-12 medium-12 large-4 columns income">
-        <h3>INCOME LEVEL:</h3>
-        <select name="level" id="level">
-          <option value="Choose an income level">Choose an income level</option>
-        </select>
-        <p class="blue">$<span class="income">69,402</span></p>
+        <h3>MEDIAN INCOME LEVEL:</h3>
+        <p class="blue">$<span class="incomeannual">69,402</span></p>
         <p class="blue">$<span class="takehome">4,577</span><span class="money-label">/month</span></p>
-        <p>$<span class="difference">45,552</span> above federal poverty level.</p>
-          <input type="button" onclick="runScenario()" value="RUN SCENARIO"></input>
+        <div class="graph-income"></div>
+        <input type="button" onclick="runScenario()" value="RUN SCENARIO" class="runScenario"></input>
       </div>
     </div>
 

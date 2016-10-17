@@ -1,5 +1,5 @@
 
-// on load completion, hide scenario sections and post-scenario graph sections, and reveal the page 
+// on page load, hide scenario sections and post-scenario graph sections, and reveal the page 
 $(window).on('load', function() {
    $(".scenario .household").css("display", "none");
    $(".scenario .income").css("display", "none");
@@ -64,7 +64,10 @@ d3.selectAll('.scenario .location select')
 
 d3.selectAll('.scenario .household select')
   .on('change', function() {
-     $(".scenario .income").css("display", "block");
+    $(".scenario .income").css("display", "block");
+    if (!$(".graph-income svg").length) {
+      drawIncome(); // draw the income graph, but only if it doesn't exist yet
+    };
 });
 
 // used for graph-specific, window postion-based events
@@ -131,7 +134,6 @@ function getUniques(dd) {
     }        
   });
   var option = '';
-  console.log(distinct);
   for (var i = 0; i < distinct.length; i++) {   // populate dropdown with unique values
     option += '<option value="' + distinct[i] + '">' + distinct[i] + '</option>';
   }
@@ -152,14 +154,11 @@ function setScenario() {
   var selected = {};
     selected.city = $('select#city option:selected').val();
     selected.household = $('select#household option:selected').val();
-    selected.level = $('select#level option:selected').val();
   // select data row based on value
   for (i=0;i<data.length;i++) {
     if (data[i].city == selected.city) {
       if (data[i].household == selected.household) {
-        if (data[i].level == selected.level) {
-          data = data[i];   // reduce data object to selected row
-        }
+        data = data[i];   // reduce data object to selected row
       }
     }
   }
@@ -184,7 +183,6 @@ function setProps() {
 function setupData() {
 
   // setup an array for each graph
-
   dataIdeal = [
     [
       { x: 0, y: data.fifty, t1: "50%", t2: "Needs:" }
@@ -244,9 +242,8 @@ function setupData() {
 function addNumbers() {
   $('span.population').html(numberWithCommas(data.population));
   $('span.area').html(data.area);
-  $('span.income').html(numberWithCommas(data.income));
+  $('span.incomeannual').html(numberWithCommas(data.income));
   $('span.takehome').html(numberWithCommas(data.takehome));
-  $('span.difference').html(numberWithCommas(data.difference));
   $('span.overneeds').html(numberWithCommas(data.overneeds));
   $('span.overneedsperc').html(data.overneedsperc);
 }
@@ -255,6 +252,49 @@ function addNumbers() {
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+// DRAW INCOME GRAPH
+function drawIncome() {
+
+  dataset = [20, 18, 36, 34, 40, 48, 38, 32, 24, 21, 14, 9, 4];
+  var width = d3.select("div.income").node().getBoundingClientRect().width - 30;
+  var height = 100;
+  var barPadding = 1;
+
+  var svg = d3.select(".graph-income")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height+20);
+
+  svg.selectAll('rect')
+    .data(dataset)
+    .enter().append('rect')
+    .attr('x', function(d,i) { return i * (width / dataset.length); })
+    .attr('y', function(d) { return height - d; })
+    .attr("width", width / dataset.length - barPadding)
+    .attr("height", function(d) { return d; })
+    .attr("fill", function(d) {
+      if (d == 38) { return "orange"; }
+      else { return "white"; }
+    });
+
+/*
+  var textLabels = svg.selectAll() 
+    .data(dataset)
+    .enter().append("text")
+    .attr("class", "income-label")
+    .style("font-weight", 300)
+    .attr("fill", "#231f20")
+    .attr('x', function(d,i) { return i * (width / dataset.length); })  
+    .attr('y', height + 16)                                       
+    .text(function(d) { return d; });
+*/ 
+// TODO: make text vert, add caption property to data object, use real data, add the poverty line
+
+}
+
+
+
 
 // DRAW EXPLAINER GRAPH
 function drawExplain() {
@@ -330,8 +370,8 @@ function drawExplain() {
       // stepped transition for bars
       d3.selectAll(".explainer rect")
         .transition()
-          .delay(function(d, i) {console.log(i); return i * 2000;}) 
-          .duration(1600)
+          .delay(function(d, i) {return i * 1600;}) 
+          .duration(1200)
           .attr("width", function(d) { return yScale(d.y); })
           .each("end", fadeInText);
       // corresponding transition for text blocks
@@ -353,10 +393,6 @@ function drawExplain() {
     }
   });
 
-
-
-
-    
 
   // draw a line over the start of each rect
   var lines = groups.selectAll("line")
