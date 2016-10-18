@@ -63,33 +63,37 @@ function backToScenario() {
   scrollTop: $(".scenario").offset().top}, 1200);
 };
 
-// listen for scenario selection events and reveal scenario sections, update numbers
-d3.selectAll('.scenario .location select')
-  .on('change', function() {
-    var selected = {};
-    selected.city = $('select#city option:selected').val();
-    selected.household = $('select#household option:selected').val();
-    for (i=0;i<allScenarios.length;i++) {
-      if (allScenarios[i].city == selected.city) {
-        $('span.population').html(numberWithCommas(allScenarios[i].population));
-        $('span.incomeannual').html(numberWithCommas(allScenarios[i].income));
-        $('span.takehome').html(numberWithCommas(allScenarios[i].takehome));
-      };
-    };
-    $(".scenario .household").css("display", "block");
-});
+// BELOW ISN'T WORKING CORRECTLY...
 
-d3.selectAll('.scenario .household select')
-  .on('change', function() {
-    var selected = {};
-    selected.household = $('select#household option:selected').val();
+// listen for scenario selection events and update numbers
+d3.selectAll('select')
+  .on('change.numbers', function() { // note the .numbers namespace after "change", prevents collision with other listeners below
+        console.log("event detected");
+    var interimSelected = {};
+    interimSelected.city = $('select#city option:selected').val();
+    interimSelected.household = $('select#household option:selected').val();
+    console.log("city " + interimSelected.city);
+    console.log("household " + interimSelected.household);
     for (i=0;i<allScenarios.length;i++) {
-      if (allScenarios[i].household == selected.household) {
-        $('span.incomeannual').html(numberWithCommas(allScenarios[i].income));
-        $('span.takehome').html(numberWithCommas(allScenarios[i].takehome));
+          console.log("firing " + i);
+      if (allScenarios[i].city == interimSelected.city) {
+        $('span.population').html(numberWithCommas(allScenarios[i].population));
+        if (allScenarios[i].household == interimSelected.household) {
+          $('span.incomeannual').html(numberWithCommas(allScenarios[i].income));
+          $('span.takehome').html(numberWithCommas(allScenarios[i].takehome));
+        };
       };
     };
-    $(".scenario .income").css("display", "block");
+  });
+
+// listen for scenario selection events and reveal next section if necessary
+d3.selectAll('.scenario .location select')
+  .on('change.sections', function() { 
+    $(".scenario .household").css("display", "block"); // reveal the household section
+});
+d3.selectAll('.scenario .household select')
+  .on('change.sections', function() {
+    $(".scenario .income").css("display", "block"); // reveal the income section
     if (!$(".graph-income svg").length) {
       drawIncome(); // draw the income graph, but only if it doesn't exist yet
     };
@@ -344,7 +348,7 @@ function drawTitle() {
 
     d3.selectAll(".graph-title rect")
       .transition()
-        .delay(function(d, i) {return (i) * 1600;}) 
+        .delay(function(d, i) {return (i+0.5) * 1600;}) 
         .duration(1200)
         .attr("width", function(d) { return yScale(d.y); });  
 }
@@ -517,7 +521,6 @@ function drawIncome() {
     .text(function(d) { return d; });
 */ 
 // TODO: make text vert, add caption property to data object, use real data, add the poverty line
-
 }
 
 // ***********************
