@@ -206,7 +206,7 @@ function setScenario() {
 };
 
 function setProps() {
-  data.difference = data.income - 23850;
+  data.difference = data.income - 23850; // TODO: this number is diff for different household sizes
   data.fifty = Math.round(data.takehome * 0.5);
   data.thirty = Math.round(data.takehome * 0.3);
   data.twenty = Math.round(data.takehome * 0.2);
@@ -235,6 +235,11 @@ function setupData() {
       { x: 0, y: data.twenty, t1: "20%", t2: "Saves:"  }
     ]
   ];
+
+
+
+
+
 
   dataNeeds = [
     [
@@ -884,11 +889,32 @@ function arrangeLabels() {
 // ***********************
 function drawNeeds() {
 
-  var h = 720; 
-  var dataset = dataNeeds;
-  var bottomOffset = 34;
+  dataNeeds = [
+    [
+      { x: 0, y: data.housing, section: "Housing & Utilities", icon: "housing.svg" }
+    ],
+    [
+      { x: 0, y: data.health, section: "Healthcare", icon: "health.svg" }, 
+    ],
+    [
+      { x: 0, y: data.grocery, section: "Groceries", icon: "grocery.svg" }, 
+    ],
+    [
+      { x: 0, y: data.transit, section: "Transportation", icon: "transit.svg" },
+    ],
+    [
+      { x: 0, y: data.childcare, section: "Childcare", icon: "childcare.svg" } 
+    ],
+    [
+      { x: 0, y: data.lo, section: "Childcare", icon: "childcare.svg" } 
+    ]
+  ];
 
-  // reset scales 
+  stack(dataNeeds);
+
+  var h = 100; 
+  var dataset = dataNeeds;
+
   var xScale = d3.scale.ordinal()              
     .domain(d3.range(dataset[0].length))
     .rangeRoundBands([0, h]); 
@@ -910,70 +936,31 @@ function drawNeeds() {
     .attr("width", w)
     .attr("height", h);    
 
-  // add background colors
-  svg.append("rect")
-    .attr("x", 0) 
-    .attr("y", 0) 
-    .attr("width", function(d) { return yScale(data.fifty); })
-    .attr("height", h-bottomOffset)
-    .style("fill", "#65B68A")
-    .style("fill-opacity", 0.18);
-
-  svg.append("rect")
-    .attr("x", function(d) { return yScale(data.fifty); }) 
-    .attr("y", 0) 
-    .attr("width", function(d) { return yScale(data.thirty); })
-    .attr("height", h-bottomOffset)
-    .style("fill", "#297676")
-    .style("fill-opacity", 0.18);
-
-  svg.append("rect")
-    .attr("x", function(d) { return yScale(data.fifty) + yScale(data.thirty); }) 
-    .attr("y", 0) 
-    .attr("width", function(d) { return yScale(data.twenty); })
-    .attr("height", h-bottomOffset)
-    .style("fill", "#0C3758")
-    .style("fill-opacity", 0.18);
-
   // add a group for each row of data
   var groups = svg.selectAll("g")
     .data(dataset)
     .enter().append("g")
     .style("fill", function(d, i) {                   
       var fillColor;                                  
-        if (i == 0) { fillColor = "#65B68A" ;}         // solid yellow
-        else if (i == 1) { fillColor = "url(#diagonal-stripe-2)" ;}    // pattern fill defined in svg in html
-        else if (i == 2) { fillColor = "#e8e8e8" ;}    // gray
+        if (i == 0) { fillColor = "#65B68A" ;}         
+        else if (i == 1) { fillColor = "url(#diagonal-stripe-2)" ;}   
+        else if (i == 2) { fillColor = "#e8e8e8" ;}    
       return fillColor;      
     });
 
   // add a rect for each data value
   var rects = groups.selectAll("rect")
-    .data(function(d) {return d;})
+    .data(function(d) { return d; })
     .enter().append("rect")
-    .attr("x", function(d) { return yScale(d.y0); })
-    .attr("y", function(d, i) { return xScale(i)+50; })   // value adjusts vertical position of rects
-    .attr("width", 0)
-    .attr("height", 60)                                  // value sets height of each bar, no effect on position
-    .transition()
-      .delay(function(d, i) {return (i+0.5) * 1600;}) 
-      .duration(1200)
-      .attr("width", function(d) { return yScale(d.y); });
+      .attr("x", function(d) { return yScale(d.y0); })
+      .attr("y", function(d, i) { return xScale(i); })  
+      .attr("class", "actual-rect")    // set vertical position of bar inside svg
+      .attr("width", function(d) { return yScale(d.y); })
+      .attr("height", xScale.rangeBand());
 
-  // first dashed line
+  // first dashed line - 50% of ideal budget
   svg.append("line")
-    .attr("y1", h-bottomOffset) 
-    .attr("y2", 0) 
-    .attr("x1", 2) 
-    .attr("x2", 2) 
-    .style("stroke-width", 4)
-    .style("stroke", "white")
-    .style("fill", "none")
-    .style("stroke-dasharray", ("4, 8"));
-
-  // second dashed line - 50% of ideal budget
-  svg.append("line")
-    .attr("y1", h-bottomOffset) 
+    .attr("y1", h) 
     .attr("y2", 0) 
     .attr("x1", function(d) { return yScale(data.fifty); })
     .attr("x2", function(d) { return yScale(data.fifty); })
@@ -982,9 +969,9 @@ function drawNeeds() {
     .style("fill", "none")
     .style("stroke-dasharray", ("4, 8"));
 
-  // third dashed line - next 30% of ideal budget
+  // second dashed line - next 30% of ideal budget
   svg.append("line")
-    .attr("y1", h-bottomOffset) 
+    .attr("y1", h) 
     .attr("y2", 0) 
     .attr("x1", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
     .attr("x2", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
@@ -993,16 +980,9 @@ function drawNeeds() {
     .style("fill", "none")
     .style("stroke-dasharray", ("4, 8"));
 
-  // fourth dashed line
-  svg.append("line")
-    .attr("y1", h-bottomOffset) 
-    .attr("y2", 0) 
-    .attr("x1", w-2)
-    .attr("x2", w-2)
-    .style("stroke-width", 4)
-    .style("stroke", "white")
-    .style("fill", "none")
-    .style("stroke-dasharray", ("4, 8"));
+// TODO: coplors, transitions, pacing...
+
+/*
 
   // add a label to each row, indicating which value (housing, healthcare etc.) is being added to the cumulative total
   var textLabelOne = svg.selectAll("text")
@@ -1063,4 +1043,7 @@ function drawNeeds() {
           .attr("height", 20);
       }
     });
+
+
+  */
 }
