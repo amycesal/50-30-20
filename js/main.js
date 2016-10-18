@@ -46,6 +46,22 @@ d3.selection.prototype.first = function() {
   return d3.select(this[0][0]);
 };
 
+// setup data for pre-scenario charts — static, so removed from rest of control flow
+dataFiftyThirtyTwenty = [
+  [
+    { x: 0, y: 50 }
+  ],
+  [ 
+    { x: 0, y: 30 }
+  ],
+  [
+    { x: 0, y: 20 }
+  ]
+];
+
+var stack = d3.layout.stack();
+stack(dataFiftyThirtyTwenty);
+
 // draw the title and explainer graphs
 drawTitle();
 drawExplain();
@@ -68,14 +84,10 @@ function backToScenario() {
 // listen for scenario selection events and update numbers
 d3.selectAll('select')
   .on('change.numbers', function() { // note the .numbers namespace after "change", prevents collision with other listeners below
-        console.log("event detected");
     var interimSelected = {};
     interimSelected.city = $('select#city option:selected').val();
     interimSelected.household = $('select#household option:selected').val();
-    console.log("city " + interimSelected.city);
-    console.log("household " + interimSelected.household);
     for (i=0;i<allScenarios.length;i++) {
-          console.log("firing " + i);
       if (allScenarios[i].city == interimSelected.city) {
         $('span.population').html(numberWithCommas(allScenarios[i].population));
         if (allScenarios[i].household == interimSelected.household) {
@@ -211,7 +223,7 @@ function setProps() {
 
 function setupData() {
 
-  // setup an array for each graph
+  // setup an array for each post-scenario graph
   dataIdeal = [
     [
       { x: 0, y: data.fifty, t1: "50%", t2: "Needs:" }
@@ -261,7 +273,6 @@ function setupData() {
   ];
 
   // stack each array
-  var stack = d3.layout.stack();
   stack(dataIdeal);
   stack(dataActual);
   stack(dataNeeds);
@@ -285,23 +296,7 @@ function numberWithCommas(x) {
 // ****************
 function drawTitle() {
 
-  // setup data — static so removed from rest of control flow
-  dataTitle = [
-    [
-      { x: 0, y: 50 }
-    ],
-    [ 
-      { x: 0, y: 30 }
-    ],
-    [
-      { x: 0, y: 20 }
-    ]
-  ];
-
-  var stack = d3.layout.stack();
-  stack(dataTitle);
-
-  var dataset = dataTitle; 
+  var dataset = dataFiftyThirtyTwenty; 
   var h = 40; 
 
   // set up scales 
@@ -358,23 +353,7 @@ function drawTitle() {
 // ********************
 function drawExplain() {
 
-  // setup data — static so removed from rest of control flow
-  dataExplain = [
-    [
-      { x: 0, y: 50 }
-    ],
-    [ 
-      { x: 0, y: 30 }
-    ],
-    [
-      { x: 0, y: 20 }
-    ]
-  ];
-
-  var stack = d3.layout.stack();
-  stack(dataExplain);
-
-  var dataset = dataExplain; 
+  var dataset = dataFiftyThirtyTwenty; 
   var h = 100; 
   var lineHeight = 100;  // height of solid lines
 
