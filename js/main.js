@@ -236,32 +236,24 @@ function setupData() {
     ]
   ];
 
-
-
-
-
-
   dataNeeds = [
     [
-        { x: 0, y: 0 },                          
-        { x: 1, y: data.housing },              
-        { x: 2, y: data.housing + data.health },               
-        { x: 3, y: data.housing + data.health + data.grocery },               
-        { x: 4, y: data.housing + data.health + data.grocery + data.transit }   
+      { x: 0, y: data.housing, section: "Housing & Utilities", icon: "housing.svg" }
     ],
     [
-        { section: "Housing & Utilities", icon: "housing.svg", x: 0, y: data.housing }, 
-        { section: "Healthcare", icon: "health.svg", x: 1, y: data.health }, 
-        { section: "Groceries", icon: "grocery.svg", x: 2, y: data.grocery }, 
-        { section: "Transportation", icon: "transit.svg", x: 3, y: data.transit },
-        { section: "Childcare", icon: "childcare.svg", x: 4, y: data.childcare } 
+      { x: 0, y: data.health, section: "Healthcare", icon: "health.svg" }, 
     ],
     [
-        { x: 0, y: data.takehome - data.housing },
-        { x: 1, y: data.takehome - data.housing - data.health },
-        { x: 2, y: data.takehome - data.housing - data.health - data.grocery },
-        { x: 3, y: data.takehome - data.housing - data.health - data.grocery - data.transit },
-        { x: 4, y: data.takehome - data.housing - data.health - data.grocery - data.transit - data.childcare }  
+      { x: 0, y: data.grocery, section: "Groceries", icon: "grocery.svg" }, 
+    ],
+    [
+      { x: 0, y: data.transit, section: "Transportation", icon: "transit.svg" },
+    ],
+    [
+      { x: 0, y: data.childcare, section: "Childcare", icon: "childcare.svg" } 
+    ],
+    [
+      { x: 0, y: data.lo, section: "Childcare", icon: "childcare.svg" } 
     ]
   ];
 
@@ -889,29 +881,6 @@ function arrangeLabels() {
 // ***********************
 function drawNeeds() {
 
-  dataNeeds = [
-    [
-      { x: 0, y: data.housing, section: "Housing & Utilities", icon: "housing.svg" }
-    ],
-    [
-      { x: 0, y: data.health, section: "Healthcare", icon: "health.svg" }, 
-    ],
-    [
-      { x: 0, y: data.grocery, section: "Groceries", icon: "grocery.svg" }, 
-    ],
-    [
-      { x: 0, y: data.transit, section: "Transportation", icon: "transit.svg" },
-    ],
-    [
-      { x: 0, y: data.childcare, section: "Childcare", icon: "childcare.svg" } 
-    ],
-    [
-      { x: 0, y: data.lo, section: "Childcare", icon: "childcare.svg" } 
-    ]
-  ];
-
-  stack(dataNeeds);
-
   var h = 100; 
   var dataset = dataNeeds;
 
@@ -936,17 +905,25 @@ function drawNeeds() {
     .attr("width", w)
     .attr("height", h);    
 
-  // add a group for each row of data
-  var groups = svg.selectAll("g")
-    .data(dataset)
-    .enter().append("g")
-    .style("fill", function(d, i) {                   
-      var fillColor;                                  
+/* old colors:    
         if (i == 0) { fillColor = "#65B68A" ;}         
         else if (i == 1) { fillColor = "url(#diagonal-stripe-2)" ;}   
         else if (i == 2) { fillColor = "#e8e8e8" ;}    
-      return fillColor;      
-    });
+*/
+
+  // add background rect
+  svg.append("rect")
+    .attr("x", 0) 
+    .attr("y", 0) 
+    .attr("width", function(d) { return yScale(data.lo + data.needs); })
+    .attr("height", xScale.rangeBand())
+    .style("fill", "#e8e8e8")
+    .style("fill-opacity", 1);
+
+  // add a group for each row of data
+  var groups = svg.selectAll("g")
+    .data(dataset)
+    .enter().append("g");
 
   // add a rect for each data value
   var rects = groups.selectAll("rect")
@@ -955,8 +932,20 @@ function drawNeeds() {
       .attr("x", function(d) { return yScale(d.y0); })
       .attr("y", function(d, i) { return xScale(i); })  
       .attr("class", "actual-rect")    // set vertical position of bar inside svg
-      .attr("width", function(d) { return yScale(d.y); })
-      .attr("height", xScale.rangeBand());
+      .attr("width", 0)
+      .attr("height", xScale.rangeBand())
+      .style("fill", "url(#diagonal-stripe-2)");
+
+  d3.selectAll("rect.actual-rect")
+    .transition()
+      .delay(function(d, i) {return (i+0.5) * 1600;}) 
+      .duration(1200)
+      .attr("width", function(d) { return yScale(d.y); })  
+      .style("fill", "#65B68A");
+
+    // .each("end", flipColor);
+
+
 
   // first dashed line - 50% of ideal budget
   svg.append("line")
@@ -979,6 +968,7 @@ function drawNeeds() {
     .style("stroke", "white")
     .style("fill", "none")
     .style("stroke-dasharray", ("4, 8"));
+
 
 // TODO: coplors, transitions, pacing...
 
