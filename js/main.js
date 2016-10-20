@@ -1127,6 +1127,8 @@ function nextStep(el) {
   d3.selectAll("rect.needs-rect")
     .style("fill", function(d, i) {
       if (i < el) {return "#65B68A";}
+      else if (i == 5) {return "#e8e8e8";}
+      else {return "url(#diagonal-stripe-2)";}
     })
     .attr("width", function(d, i) {
       if (i <= el) {return yScale(d.y);}
