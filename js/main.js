@@ -1115,11 +1115,8 @@ function nextStep(el) {
     .range([0, w]); 
 
   d3.selectAll("rect.needs-rect")
-    .transition()
-    .duration(1600)
-    .attr("width", function(d, i) { 
-      console.log(i);
-      if (i==el) {console.log(i+" firing");return yScale(d.y);}
+    .attr("width", function(d, i) {
+      if (i <= el) {return yScale(d.y);}
     });  
 
 }
