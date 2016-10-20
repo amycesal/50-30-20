@@ -1034,7 +1034,6 @@ function drawNeeds() {
       .delay(function(d, i) {return (i+0.5) * 1600;}) 
       .duration(1200)
       .attr("width", function(d) { return yScale(d.y); })  
-      .style("fill", "#65B68A");
 
     // .each("end", flipColor);
 
@@ -1126,6 +1125,9 @@ function nextStep(el) {
     .range([0, w]); 
 
   d3.selectAll("rect.needs-rect")
+    .style("fill", function(d, i) {
+      if (i < el) {return "#65B68A";}
+    })
     .attr("width", function(d, i) {
       if (i <= el) {return yScale(d.y);}
     });  
