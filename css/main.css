@@ -67,11 +67,6 @@ p, li {font-weight:400; font-size:1.2em;}
 .explain-20 {width:20%; opacity:0;}
 .explain-question {opacity:0;}
 
-.scrollcue {
-	margin:0 auto;
-	cursor: pointer;
-}
-
 img {display: block; margin: 0.5em auto 1em auto;}
 
 .left {float:left;}
@@ -100,6 +95,19 @@ select {max-width:300px;}
 	width: 90%;
 }
 
+.scrollcue {
+	margin:0 auto;
+	cursor: pointer;
+}
+
+.steppercue {
+	display: inline;
+	background-color: #115AA0;
+	float: left;
+	margin-right: 20px;
+	max-width: 2.5em;
+	cursor: pointer;
+}
 
 
 

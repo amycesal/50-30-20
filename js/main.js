@@ -881,97 +881,6 @@ function arrangeLabels() {
 // ***********************
 function drawNeeds() {
 
-  var h = 100; 
-  var dataset = dataNeeds;
-
-  var xScale = d3.scale.ordinal()              
-    .domain(d3.range(dataset[0].length))
-    .rangeRoundBands([0, h]); 
-
-  var yScale = d3.scale.linear()               
-    .domain([0,
-      d3.max(dataset, function(d) {
-        return d3.max(d, function(d) {
-          return d.y0 + d.y;
-        });
-      })
-    ])
-    .range([0, w]); 
-
-  // create new svg element
-  var svg = d3.select("#graph-needs")
-    .append("svg")
-    .attr("class", "graph")
-    .attr("width", w)
-    .attr("height", h);    
-
-/* old colors:    
-        if (i == 0) { fillColor = "#65B68A" ;}         
-        else if (i == 1) { fillColor = "url(#diagonal-stripe-2)" ;}   
-        else if (i == 2) { fillColor = "#e8e8e8" ;}    
-*/
-
-  // add background rect
-  svg.append("rect")
-    .attr("x", 0) 
-    .attr("y", 0) 
-    .attr("width", function(d) { return yScale(data.lo + data.needs); })
-    .attr("height", xScale.rangeBand())
-    .style("fill", "#e8e8e8")
-    .style("fill-opacity", 1);
-
-  // add a group for each row of data
-  var groups = svg.selectAll("g")
-    .data(dataset)
-    .enter().append("g");
-
-  // add a rect for each data value
-  var rects = groups.selectAll("rect")
-    .data(function(d) { return d; })
-    .enter().append("rect")
-      .attr("x", function(d) { return yScale(d.y0); })
-      .attr("y", function(d, i) { return xScale(i); })  
-      .attr("class", "actual-rect")    // set vertical position of bar inside svg
-      .attr("width", 0)
-      .attr("height", xScale.rangeBand())
-      .style("fill", "url(#diagonal-stripe-2)");
-
-  d3.selectAll("rect.actual-rect")
-    .transition()
-      .delay(function(d, i) {return (i+0.5) * 1600;}) 
-      .duration(1200)
-      .attr("width", function(d) { return yScale(d.y); })  
-      .style("fill", "#65B68A");
-
-    // .each("end", flipColor);
-
-
-
-  // first dashed line - 50% of ideal budget
-  svg.append("line")
-    .attr("y1", h) 
-    .attr("y2", 0) 
-    .attr("x1", function(d) { return yScale(data.fifty); })
-    .attr("x2", function(d) { return yScale(data.fifty); })
-    .style("stroke-width", 4)
-    .style("stroke", "white")
-    .style("fill", "none")
-    .style("stroke-dasharray", ("4, 8"));
-
-  // second dashed line - next 30% of ideal budget
-  svg.append("line")
-    .attr("y1", h) 
-    .attr("y2", 0) 
-    .attr("x1", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
-    .attr("x2", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
-    .style("stroke-width", 4)
-    .style("stroke", "white")
-    .style("fill", "none")
-    .style("stroke-dasharray", ("4, 8"));
-
-
-// TODO: coplors, transitions, pacing...
-
 /*
 
   // add a label to each row, indicating which value (housing, healthcare etc.) is being added to the cumulative total
@@ -1036,4 +945,190 @@ function drawNeeds() {
 
 
   */
+
+
+  var h = 100; 
+  var dataset = dataNeeds;
+
+  var xScale = d3.scale.ordinal()              
+    .domain(d3.range(dataset[0].length))
+    .rangeRoundBands([0, h]); 
+
+  var yScale = d3.scale.linear()               
+    .domain([0,
+      d3.max(dataset, function(d) {
+        return d3.max(d, function(d) {
+          return d.y0 + d.y;
+        });
+      })
+    ])
+    .range([0, w]); 
+
+  // create new svg element
+  var svg = d3.select("#graph-needs")
+    .append("svg")
+    .attr("class", "graph")
+    .attr("width", w)
+    .attr("height", h);    
+
+  // add background rect
+  svg.append("rect")
+    .attr("x", 0) 
+    .attr("y", 0) 
+    .attr("width", function(d) { return yScale(data.lo + data.needs); })
+    .attr("height", xScale.rangeBand())
+    .style("fill", "#e8e8e8")
+    .style("fill-opacity", 1);
+
+  // first dashed line - 50% of ideal budget
+  svg.append("line")
+    .attr("y1", h) 
+    .attr("y2", 0) 
+    .attr("x1", function(d) { return yScale(data.fifty); })
+    .attr("x2", function(d) { return yScale(data.fifty); })
+    .style("stroke-width", 4)
+    .style("stroke", "white")
+    .style("fill", "none")
+    .style("stroke-dasharray", ("4, 8"));
+
+  // second dashed line - next 30% of ideal budget
+  svg.append("line")
+    .attr("y1", h) 
+    .attr("y2", 0) 
+    .attr("x1", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
+    .attr("x2", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
+    .style("stroke-width", 4)
+    .style("stroke", "white")
+    .style("fill", "none")
+    .style("stroke-dasharray", ("4, 8"));
+
+
+  // add a group for each row of data
+  var groups = svg.selectAll("g")
+    .data(dataset)
+    .enter().append("g");
+
+  // add a rect for each data value
+  var rects = groups.selectAll("rect")
+    .data(function(d) { return d; })
+    .enter().append("rect")
+      .attr("x", function(d) { return yScale(d.y0); })
+      .attr("y", function(d, i) { return xScale(i); })  
+      .attr("class", "needs-rect")    
+      .attr("width", 0)
+      .attr("height", xScale.rangeBand())
+      .style("fill", "url(#diagonal-stripe-2)");
+
+  d3.select("rect.needs-rect")
+    .transition()
+    .delay(800)
+    .duration(1200)
+    .attr("width", function(d) { return yScale(d.y); });
+
+/*
+    .each(function(d,i) {
+      d3.select(this)
+
+  d3.selectAll("rect.needs-rect")
+    .transition()
+      .delay(function(d, i) {return (i+0.5) * 1600;}) 
+      .duration(1200)
+      .attr("width", function(d) { return yScale(d.y); })  
+      .style("fill", "#65B68A");
+
+    // .each("end", flipColor);
+
+  d3.selectAll("rect.needs-rect")
+    .transition()
+      .attr("width", function(d, i) { 
+        console.log(i);
+        if (i==1) {console.log(i+" firing");return yScale(d.y);}
+      });  
+
+
+d3.selectAll('.step-link')
+  .on('click', function() {
+    d3.selectAll("rect.needs-rect")
+    .transition()
+      .attr("width", function(d) { return yScale(d.y); });
+  });
+
+
+
+*/
+
+
+
+
 }
+
+// hide all step links in the "needs" section, except the first one
+ $(".step-link").css("display", "none");
+ $("#step1").css("display", "block");
+
+function step1() {
+  // hide step 1, display step 2
+  $("#step2").css("display", "block");
+  nextStep(1);
+  $("#step1").css("display", "none");
+}
+
+function step2() {
+  // hide step 1, display step 2
+  $("#step3").css("display", "block");
+  nextStep(2);
+  $("#step2").css("display", "none");
+}
+
+function step3() {
+  // hide step 1, display step 2
+  $("#step4").css("display", "block");
+  nextStep(3);
+  $("#step3").css("display", "none");
+}
+
+function step4() {
+  // hide step 1, display step 2
+  $("#step5").css("display", "block");
+  nextStep(4);
+  $("#step4").css("display", "none");
+}
+
+
+
+function nextStep(el) {
+  var h = 100; 
+  var dataset = dataNeeds;
+
+  var xScale = d3.scale.ordinal()              
+    .domain(d3.range(dataset[0].length))
+    .rangeRoundBands([0, h]); 
+
+  var yScale = d3.scale.linear()               
+    .domain([0,
+      d3.max(dataset, function(d) {
+        return d3.max(d, function(d) {
+          return d.y0 + d.y;
+        });
+      })
+    ])
+    .range([0, w]); 
+
+  d3.selectAll("rect.needs-rect")
+    .transition()
+    .duration(1600)
+    .attr("width", function(d, i) { 
+      console.log(i);
+      if (i==el) {console.log(i+" firing");return yScale(d.y);}
+    });  
+
+}
+
+
+
+
+
+
+
+
+
