@@ -1066,34 +1066,45 @@ d3.selectAll('.step-link')
  $(".step-link").css("display", "none");
  $("#step1").css("display", "block");
 
+// hide corresponding copy, except for the first
+ $(".needs-copy").css("display", "none");
+ $("#needs-copy1").css("display", "block");
+
 function step1() {
   // hide step 1, display step 2
   $("#step2").css("display", "block");
+  $("#needs-copy2").css("display", "block");
   nextStep(1);
   $("#step1").css("display", "none");
+  $("#needs-copy1").css("display", "none");
 }
 
 function step2() {
-  // hide step 1, display step 2
+  // hide step 2, display step 3
   $("#step3").css("display", "block");
+  $("#needs-copy3").css("display", "block");
   nextStep(2);
   $("#step2").css("display", "none");
+  $("#needs-copy2").css("display", "none");
 }
 
 function step3() {
-  // hide step 1, display step 2
+  // hide step 3, display step 4
   $("#step4").css("display", "block");
+  $("#needs-copy4").css("display", "block");
   nextStep(3);
   $("#step3").css("display", "none");
+  $("#needs-copy3").css("display", "none");
 }
 
 function step4() {
-  // hide step 1, display step 2
+  // hide step 4, display step 5
   $("#step5").css("display", "block");
+  $("#needs-copy5").css("display", "block");
   nextStep(4);
   $("#step4").css("display", "none");
+  $("#needs-copy4").css("display", "none");
 }
-
 
 
 function nextStep(el) {
