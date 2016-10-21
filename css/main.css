@@ -109,7 +109,14 @@ select {max-width:300px;}
 	cursor: pointer;
 }
 
-
+.replaycue {
+	display: inline;
+	background-color: #115AA0;
+	float: left;
+	margin-right: 20px;
+	max-width: 2.5em;
+	cursor: pointer;
+}
 
 
 

@@ -1071,6 +1071,42 @@ d3.selectAll('.step-link')
 
 }
 
+
+// hide all step links in the "needs" section, except the first one
+$(".step-link").css("display", "none");
+$("#step1").css("display", "block");
+
+// hide corresponding copy, except for the first 
+$(".needs-copy").css("display", "none");
+$("#needs-copy1").css("display", "block");
+
+// hide replay button and next section button
+$(".hidey").css("display", "none");
+
+
+
+// listen for replay-cue click and reset this section
+d3.selectAll('.replaycue')
+  .on('click', function() {
+    // hide all step links in the "needs" section, except the first one
+    $(".step-link").css("display", "none");
+    $("#step1").css("display", "block");
+
+    // hide corresponding copy, except for the first 
+    $(".needs-copy").css("display", "none");
+    $("#needs-copy1").css("display", "block");
+
+    // hide replay button only
+    $(".replay-box").css("display", "none");
+
+    // reset needs visualization and redraw in initial state
+    d3.select("#graph-needs svg").remove()
+    drawNeeds();
+});
+
+
+
+// DRY I know... this is called by the jquery stepper functions below to update the needs visualization - labels and rects
 function nextStep(el) {
   var graphOffset = 60;
   var h = 100; 
@@ -1106,22 +1142,7 @@ function nextStep(el) {
       else if (i == el) {return "1";}
       else {return "0";}
     });
-
-
 }
-
-
-// hide all step links in the "needs" section, except the first one
- $(".step-link").css("display", "none");
- $("#step1").css("display", "block");
-
-// hide corresponding copy, except for the first
- $(".needs-copy").css("display", "none");
- $("#needs-copy1").css("display", "block");
-
-// hide replay button and next section button
-  $(".hidey").css("display", "none");
-
 
 function step1() {
   // hide step 1, display step 2
