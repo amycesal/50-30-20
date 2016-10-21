@@ -79,8 +79,6 @@ function backToScenario() {
   scrollTop: $(".scenario").offset().top}, 1200);
 };
 
-// BELOW ISN'T WORKING CORRECTLY...
-
 // listen for scenario selection events and update numbers
 d3.selectAll('select')
   .on('change.numbers', function() { // note the .numbers namespace after "change", prevents collision with other listeners below
@@ -111,7 +109,7 @@ d3.selectAll('.scenario .household select')
     };
 });
 
-// used for graph-specific, window postion-based events
+// used for graph-specific, window-postion based events
 function isElementInViewport(elem) {
     var $elem = $(elem);
 
@@ -946,7 +944,7 @@ function drawNeeds() {
 
   */
 
-
+  var graphOffset = 60;
   var h = 100; 
   var dataset = dataNeeds;
 
@@ -969,12 +967,12 @@ function drawNeeds() {
     .append("svg")
     .attr("class", "graph")
     .attr("width", w)
-    .attr("height", h);    
+    .attr("height", h+120);    
 
   // add background rect
   svg.append("rect")
     .attr("x", 0) 
-    .attr("y", 0) 
+    .attr("y", graphOffset) 
     .attr("width", function(d) { return yScale(data.lo + data.needs); })
     .attr("height", xScale.rangeBand())
     .style("fill", "#e8e8e8")
@@ -982,8 +980,8 @@ function drawNeeds() {
 
   // first dashed line - 50% of ideal budget
   svg.append("line")
-    .attr("y1", h) 
-    .attr("y2", 0) 
+    .attr("y1", graphOffset+h) 
+    .attr("y2", graphOffset) 
     .attr("x1", function(d) { return yScale(data.fifty); })
     .attr("x2", function(d) { return yScale(data.fifty); })
     .style("stroke-width", 4)
@@ -993,8 +991,8 @@ function drawNeeds() {
 
   // second dashed line - next 30% of ideal budget
   svg.append("line")
-    .attr("y1", h) 
-    .attr("y2", 0) 
+    .attr("y1", graphOffset+h) 
+    .attr("y2", graphOffset) 
     .attr("x1", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
     .attr("x2", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
     .style("stroke-width", 4)
@@ -1013,7 +1011,7 @@ function drawNeeds() {
     .data(function(d) { return d; })
     .enter().append("rect")
       .attr("x", function(d) { return yScale(d.y0); })
-      .attr("y", function(d, i) { return xScale(i); })  
+      .attr("y", function(d, i) { return xScale(i) + graphOffset; })  
       .attr("class", "needs-rect")    
       .attr("width", 0)
       .attr("height", xScale.rangeBand())
@@ -1061,6 +1059,37 @@ d3.selectAll('.step-link')
 
 }
 
+function nextStep(el) {
+  var graphOffset = 60;
+  var h = 100; 
+  var dataset = dataNeeds;
+
+  var xScale = d3.scale.ordinal()              
+    .domain(d3.range(dataset[0].length))
+    .rangeRoundBands([0, h]); 
+
+  var yScale = d3.scale.linear()               
+    .domain([0,
+      d3.max(dataset, function(d) {
+        return d3.max(d, function(d) {
+          return d.y0 + d.y;
+        });
+      })
+    ])
+    .range([0, w]); 
+
+  d3.selectAll("rect.needs-rect")
+    .style("fill", function(d, i) {
+      if (i < el) {return "#65B68A";}
+      else if (i == 5) {return "#e8e8e8";}
+      else {return "url(#diagonal-stripe-2)";}
+    })
+    .attr("width", function(d, i) {
+      if (i <= el) {return yScale(d.y);}
+    });  
+}
+
+
 // hide all step links in the "needs" section, except the first one
  $(".step-link").css("display", "none");
  $("#step1").css("display", "block");
@@ -1106,35 +1135,7 @@ function step4() {
 }
 
 
-function nextStep(el) {
-  var h = 100; 
-  var dataset = dataNeeds;
 
-  var xScale = d3.scale.ordinal()              
-    .domain(d3.range(dataset[0].length))
-    .rangeRoundBands([0, h]); 
-
-  var yScale = d3.scale.linear()               
-    .domain([0,
-      d3.max(dataset, function(d) {
-        return d3.max(d, function(d) {
-          return d.y0 + d.y;
-        });
-      })
-    ])
-    .range([0, w]); 
-
-  d3.selectAll("rect.needs-rect")
-    .style("fill", function(d, i) {
-      if (i < el) {return "#65B68A";}
-      else if (i == 5) {return "#e8e8e8";}
-      else {return "url(#diagonal-stripe-2)";}
-    })
-    .attr("width", function(d, i) {
-      if (i <= el) {return yScale(d.y);}
-    });  
-
-}
 
 
 
