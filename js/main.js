@@ -964,29 +964,6 @@ function drawNeeds() {
     .style("fill", "#e8e8e8")
     .style("fill-opacity", 1);
 
-  // first dashed line - 50% of ideal budget
-  svg.append("line")
-    .attr("y1", graphOffset+h) 
-    .attr("y2", graphOffset) 
-    .attr("x1", function(d) { return yScale(data.fifty); })
-    .attr("x2", function(d) { return yScale(data.fifty); })
-    .style("stroke-width", 4)
-    .style("stroke", "white")
-    .style("fill", "none")
-    .style("stroke-dasharray", ("4, 8"));
-
-  // second dashed line - next 30% of ideal budget
-  svg.append("line")
-    .attr("y1", graphOffset+h) 
-    .attr("y2", graphOffset) 
-    .attr("x1", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
-    .attr("x2", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
-    .style("stroke-width", 4)
-    .style("stroke", "white")
-    .style("fill", "none")
-    .style("stroke-dasharray", ("4, 8"));
-
-
   // add a group for each row of data
   var groups = svg.selectAll("g")
     .data(dataset)
@@ -1024,6 +1001,7 @@ function drawNeeds() {
         else { return null; }                        // TODO: destroy the text element instead of return null
       });                              
 
+  // add dollar value to labels
   var textLabelTwo = d3.selectAll(".needs-label")
     .append("tspan")
     .style("font-weight", 700)
@@ -1032,8 +1010,27 @@ function drawNeeds() {
     d3.select(".needs-label")
       .style("opacity", "1");
 
+  // first dashed line - 50% of ideal budget
+  svg.append("line")
+    .attr("y1", graphOffset+h) 
+    .attr("y2", graphOffset) 
+    .attr("x1", function(d) { return yScale(data.fifty); })
+    .attr("x2", function(d) { return yScale(data.fifty); })
+    .style("stroke-width", 4)
+    .style("stroke", "white")
+    .style("fill", "none")
+    .style("stroke-dasharray", ("4, 8"));
 
-
+  // second dashed line - next 30% of ideal budget
+  svg.append("line")
+    .attr("y1", graphOffset+h) 
+    .attr("y2", graphOffset) 
+    .attr("x1", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
+    .attr("x2", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
+    .style("stroke-width", 4)
+    .style("stroke", "white")
+    .style("fill", "none")
+    .style("stroke-dasharray", ("4, 8"));
 
 /*
     .each(function(d,i) {
