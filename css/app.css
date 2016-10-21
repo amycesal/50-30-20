@@ -4,9 +4,30 @@
 	float: left;
 	margin-right: 20px;
 	max-width: 2.5em;
+    width: 10%;
 }
 
 .button {
 	background-color: #115AA0;
 	text-decoration: none;
+}
+
+.scroll-box {
+	border-top: 3px solid #d8d8d8;
+	padding-top: 15px;
+	margin-bottom: 40px;
+	padding-bottom: 15px;
+	border-bottom: 3px solid #d8d8d8;
+}
+
+.scroll-box p {
+	margin-bottom: 0px;
+}
+
+.text {
+	clear: all;
+}
+
+hr {
+	border-top: 2px solid #d8d8d8;
 }
