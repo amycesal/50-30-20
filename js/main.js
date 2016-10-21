@@ -1012,21 +1012,23 @@ function drawNeeds() {
   var textLabelOne = groups.selectAll("text")
     .data(function(d) { return d; })
     .enter().append("text")
-      .attr("x", function(d) { return yScale(d.y0)+12; })      // value adjusts horizontal position of labels
-      .attr("y", function(d, i) { return xScale(i)+36; })     // value adjusts vertical position of labels
+      .attr("x", function(d) { return yScale(d.y0)+4; })      // value adjusts horizontal position of labels
+      .attr("y", function(d, i) { return xScale(i)+48; })     // value adjusts vertical position of labels
       .attr("fill", "#231f20")
       .attr("class", "needs-label")
+      .style("opacity", "0")
       .text(function(d) { 
         if (d.section != null) { return d.section; } // only add label if 'section' exists in the object
         else { return null; }                        // TODO: destroy the text element instead of return null
-      })                                            
+      });                              
 
   var textLabelTwo = d3.selectAll(".needs-label")
     .append("tspan")
     .style("font-weight", 700)
-    .text(function(d) { return " +$" + numberWithCommas(d.y) })
+    .text(function(d) { return " +$" + numberWithCommas(d.y) });
 
-
+    d3.select(".needs-label")
+      .style("opacity", "1");
 
 
 
@@ -1095,6 +1097,15 @@ function nextStep(el) {
     .attr("width", function(d, i) {
       if (i <= el) {return yScale(d.y);}
     });  
+
+  d3.selectAll(".needs-label")
+    .style("opacity", function(d,i) {
+      if (i < el) {return "0";}
+      else if (i == el) {return "1";}
+      else {return "0";}
+    });
+
+
 }
 
 
