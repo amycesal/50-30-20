@@ -70,7 +70,7 @@ drawExplain();
 d3.selectAll('.scrollcue')
   .on('click', function() {
     $('html, body').animate({
-      scrollTop: $(this).parent().parent().next(".row").offset().top}, 1200);
+      scrollTop: $(this).parent().parent().parent().next(".row").offset().top}, 1200);
 });
 
 // function for button in end section, sends user to scenario section
