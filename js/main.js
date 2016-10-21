@@ -6,6 +6,7 @@ $(window).on('load', function() {
    $(".ideal").css("display", "none");
    $(".needs").css("display", "none");
    $(".actual").css("display", "none");
+   $(".end").css("display", "none");
    $("#cover").fadeOut(1200);
 });
 
@@ -152,6 +153,7 @@ function runScenario() {
   $(".ideal").css("display", "block"); // display all post-scenario sections
   $(".needs").css("display", "block");
   $(".actual").css("display", "block");  
+  $(".end").css("display", "block");
   d3.selectAll("svg.graph").remove(); // clear any existing post-scenario graphs (redundant?)
   setupAndDraw(); // get the selected scenario, setup the data, draw the graphs
   $('html, body').animate({ // send user to first post-scenario graph section
