@@ -881,23 +881,7 @@ function drawNeeds() {
 
 /*
 
-  // add a label to each row, indicating which value (housing, healthcare etc.) is being added to the cumulative total
-  var textLabelOne = svg.selectAll("text")
-    .data(dataset[1])
-    .enter().append("text")
-    .attr("y", function(d, i) { return xScale(i)+35; })     // value adjusts vertical position of labels
-    .attr("x", function(d) { return yScale(d.y0)+32; })      // value adjusts horizontal position of labels
-    .attr("fill", "#231f20")
-    .attr("class", "needs-label")
-    .text(function(d) { 
-      if (d.section != null) { return d.section; } // only add label if 'section' exists in the object
-      else { return null; }                        // TODO: destroy the text element instead of return null
-    })                                             // also: maybe don't need this conditional anymore?
 
-  var textLabelTwo = d3.selectAll(".needs-label")
-    .append("tspan")
-    .style("font-weight", 700)
-    .text(function(d) { return " +$" + d.y })
 
   // add svg icons to text labels
   var icons = svg.selectAll("svg") 
@@ -1017,11 +1001,35 @@ function drawNeeds() {
       .attr("height", xScale.rangeBand())
       .style("fill", "url(#diagonal-stripe-2)");
 
+  // transition first rect into view - subsequent rects handled via stepper, below / outside main draw function
   d3.select("rect.needs-rect")
     .transition()
     .delay(800)
     .duration(1200)
     .attr("width", function(d) { return yScale(d.y); });
+
+  // add a label to each row, indicating which value (housing, healthcare etc.) is being added to the cumulative total
+  var textLabelOne = groups.selectAll("text")
+    .data(function(d) { return d; })
+    .enter().append("text")
+      .attr("x", function(d) { return yScale(d.y0)+12; })      // value adjusts horizontal position of labels
+      .attr("y", function(d, i) { return xScale(i)+36; })     // value adjusts vertical position of labels
+      .attr("fill", "#231f20")
+      .attr("class", "needs-label")
+      .text(function(d) { 
+        if (d.section != null) { return d.section; } // only add label if 'section' exists in the object
+        else { return null; }                        // TODO: destroy the text element instead of return null
+      })                                            
+
+  var textLabelTwo = d3.selectAll(".needs-label")
+    .append("tspan")
+    .style("font-weight", 700)
+    .text(function(d) { return " +$" + numberWithCommas(d.y) })
+
+
+
+
+
 
 /*
     .each(function(d,i) {
