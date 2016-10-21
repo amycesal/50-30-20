@@ -110,6 +110,16 @@ d3.selectAll('.scenario .household select')
     };
 });
 
+// listen for scenario selection events and update corresponding images
+d3.selectAll('.scenario .location select')
+  .on('change.images', function() { 
+                                              // switch to correct image
+});
+d3.selectAll('.scenario .household select')
+  .on('change.images', function() {
+                                              // switch to correct image
+});
+
 // used for graph-specific, window-postion based events
 function isElementInViewport(elem) {
     var $elem = $(elem);
