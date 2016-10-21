@@ -1117,6 +1117,10 @@ function nextStep(el) {
  $(".needs-copy").css("display", "none");
  $("#needs-copy1").css("display", "block");
 
+// hide replay button and next section button
+  $(".hidey").css("display", "none");
+
+
 function step1() {
   // hide step 1, display step 2
   $("#step2").css("display", "block");
@@ -1153,7 +1157,12 @@ function step4() {
   $("#needs-copy4").css("display", "none");
 }
 
-
+function step5() {
+  // hide stepper, show next section, show replay
+  $(".hidey").css("display", "block");
+  $("#step5").css("display", "none");
+  $("#needs-copy5").css("display", "none");
+}
 
 
 
