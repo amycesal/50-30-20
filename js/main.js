@@ -881,55 +881,6 @@ function arrangeLabels() {
 // ***********************
 function drawNeeds() {
 
-/*
-
-
-
-  // add svg icons to text labels
-  var icons = svg.selectAll("svg") 
-    .data(dataset[1])                     // this now targets the second array in dataset, where caption info is stored
-    .enter().append("svg:image")
-    .attr("xlink:href", function(d) {
-      if(d.icon != null) {                // TODO: probably don't need this conditional anymore
-        return "img/" + d.icon; }
-      else { return null; }
-    })
-    .attr("y", function(d, i) { return xScale(i)+16; })     
-    .attr("x", function(d) { return yScale(d.y0)+6; })
-    .attr("width", 20)      
-    .attr("height", 20);
-
-  // add below-the-bar icons 
-  var subIcons = svg.selectAll("svg")
-    .data(dataset[1])
-    .enter().append("svg:image")    // first add one icon of each type
-    .attr("class", "subicon")
-    .attr("xlink:href", function(d) {
-      if(d.icon != null) {
-        return "img/grey-" + d.icon; }
-      else { return null; }
-    })
-    .attr("y", function(d, i) { return xScale(i)+116; })                // vertical position below the relevant bar
-    .attr("x", function(d) { return yScale(d.y0)+(yScale(d.y)/2)-10; }) // horizontal position in the middle of the relevant bar
-    .attr("width", 20)      
-    .attr("height", 20)
-    .each(function(d,i) {           // then add a corresponding icon for each remaining bar
-      for (n=i; n<4; n++) {
-        svg.selectAll("svg")
-          .data([d])
-          .enter().append("svg:image")
-          .attr("class", "subicon")
-          .attr("xlink:href", "img/grey-" + d.icon)
-          .attr("y", function(d, i) { return xScale(i)+260+(n*144); })  // vert - 260 is 116 + 144 (height of bar etc.)
-          .attr("x", function(d) { return yScale(d.y0)+(yScale(d.y)/2)-10; }) // horz - same as above
-          .attr("width", 20)      
-          .attr("height", 20);
-      }
-    });
-
-
-  */
-
   var graphOffset = 60;
   var h = 100; 
   var dataset = dataNeeds;
@@ -1033,41 +984,53 @@ function drawNeeds() {
     .style("stroke-dasharray", ("4, 8"));
 
 /*
-    .each(function(d,i) {
-      d3.select(this)
+  // icons — on hold for now.
 
-  d3.selectAll("rect.needs-rect")
-    .transition()
-      .delay(function(d, i) {return (i+0.5) * 1600;}) 
-      .duration(1200)
-      .attr("width", function(d) { return yScale(d.y); })  
+  // add svg icons to text labels
+  var icons = svg.selectAll("svg") 
+    .data(dataset[1])                     // this now targets the second array in dataset, where caption info is stored
+    .enter().append("svg:image")
+    .attr("xlink:href", function(d) {
+      if(d.icon != null) {                // TODO: probably don't need this conditional anymore
+        return "img/" + d.icon; }
+      else { return null; }
+    })
+    .attr("y", function(d, i) { return xScale(i)+16; })     
+    .attr("x", function(d) { return yScale(d.y0)+6; })
+    .attr("width", 20)      
+    .attr("height", 20);
 
-    // .each("end", flipColor);
-
-  d3.selectAll("rect.needs-rect")
-    .transition()
-      .attr("width", function(d, i) { 
-        console.log(i);
-        if (i==1) {console.log(i+" firing");return yScale(d.y);}
-      });  
-
-
-d3.selectAll('.step-link')
-  .on('click', function() {
-    d3.selectAll("rect.needs-rect")
-    .transition()
-      .attr("width", function(d) { return yScale(d.y); });
-  });
-
-
-
-*/
-
-
-
-
+  // add below-the-bar icons 
+  var subIcons = svg.selectAll("svg")
+    .data(dataset[1])
+    .enter().append("svg:image")    // first add one icon of each type
+    .attr("class", "subicon")
+    .attr("xlink:href", function(d) {
+      if(d.icon != null) {
+        return "img/grey-" + d.icon; }
+      else { return null; }
+    })
+    .attr("y", function(d, i) { return xScale(i)+116; })                // vertical position below the relevant bar
+    .attr("x", function(d) { return yScale(d.y0)+(yScale(d.y)/2)-10; }) // horizontal position in the middle of the relevant bar
+    .attr("width", 20)      
+    .attr("height", 20)
+    .each(function(d,i) {           // then add a corresponding icon for each remaining bar
+      for (n=i; n<4; n++) {
+        svg.selectAll("svg")
+          .data([d])
+          .enter().append("svg:image")
+          .attr("class", "subicon")
+          .attr("xlink:href", "img/grey-" + d.icon)
+          .attr("y", function(d, i) { return xScale(i)+260+(n*144); })  // vert - 260 is 116 + 144 (height of bar etc.)
+          .attr("x", function(d) { return yScale(d.y0)+(yScale(d.y)/2)-10; }) // horz - same as above
+          .attr("width", 20)      
+          .attr("height", 20);
+      }
+    });
+  */
 }
 
+// NEEDS GRAPH STEPPERS ETC.
 
 // hide all step links in the "needs" section, except the first one
 $(".step-link").css("display", "none");
@@ -1080,9 +1043,7 @@ $("#needs-copy1").css("display", "block");
 // hide replay button and next section button
 $(".hidey").css("display", "none");
 
-
-
-// listen for replay-cue click and reset this section
+// listen for replay-cue click and reset needs section
 d3.selectAll('.replaycue')
   .on('click', function() {
     // hide all step links in the "needs" section, except the first one
@@ -1101,10 +1062,10 @@ d3.selectAll('.replaycue')
     drawNeeds();
 });
 
-
-
 // DRY I know... this is called by the jquery stepper functions below to update the needs visualization - labels and rects
-function nextStep(el) {
+function nextStep(step) {
+
+  // set variables and scales, identical to code in drawNeeds()
   var graphOffset = 60;
   var h = 100; 
   var dataset = dataNeeds;
@@ -1123,24 +1084,28 @@ function nextStep(el) {
     ])
     .range([0, w]); 
 
+  // draw next rect
   d3.selectAll("rect.needs-rect")
     .style("fill", function(d, i) {
-      if (i < el) {return "#65B68A";}
+      if (i < step) {return "#65B68A";}
       else if (i == 5) {return "#e8e8e8";}
       else {return "url(#diagonal-stripe-2)";}
     })
-    .attr("width", function(d, i) {
-      if (i <= el) {return yScale(d.y);}
-    });  
+    .transition().duration(800) // TODO: this only fires correctly on steps 1 and 2
+      .attr("width", function(d, i) {
+        if (i <= step) {return yScale(d.y);}
+      });  
 
+  // add next label
   d3.selectAll(".needs-label")
     .style("opacity", function(d,i) {
-      if (i < el) {return "0";}
-      else if (i == el) {return "1";}
+      if (i < step) {return "0";}
+      else if (i == step) {return "1";}
       else {return "0";}
     });
 }
 
+// stepper functions, each is called by a different button. this is obviously a bashy way to do this.
 function step1() {
   // hide step 1, display step 2
   $("#step2").css("display", "block");
