@@ -5,18 +5,15 @@
 <style type="text/css">
 	.st0{fill:#77BF9B;}
 	.st1{fill:#388686;}
-	.st2{fill:none;stroke:#05486C;stroke-width:2;stroke-miterlimit:10;}
+	.st2{fill:none;stroke:#034B6B;stroke-width:2;stroke-miterlimit:10;}
+	.st3{fill:#77BF9B;stroke:#044968;stroke-width:2;stroke-miterlimit:10;}
+	.st4{fill:none;stroke:#044968;stroke-width:2;stroke-miterlimit:10;}
 </style>
-<rect x="55.3" y="62" class="st0" width="19.2" height="32.5"/>
-<rect x="106.8" y="87.7" class="st0" width="96.2" height="6.8"/>
-<rect x="17.3" y="87.7" class="st0" width="98.3" height="6.8"/>
-<polygon class="st1" points="66.7,16.2 63,16.2 23.8,48.7 23.8,94.2 55.3,93.8 55.3,62.7 74.5,62.7 74.5,93.8 106,94.2 106,48.7 "/>
-<g sketch:type="MSPage">
-	<g>
-		<path sketch:type="MSShapeGroup" class="st2" d="M104.8,46.4L66.7,16.2c-1.1-0.8-2.6-0.8-3.6,0L24.9,46.4
-			c-0.7,0.6-1.1,1.4-1.1,2.3v45.4H106V48.7C106,47.8,105.5,47,104.8,46.4L104.8,46.4z"/>
-		<path class="st2" d="M74.5,93.8H55.3V62.7h19.2V93.8z"/>
-	</g>
-</g>
-<line class="st2" x1="15.1" y1="94.1" x2="206.5" y2="94.1"/>
+<rect x="104.8" y="87.2" class="st0" width="96.2" height="6.8"/>
+<rect x="15.3" y="87.2" class="st0" width="98.3" height="6.8"/>
+<polygon class="st1" points="64.7,15.7 61,15.7 21.8,48.2 21.8,93.7 104,93.7 104,48.2 "/>
+<path class="st2" d="M102.8,45.9L64.7,15.7c-1.1-0.8-2.6-0.8-3.6,0L22.9,45.9c-0.7,0.6-1.1,1.4-1.1,2.3v45.4H104V48.2
+	C104,47.3,103.5,46.5,102.8,45.9L102.8,45.9z"/>
+<rect x="53.3" y="62.2" class="st3" width="19.2" height="31.1"/>
+<line class="st4" x1="13.1" y1="93.6" x2="204.5" y2="93.6"/>
 </svg>
