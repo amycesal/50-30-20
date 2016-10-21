@@ -89,9 +89,11 @@ d3.selectAll('select')
     for (i=0;i<allScenarios.length;i++) {
       if (allScenarios[i].city == interimSelected.city) {
         $('span.population').html(numberWithCommas(allScenarios[i].population));
+        $('.cityimg').attr('src', 'img/location/' + allScenarios[i].cityimg);
         if (allScenarios[i].household == interimSelected.household) {
           $('span.incomeannual').html(numberWithCommas(allScenarios[i].income));
           $('span.takehome').html(numberWithCommas(allScenarios[i].takehome));
+          $('.hhimg').attr('src', 'img/household/' + allScenarios[i].hhimg);
         };
       };
     };
@@ -108,16 +110,6 @@ d3.selectAll('.scenario .household select')
     if (!$(".graph-income svg").length) {
       drawIncome(); // draw the income graph, but only if it doesn't exist yet
     };
-});
-
-// listen for scenario selection events and update corresponding images
-d3.selectAll('.scenario .location select')
-  .on('change.images', function() { 
-                                              // switch to correct image
-});
-d3.selectAll('.scenario .household select')
-  .on('change.images', function() {
-                                              // switch to correct image
 });
 
 // used for graph-specific, window-postion based events
