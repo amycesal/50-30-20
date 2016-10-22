@@ -774,7 +774,24 @@ function drawActual() {
     .style("font-weight", 400)
     .text(function(d) { return "$" + d.y });
 
-  arrangeLabels();
+  // if needs exceed takehome, move wants and saves labels to their fallback positions
+  if (data.lowants <= 0) {
+    d3.selectAll('text.actual-label')
+      .attr('dx', function(d,i) {
+        if (i > 0) {return (yScale(d.y0)+10)-(i*200);}
+        else {return yScale(d.y0)+10;}
+      });
+    d3.selectAll('tspan.labelThree')
+      .attr('x', function(d,i) {
+        if (i > 0) {return (yScale(d.y0)+10)-(i*200);}
+        else {return yScale(d.y0)+10;}
+      });
+  }
+  // otherwise check for overlap etc. and display as normal
+  else {arrangeLabels();}
+
+
+  
 }
 
 function getVerdict() {
