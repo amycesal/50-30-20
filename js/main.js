@@ -670,7 +670,10 @@ function drawActual() {
       .transition()
         .delay(function(d, i) {return (i+0.5) * 1600;}) 
         .duration(1200)
-        .attr("width", function(d) { return yScale(d.y); })
+        .attr("width", function(d) { 
+          if (yScale(d.y) <= 0) {return 0;}
+          else {return yScale(d.y);}
+        })
         .each("end", getVerdict);
 
   // draw a line over the start of every rect
