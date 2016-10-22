@@ -11,7 +11,7 @@ $(window).on('load', function() {
 });
 
 // declare global variables
-var w, h, allScenarios, data, dataExplain, dataIdeal, dataNeeds, dataActual;
+var w, h, allScenarios, data, dataExplain, dataIncome, dataIdeal, dataNeeds, dataActual;
 
 // get page width and store in global variable for graph sizing
 w = d3.select("div.row").node().getBoundingClientRect().width - 30; 
@@ -34,6 +34,16 @@ d3.csv("csv/data.csv", function(csv) {  // pull data from csv
   csv.forEach(function(d){ d['twenty'] = +d['twenty']; });
   csv.forEach(function(d){ d['population'] = +d['population']; });
   csv.forEach(function(d){ d['difference'] = +d['difference']; });
+  csv.forEach(function(d){ d['inc0'] = +d['inc0']; });
+  csv.forEach(function(d){ d['inc1'] = +d['inc1']; });
+  csv.forEach(function(d){ d['inc2'] = +d['inc2']; });
+  csv.forEach(function(d){ d['inc3'] = +d['inc3']; });
+  csv.forEach(function(d){ d['inc4'] = +d['inc4']; });
+  csv.forEach(function(d){ d['inc5'] = +d['inc5']; });
+  csv.forEach(function(d){ d['inc6'] = +d['inc6']; });
+  csv.forEach(function(d){ d['inc7'] = +d['inc7']; });
+  csv.forEach(function(d){ d['inc8'] = +d['inc8']; });
+  csv.forEach(function(d){ d['inc9'] = +d['inc9']; });
   data = csv;         // pass csv values to the global 'data' object
   allScenarios = csv; // also pass them to this object that -doesn't- get changed in scenario setup
   // get unique values for all three dropdowns and populate them
@@ -80,7 +90,7 @@ function backToScenario() {
   scrollTop: $(".scenario").offset().top}, 1200);
 };
 
-// listen for scenario selection events and update numbers
+// listen for scenario selection events and update display numbers, income data & graph
 d3.selectAll('select')
   .on('change.numbers', function() { // note the .numbers namespace after "change", prevents collision with other listeners below
     var interimSelected = {};
@@ -94,6 +104,21 @@ d3.selectAll('select')
           $('span.incomeannual').html(numberWithCommas(allScenarios[i].income));
           $('span.takehome').html(numberWithCommas(allScenarios[i].takehome));
           $('.hhimg').attr('src', 'img/household/' + allScenarios[i].hhimg);
+          // if the income graph exists, remove it
+          if ($(".graph-income svg").length) { d3.select(".graph-income svg").remove(); }
+          // setup data for income graph
+          dataIncome = [
+            allScenarios[i].inc0, 
+            allScenarios[i].inc1, 
+            allScenarios[i].inc2, 
+            allScenarios[i].inc3, 
+            allScenarios[i].inc4, 
+            allScenarios[i].inc5, 
+            allScenarios[i].inc6, 
+            allScenarios[i].inc7, 
+            allScenarios[i].inc8, 
+            allScenarios[i].inc9];
+          drawIncome(); // draw the income graph
         };
       };
     };
@@ -107,9 +132,6 @@ d3.selectAll('.scenario .location select')
 d3.selectAll('.scenario .household select')
   .on('change.sections', function() {
     $(".scenario .income").css("display", "block"); // reveal the income section
-    if (!$(".graph-income svg").length) {
-      drawIncome(); // draw the income graph, but only if it doesn't exist yet
-    };
 });
 
 // used for graph-specific, window-postion based events
@@ -465,8 +487,8 @@ function drawExplain() {
 // ********************
 function drawIncome() {
 
-  dataset = [20, 18, 36, 34, 40, 48, 38, 32, 24, 21, 14, 9, 4];
-  var width = d3.select("div.income").node().getBoundingClientRect().width - 30;
+  dataset = dataIncome;
+  var width = 350; // d3.select("div.income").node().getBoundingClientRect().width - 30;
   var height = 100;
   var barPadding = 1;
 
@@ -486,6 +508,13 @@ function drawIncome() {
       if (d == 38) { return "orange"; }
       else { return "white"; }
     });
+
+
+
+
+
+
+
 
 /*
   var textLabels = svg.selectAll() 
@@ -790,8 +819,6 @@ function drawActual() {
   // otherwise check for overlap etc. and display as normal
   else {arrangeLabels();}
 
-
-  
 }
 
 function getVerdict() {
