@@ -1,4 +1,13 @@
-.scrollcue {
+img.steppercue {
+	margin: 0 20px 0 0;
+	padding-top: 0;
+	max-width: 2em;
+	width: 10%;
+
+
+}
+
+.scrollcue, .replaycue, .steppercue {
 	display: inline;
 	background-color: #115AA0;
 	float: left;
@@ -12,22 +21,29 @@
 	text-decoration: none;
 	text-transform: uppercase;
 	font-weight: bold;
+	font-family: 'Roboto Condensed', sans-serif;
 }
 
 .scroll-box {
 	border-top: 3px solid #d8d8d8;
 	padding-top: 15px;
-	margin-bottom: 70px;
+	margin-bottom: 100px;
 	padding-bottom: 15px;
 	border-bottom: 3px solid #d8d8d8;
+	margin-top: 15px;
 }
 
 .scenario {
 	margin-bottom: 70px;
 }
 
+.post {
+	padding-top: 100px;
+}
+
 .scroll-box p {
 	margin-bottom: 0px;
+	font-size: 1.6em;
 }
 
 .text {
@@ -53,4 +69,30 @@ h2 {
 .light {
 	font-weight: 300;
 }
+
+#needs-nav a, .replay-box p {
+	color: #000;
+	text-decoration: none;
+	font-weight: 700;
+	text-transform: uppercase;
+	font-size: 1.2em;
+	vertical-align: middle;
+	min-height: 50px;
+	margin-left: 0;
+
+}
+
+#needs-nav {
+	clear: all;
+}
+
+div.needs #graph-needs {
+	margin-bottom: 0;
+}
+.replay-box {
+	clear: all;
+	min-height: 50px;
+}
+
+
 

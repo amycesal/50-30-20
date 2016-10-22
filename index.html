@@ -156,6 +156,7 @@
         <div class="graph-income"></div>
         <input type="button" onclick="runScenario()" value="RUN SCENARIO" class="runScenario button"></input>
       </div>
+      <br>
     </div>
 
     <div class="row ideal post slide">
@@ -166,7 +167,7 @@
         <div id="graph-ideal"></div>
       </div>
       <div class="small-12 medium-12 large-12 columns">
-        <h2>Actual Budget: <span class="light">average spending on needs added</span></h2>
+        <h2>Actual Budget: <span class="light">average spending on needs totaled</span></h2>
       </div>
       <div class="small-12 medium-12 large-12 columns">
         <div id="graph-actual"></div>
@@ -177,7 +178,7 @@
         <div class="text"></div>
         <hr>
         <img src="./img/scrollcue.png" class="scrollcue" />
-        <p>See how the average needs of this household add up.</p>
+        <p>See how the needs of this household add up.</p>
       </div>
       </div>
     </div>
@@ -188,23 +189,29 @@
     </div>
     <div class="small-12 medium-12 large-12 columns">
       <div id="graph-needs"></div>
-      <div id="needs-nav">
-        <a id="step1" class="step-link" onclick="step1()"><img src="./img/nextcue.png" class="steppercue" />Step 1</a>
-        <a id="step2" class="step-link" onclick="step2()"><img src="./img/nextcue.png" class="steppercue" />Step 2</a>
-        <a id="step3" class="step-link" onclick="step3()"><img src="./img/nextcue.png" class="steppercue" />Step 3</a>
-        <a id="step4" class="step-link" onclick="step4()"><img src="./img/nextcue.png" class="steppercue" />Step 4</a>
-        <a id="step5" class="step-link" onclick="step5()"><img src="./img/nextcue.png" class="steppercue" />Step 5</a>
-      </div>
+
       <div>
-        <p id="needs-copy1" class="needs-copy">Based on a two-bedroom apartments for families with two children. <a href="http://www.epi.org/resources/budget/">Source.</a></p>
+        <p id="needs-copy1" class="needs-copy">Based on a two-bedroom apartment for families with two children or a studio apartment for a single adult.<a href="http://www.epi.org/resources/budget/">Source.</a></p>
         <p id="needs-copy2" class="needs-copy">Includes insurance premiums and out-of-pocket expenditures. <a href="http://www.epi.org/resources/budget/">Source.</a></p>
         <p id="needs-copy3" class="needs-copy">Based on the “low-cost plan” which assumes almost all food is bought at the grocery store and prepared at home. <a href="http://www.epi.org/resources/budget/">Source.</a></p>
-        <p id="needs-copy4" class="needs-copy">The cost of 2 monthly transportation passes. </p>
+        <p id="needs-copy4" class="needs-copy">The cost of a monthly transportation pass for each adult.</p>
         <p id="needs-copy5" class="needs-copy">Based on center-based child care and family-based care for four-year-olds and school-age children. <a href="http://www.epi.org/resources/budget/">Source.</a></p>
       </div>
+
+      <div id="needs-nav">
+        <a id="step1" class="step-link" onclick="step1()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
+        <a id="step2" class="step-link" onclick="step2()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
+        <a id="step3" class="step-link" onclick="step3()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
+        <a id="step4" class="step-link" onclick="step4()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
+        <a id="step5" class="step-link" onclick="step5()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
+      </div>
+
+
       <div class="replay-box hidey">
+        <br>
+        <br>
         <img src="./img/replaycue.png" class="replaycue"/>
-        <p>Replay needs.</p> 
+        <p>Replay needs</p> 
       </div>
       <div class="scroll-box hidey">
         <img src="./img/scrollcue.png" class="scrollcue"/>
@@ -212,16 +219,18 @@
       </div>
     </div>
   </div>
-
+<br>
   <div class="row end post slide">
     <div class="small-12 medium-12 large-12 columns">
-      <h2>Why this is important</h2>
-      <p>These numbers look at the median. Imagine someone who is below this level. Or a single parent. It’s almost impossible to live the american dream, save up and get ahead when it’s this hard to just stay afloat as the average. Unfortunately, this is typical for the median American household, which goes XX% over the 50% needs.</p>
-      <p>Why is this: it’s not that most Americans don’t make enough money, but it’s hard be responsible and save, when the bare necessities cost too much for most Americans. The numbers just don’t add up, and people are being squeezed by the rising cost of housing, childcare, healthcare, and their income can’t keep up. It’s not a simple problem with an easy fix.</p>
+      <br>
+      <br>
+      <h2>The big picture</h2>
+      <p>These numbers look at the median. Imagine how hard it is for a household who's income is below the median or a single parent with a single income plus childcare expenses. It’s almost impossible to live the American dream, save up and get ahead when it’s this hard to just stay afloat as the average.</p>
+      <p><strong>Why is this:</strong> it’s not that most Americans don’t make enough money, but it’s hard be responsible and save, when the bare necessities cost too much for most Americans. The numbers just don’t add up. People are being squeezed by the rising cost of housing, childcare, healthcare, and their income can’t keep up. It’s not a simple problem with an easy fix.</p>
       <input class="button" type="button" onclick="backToScenario()" value="SELECT ANOTHER SCENARIO"></input>
-      <a href="##" class="button">About</a>
-      <a href="https://www.learnvest.com/knowledge-center/your-ultimate-budget-guideline-the-502030-rule/" class="button">50-30-20 example</a>
-      <a class="button" href="https://www.amazon.com/All-Your-Worth-Ultimate-Lifetime/dp/0743269888">Elizabeth Warren's perspetive</a>
+      <a href="/about" class="button">About the project</a>
+      <a class="button" href="https://www.amazon.com/All-Your-Worth-Ultimate-Lifetime/dp/0743269888">Elizabeth Warren's book on the subject</a>
+      <br>
       <br>
 
     </div>
