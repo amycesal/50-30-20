@@ -10,14 +10,20 @@
 .button {
 	background-color: #115AA0;
 	text-decoration: none;
+	text-transform: uppercase;
+	font-weight: bold;
 }
 
 .scroll-box {
 	border-top: 3px solid #d8d8d8;
 	padding-top: 15px;
-	margin-bottom: 40px;
+	margin-bottom: 70px;
 	padding-bottom: 15px;
 	border-bottom: 3px solid #d8d8d8;
+}
+
+.scenario {
+	margin-bottom: 70px;
 }
 
 .scroll-box p {
@@ -31,3 +37,20 @@
 hr {
 	border-top: 2px solid #d8d8d8;
 }
+
+.blue {
+	color: #000;
+}
+
+h1 {
+	font-weight: 300;
+}
+
+h2 {
+	font-weight: 600;
+}
+
+.light {
+	font-weight: 300;
+}
+

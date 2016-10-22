@@ -151,8 +151,8 @@
       </div>
       <div class="small-12 medium-12 large-4 columns income">
         <h3>MEDIAN INCOME:</h3>
-        <p class="blue">$<span class="incomeannual">69,402</span></p>
-        <p class="blue">$<span class="takehome">4,577</span><span class="money-label">/month</span></p>
+        <p class="blue">$<span class="incomeannual">69,402</span><span class="money-label">/year</span></p>
+        <p class="blue">$<span class="takehome">4,577</span><span class="money-label">/month after taxes</span></p>
         <div class="graph-income"></div>
         <input type="button" onclick="runScenario()" value="RUN SCENARIO" class="runScenario button"></input>
       </div>
@@ -160,13 +160,13 @@
 
     <div class="row ideal post slide">
       <div class="small-12 medium-12 large-12 columns">
-        <h2><strong>Ideal Budget: </strong>income divided into categories</h2>
+        <h2>Ideal Budget: <span class="light">income divided into categories</span></h2>
       </div>
       <div class="small-12 medium-12 large-12 columns">
         <div id="graph-ideal"></div>
       </div>
       <div class="small-12 medium-12 large-12 columns">
-        <h2><strong>Actual Budget: </strong>average spending on needs added</h2>
+        <h2>Actual Budget: <span class="light">average spending on needs added</span></h2>
       </div>
       <div class="small-12 medium-12 large-12 columns">
         <div id="graph-actual"></div>
@@ -184,7 +184,7 @@
 
   <div class="row needs post slide">
     <div class="small-12 medium-12 large-12 columns">
-      <h2><strong>Actual Budget: </strong>needs broken down and explained</h2>
+      <h2>Actual Budget: <span class="light">needs broken down and explained</span></h2>
     </div>
     <div class="small-12 medium-12 large-12 columns">
       <div id="graph-needs"></div>
@@ -215,6 +215,7 @@
 
   <div class="row end post slide">
     <div class="small-12 medium-12 large-12 columns">
+      <h2>Why this is important</h2>
       <p>These numbers look at the median. Imagine someone who is below this level. Or a single parent. It’s almost impossible to live the american dream, save up and get ahead when it’s this hard to just stay afloat as the average. Unfortunately, this is typical for the median American household, which goes XX% over the 50% needs.</p>
       <p>Why is this: it’s not that most Americans don’t make enough money, but it’s hard be responsible and save, when the bare necessities cost too much for most Americans. The numbers just don’t add up, and people are being squeezed by the rising cost of housing, childcare, healthcare, and their income can’t keep up. It’s not a simple problem with an easy fix.</p>
       <input class="button" type="button" onclick="backToScenario()" value="SELECT ANOTHER SCENARIO"></input>
