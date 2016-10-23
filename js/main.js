@@ -12,6 +12,10 @@ $(window).on('load', function() {
 
 // declare global variables
 var w, h, allScenarios, data, dataExplain, dataIncome, dataIdeal, dataNeeds, dataActual;
+// declare income graph-specific variables
+var incomeSelected, incomeDecile, incomeDecileOrd;
+// bins for income histogram, these correspond to .incn data points in csv
+var buckets = [0, 10000, 15000, 25000, 35000, 50000, 75000, 100000, 150000, 200000];
 
 // get page width and store in global variable for graph sizing
 w = d3.select("div.row").node().getBoundingClientRect().width - 30; 
@@ -118,7 +122,9 @@ d3.selectAll('select')
             allScenarios[i].inc7, 
             allScenarios[i].inc8, 
             allScenarios[i].inc9];
-          drawIncome(); // draw the income graph
+          // store income from selected scenario
+          incomeSelected = allScenarios[i].income;
+          drawIncome();
         };
       };
     };
@@ -487,10 +493,28 @@ function drawExplain() {
 // ********************
 function drawIncome() {
 
+/*
+          // figure out which bucket the current income is in and store the ordinal value
+          for (i=0; i<buckets.length; i++) {
+            if (incomeSelected >= buckets[i]) {
+              var incomeDecileOrd = i; 
+              console.log(incomeDecileOrd + " " + buckets[i]);
+            };
+            // var incomeDecileOrd = i; 
+            // console.log(buckets[i] + " " + incomeSelected + " " + buckets[i+1]);
+            // console.log(incomeDecileOrd);
+            // drawIncome(); // draw the income graph
+          };
+*/
+
   dataset = dataIncome;
   var width = 350; // d3.select("div.income").node().getBoundingClientRect().width - 30;
   var height = 100;
   var barPadding = 1;
+
+  var yScale = d3.scale.linear()
+    .domain([0, 25]) // use a constant > largest individual value across cities for upper bound of domain OR d3.max(dataset)...
+    .range([0,height]);
 
   var svg = d3.select(".graph-income")
     .append("svg")
@@ -501,19 +525,13 @@ function drawIncome() {
     .data(dataset)
     .enter().append('rect')
     .attr('x', function(d,i) { return i * (width / dataset.length); })
-    .attr('y', function(d) { return height - d; })
+    .attr('y', function(d) { return height - yScale(d); })
     .attr("width", width / dataset.length - barPadding)
-    .attr("height", function(d) { return d; })
-    .attr("fill", function(d) {
-      if (d == 38) { return "orange"; }
+    .attr("height", function(d) { return yScale(d); })
+    .attr("fill", function(d, i) {
+      if (i == incomeDecileOrd) { return "orange"; } // highlight the correct decile
       else { return "white"; }
     });
-
-
-
-
-
-
 
 
 /*
@@ -527,7 +545,8 @@ function drawIncome() {
     .attr('y', height + 16)                                       
     .text(function(d) { return d; });
 */ 
-// TODO: make text vert, add caption property to data object, use real data, add the poverty line
+// TODO: make text vert, add caption property to data object(?), add the poverty line
+
 }
 
 // ***********************
