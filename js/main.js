@@ -11,11 +11,7 @@ $(window).on('load', function() {
 });
 
 // declare global variables
-var w, h, allScenarios, data, dataExplain, dataIncome, dataIdeal, dataNeeds, dataActual;
-// declare income graph-specific variables
-var incomeSelected, incomeDecile, incomeDecileOrd;
-// bins for income histogram, these correspond to .incn data points in csv
-var buckets = [0, 10000, 15000, 25000, 35000, 50000, 75000, 100000, 150000, 200000];
+var w, h, allScenarios, data, dataExplain, dataIncome, dataIdeal, dataNeeds, dataActual, decileSelected;
 
 // get page width and store in global variable for graph sizing
 w = d3.select("div.row").node().getBoundingClientRect().width - 30; 
@@ -48,6 +44,7 @@ d3.csv("csv/data.csv", function(csv) {  // pull data from csv
   csv.forEach(function(d){ d['inc7'] = +d['inc7']; });
   csv.forEach(function(d){ d['inc8'] = +d['inc8']; });
   csv.forEach(function(d){ d['inc9'] = +d['inc9']; });
+  csv.forEach(function(d){ d['decile'] = +d['decile']; });
   data = csv;         // pass csv values to the global 'data' object
   allScenarios = csv; // also pass them to this object that -doesn't- get changed in scenario setup
   // get unique values for all three dropdowns and populate them
@@ -122,8 +119,9 @@ d3.selectAll('select')
             allScenarios[i].inc7, 
             allScenarios[i].inc8, 
             allScenarios[i].inc9];
-          // store income from selected scenario
-          incomeSelected = allScenarios[i].income;
+          // store income decile from selected scenario
+          decileSelected = allScenarios[i].decile;
+          // draw income graph
           drawIncome();
         };
       };
@@ -493,20 +491,6 @@ function drawExplain() {
 // ********************
 function drawIncome() {
 
-/*
-          // figure out which bucket the current income is in and store the ordinal value
-          for (i=0; i<buckets.length; i++) {
-            if (incomeSelected >= buckets[i]) {
-              var incomeDecileOrd = i; 
-              console.log(incomeDecileOrd + " " + buckets[i]);
-            };
-            // var incomeDecileOrd = i; 
-            // console.log(buckets[i] + " " + incomeSelected + " " + buckets[i+1]);
-            // console.log(incomeDecileOrd);
-            // drawIncome(); // draw the income graph
-          };
-*/
-
   dataset = dataIncome;
   var width = 350; // d3.select("div.income").node().getBoundingClientRect().width - 30;
   var height = 100;
@@ -529,7 +513,7 @@ function drawIncome() {
     .attr("width", width / dataset.length - barPadding)
     .attr("height", function(d) { return yScale(d); })
     .attr("fill", function(d, i) {
-      if (i == incomeDecileOrd) { return "orange"; } // highlight the correct decile
+      if (i == decileSelected) { return "orange"; } // highlight the correct decile
       else { return "white"; }
     });
 
