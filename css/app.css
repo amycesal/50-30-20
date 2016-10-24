@@ -7,7 +7,7 @@ img.steppercue {
 
 }
 
-.scrollcue, .replaycue, .steppercue {
+.scrollcue, .scrollcue2, .replaycue, .steppercue {
 	display: inline;
 	background-color: #115AA0;
 	float: left;

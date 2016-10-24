@@ -36,9 +36,6 @@
   <body>
 
     <div id="cover"></div>
-
-    <!-- http://foundation.zurb.com/sites/docs/grid.html -->
-
     <div class="row nav">
       <div class="small-12 medium-12 large-12 columns">
         <ul>
@@ -52,23 +49,11 @@
       <div class="small-12 medium-12 large-12 columns">
         <h1><span class="strong">50-30-20:</span> A Litmus Test for Financial Stability for Average Americans</h1>
         <div class="graph-title"></div>
-        <p>
-          50-30-20 is a rule of thumb to help people achieve financial stability through saving. We're told that if we just work hard, we can live the American Dream and move up. However, is this dream still achieveable? 
-
-    <!-- 
-
-          50-30-20 is a rule of thumb to help people achieve financial security and live the American Dream. It lays down a simple-to-follow guide for households to prepare for the future and achieve long-term financial stability through savings. But is it still possible for real families to accrue savings? 
-
-
-        See if saving for the future and being financially stable is still within reach for the average Amercan.
-      -->
-        </p>
+        <p>50-30-20 is a rule of thumb to help people achieve financial stability through saving. We're told that if we just work hard, we can live the American Dream and move up. However, is this dream still achieveable?</p>
         <div class="scroll-box">
-        <img src="./img/scrollcue.png" class="scrollcue" />
-        <p>
-          <span class="strong">Scroll down</span> to test the average American’s ability to follow the 50-30-20 rule.</p>
+          <img src="./img/scrollcue.png" class="scrollcue" />
+          <p><span class="strong">Scroll down</span> to test the average American’s ability to follow the 50-30-20 rule.</p>
         </div>
-        
       </div>
     </div>
 
@@ -119,13 +104,12 @@
                 <li>retirement</li>
             </ul>
           </div>
-      </div>
-      <div class="small-12 medium-12 large-12 columns explain-question">
-        <div class="scroll-box">
-       <img src="./img/scrollcue.png" class="scrollcue" />
-        <p class="strong">How possible is this for Americans today?</p>
-      </div>
-          
+        </div>
+        <div class="small-12 medium-12 large-12 columns explain-question">
+          <div class="scroll-box">
+         <img src="./img/scrollcue.png" class="scrollcue" />
+          <p class="strong">How possible is this for Americans today?</p>
+        </div>   
       </div>
     </div>
 
@@ -156,7 +140,6 @@
         <div class="graph-income"></div>
         <input type="button" onclick="runScenario()" value="RUN SCENARIO" class="runScenario button"></input>
       </div>
-      <br>
     </div>
 
     <div class="row ideal post slide">
@@ -183,76 +166,60 @@
       </div>
     </div>
 
-  <div class="row needs post slide">
-    <div class="small-12 medium-12 large-12 columns">
-      <h2>Actual Budget: <span class="light">needs broken down and explained</span></h2>
-    </div>
-    <div class="small-12 medium-12 large-12 columns">
-      <div id="graph-needs"></div>
-
-      <div>
-        <p id="needs-copy1" class="needs-copy">Based on a two-bedroom apartment for families with two children or a studio apartment for a single adult.<a href="http://www.epi.org/resources/budget/">Source.</a></p>
-        <p id="needs-copy2" class="needs-copy">Includes insurance premiums and out-of-pocket expenditures. <a href="http://www.epi.org/resources/budget/">Source.</a></p>
-        <p id="needs-copy3" class="needs-copy">Based on the “low-cost plan” which assumes almost all food is bought at the grocery store and prepared at home. <a href="http://www.epi.org/resources/budget/">Source.</a></p>
-        <p id="needs-copy4" class="needs-copy">The cost of a monthly transportation pass for each adult.</p>
-        <p id="needs-copy5" class="needs-copy">Based on center-based child care and family-based care for four-year-olds and school-age children. <a href="http://www.epi.org/resources/budget/">Source.</a></p>
+    <div class="row needs post slide">
+      <div class="small-12 medium-12 large-12 columns">
+        <h2>Actual Budget: <span class="light">needs broken down and explained</span></h2>
       </div>
-
-      <div id="needs-nav">
-        <a id="step1" class="step-link" onclick="step1()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
-        <a id="step2" class="step-link" onclick="step2()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
-        <a id="step3" class="step-link" onclick="step3()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
-        <a id="step4" class="step-link" onclick="step4()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
-        <a id="step5" class="step-link" onclick="step5()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
-      </div>
-
-
-      <div class="replay-box hidey">
-        <br>
-        <br>
-        <img src="./img/replaycue.png" class="replaycue"/>
-        <p>Replay needs</p> 
-      </div>
-      <div class="scroll-box hidey">
-        <img src="./img/scrollcue.png" class="scrollcue"/>
-        <p>So now what?</p>
+      <div class="small-12 medium-12 large-12 columns">
+        <div id="graph-needs"></div>
+        <div>
+          <p id="needs-copy1" class="needs-copy">Based on a two-bedroom apartment for families with two children or a studio apartment for a single adult.<a href="http://www.epi.org/resources/budget/">Source.</a></p>
+          <p id="needs-copy2" class="needs-copy">Includes insurance premiums and out-of-pocket expenditures. <a href="http://www.epi.org/resources/budget/">Source.</a></p>
+          <p id="needs-copy3" class="needs-copy">Based on the “low-cost plan” which assumes almost all food is bought at the grocery store and prepared at home. <a href="http://www.epi.org/resources/budget/">Source.</a></p>
+          <p id="needs-copy4" class="needs-copy">The cost of a monthly transportation pass for each adult.</p>
+          <p id="needs-copy5" class="needs-copy">Based on center-based child care and family-based care for four-year-olds and school-age children. <a href="http://www.epi.org/resources/budget/">Source.</a></p>
+        </div>
+        <div id="needs-nav">
+          <a id="step1" class="step-link" onclick="step1()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
+          <a id="step2" class="step-link" onclick="step2()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
+          <a id="step3" class="step-link" onclick="step3()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
+          <a id="step4" class="step-link" onclick="step4()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
+          <a id="step5" class="step-link" onclick="step5()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
+        </div>
+        <div class="replay-box hidey">
+          <img src="./img/replaycue.png" class="replaycue" />
+          <p>Replay needs</p> 
+        </div>
+        <div class="scroll-box hidey">
+          <img src="./img/scrollcue.png" class="scrollcue2" />
+          <p>So now what?</p>
+        </div>
       </div>
     </div>
-  </div>
-<br>
-  <div class="row end post slide">
-    <div class="small-12 medium-12 large-12 columns">
-      <br>
-      <br>
-      <h2>The big picture</h2>
-      <p>These numbers look at the median. Imagine how hard it is for a household where the income is below the median or a single parent with one income plus childcare expenses. It’s almost impossible to live the American dream, save up, and get ahead when it’s this hard to stay afloat as the average.</p>
-      <p><strong>Why is this:</strong> it’s not that most Americans don’t make enough money, but it’s hard be responsible and save, when the bare necessities cost too much for most Americans. The numbers just don’t add up. People are being squeezed by the rising cost of housing, childcare, healthcare, and their income can’t keep up. It’s not a simple problem with an easy fix.</p>
-      <input class="button" type="button" onclick="backToScenario()" value="SELECT ANOTHER SCENARIO"></input>
-      <a href="about.html" class="button">About the project</a>
-      <a class="button" href="https://www.amazon.com/All-Your-Worth-Ultimate-Lifetime/dp/0743269888">Elizabeth Warren's book on the subject</a>
-      <br>
-      <br>
 
+    <div class="row end post slide">
+      <div class="small-12 medium-12 large-12 columns">
+        <h2>The big picture</h2>
+        <p>These numbers look at the median. Imagine how hard it is for a household where the income is below the median or a single parent with one income plus childcare expenses. It’s almost impossible to live the American dream, save up, and get ahead when it’s this hard to stay afloat as the average.</p>
+        <p><strong>Why is this:</strong> it’s not that most Americans don’t make enough money, but it’s hard be responsible and save, when the bare necessities cost too much for most Americans. The numbers just don’t add up. People are being squeezed by the rising cost of housing, childcare, healthcare, and their income can’t keep up. It’s not a simple problem with an easy fix.</p>
+        <input class="button" type="button" onclick="backToScenario()" value="SELECT ANOTHER SCENARIO"></input>
+        <a href="about.html" class="button">About the project</a>
+        <a class="button" href="https://www.amazon.com/All-Your-Worth-Ultimate-Lifetime/dp/0743269888">Elizabeth Warren's book on the subject</a>
+      </div>
     </div>
-  </div>
 
-
-
-
-
-
-  <!-- pattern definition for stripes in Needs graph --> 
-  <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg" version="1.1"> 
-    <defs> 
-      <pattern id="diagonal-stripe-2" patternUnits="userSpaceOnUse" width="10" height="10"> 
-        <rect width='10' height='10' fill='#65B68A'/>
-        <path d='M-1,1 l2,-2
-                 M0,10 l10,-10
-                 M9,11 l2,-2' stroke='#B8DBC7' stroke-width='2.5'/>
-        </image> 
-      </pattern> 
-    </defs> 
-  </svg>
+    <!-- pattern definition for stripes in Needs graph --> 
+    <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg" version="1.1"> 
+      <defs> 
+        <pattern id="diagonal-stripe-2" patternUnits="userSpaceOnUse" width="10" height="10"> 
+          <rect width='10' height='10' fill='#65B68A'/>
+          <path d='M-1,1 l2,-2
+                   M0,10 l10,-10
+                   M9,11 l2,-2' stroke='#B8DBC7' stroke-width='2.5'/>
+          </image> 
+        </pattern> 
+      </defs> 
+    </svg>
 
     <script src="js/main.js"></script>
 

@@ -85,6 +85,13 @@ d3.selectAll('.scrollcue')
       scrollTop: $(this).parent().parent().parent().next(".row").offset().top}, 1200);
 });
 
+// kludge for last section
+d3.selectAll('.scrollcue2')
+  .on('click', function() {
+    $('html, body').animate({
+      scrollTop: $(".end").offset().top}, 1200);
+});
+
 // function for button in end section, sends user to scenario section
 function backToScenario() {
   $('html, body').animate({
