@@ -832,18 +832,30 @@ function drawActual() {
 }
 
 function getVerdict() {
-  if (data.needs > data.fifty) {
-    setTimeout(function() {
-      $(".verdict .icon").html("<img src='img/verdict.png' />");
+  if (data.needs > data.takehome) {
+   setTimeout(function() {
+      $(".verdict .icon").html("<img src='img/verdict-3.svg' />");
       $(".verdict .text")
-      .html("Following 50-30-20 isn't possible in this situation. The needs of this household exceed 50% of its income by " + 
-        data.overneedsperc + "%, which reduces this household's ability to save for the future.");
+      .html("Following 50-30-20 is <span class='red'>virtually impossible</span> in this situation. <span class='strong'>The average needs of this household exceed the income.</span> This harms the household’s ability to not only save for the future, but take care of their necessities.");
+      $(".verdict").animate( { opacity: 1 }, 600);
+    }, 3200);
+  }
+  else if (data.needs > data.fifty) {
+    setTimeout(function() {
+      $(".verdict .icon").html("<img src='img/verdict-2.svg' />");
+      $(".verdict .text")
+      .html("Following 50-30-20 <span class='red'>isn't possible</span> in this situation. The average needs of this household exceed 50% of the income by <span class='strong'>" + 
+        data.overneedsperc + "%</span>, which reduces the ability for this household to save for the future.");
       $(".verdict").animate( { opacity: 1 }, 600);
     }, 3200);
   }
   else {
-    $(".verdict p")
-      .html("This household is doing great yay!");
+   setTimeout(function() {
+      $(".verdict .icon").html("<img src='img/verdict-1.svg' />");
+      $(".verdict .text")
+      .html("Following 50-30-20 is <span class='yellow'>basically possible</span> in this situation. <span class='strong'>The average needs of this household are under 50%.</span> The household needs to stay within the average, and control their spending on their wants.");
+      $(".verdict").animate( { opacity: 1 }, 600);
+    }, 3200);
   }
 
 }
