@@ -10,8 +10,8 @@ w = d3.select("div.row").node().getBoundingClientRect().width - 30;
 // ******************
 
 d3.csv("csv/data.csv", function(csv) {  // pull data from csv
-  // read numerical values as numbers not strings — kludgy...
-  csv.forEach(function(d){ d['income'] = +d['income']; });
+  // read numerical values as numbers not strings 
+  csv.forEach(function(d){ d['income'] = +d['income']; });        // kludgy...
   csv.forEach(function(d){ d['takehome'] = +d['takehome']; });
   csv.forEach(function(d){ d['housing'] = +d['housing']; });
   csv.forEach(function(d){ d['health'] = +d['health']; });
@@ -34,22 +34,12 @@ d3.csv("csv/data.csv", function(csv) {  // pull data from csv
   csv.forEach(function(d){ d['inc8'] = +d['inc8']; });
   csv.forEach(function(d){ d['inc9'] = +d['inc9']; });
   csv.forEach(function(d){ d['decile'] = +d['decile']; });
-  data = csv;         // pass csv values to the global 'data' object
+  data = csv; // pass csv values to the global 'data' object
   allScenarios = csv; // also pass them to this object that -doesn't- get changed in scenario setup
-  // get unique values for all three dropdowns and populate them
   console.log(data);
+  init();
 
 });
-
-// setup data for pre-scenario charts — static, so removed from rest of control flow
-dataFiftyThirtyTwenty = [
-  [{ x: 0, y: 50 }],
-  [{ x: 0, y: 30 }],
-  [{ x: 0, y: 20 }]
-];
-
-var stack = d3.stack();
-stack(dataFiftyThirtyTwenty);
 
 // I _think_ this deals with a reduced data object — surely there's a better way to handle...
 function setProps() {
@@ -67,6 +57,17 @@ function setProps() {
   data.overneeds = Math.round(data.needs - data.fifty);
   data.overneedsperc = Math.round(data.needsperc-50);
 };
+
+
+// data for pre-scenario charts — static
+dataIntro = [
+  [{ x: 0, y: 50 }],
+  [{ x: 0, y: 30 }],
+  [{ x: 0, y: 20 }]
+];
+
+var stack = d3.stack();
+stack(dataIntro);
 
 // setup an array for each post-scenario graph
 function setupData() {
@@ -118,15 +119,19 @@ d3.selection.prototype.first = function() {
 };
 
 
-
-// ****************
-// *** DISPATCH ***
-// ****************
+// dispatch needed...
 
 
 // ********************
 // *** CONTROL FLOW ***
 // ********************
+
+
+function init() {
+
+  drawTitle();
+
+}
 
 /* 
 function setupAndDraw() {
@@ -147,22 +152,12 @@ function setupAndDraw() {
 
 function drawTitle() {
 
-  var dataset = dataFiftyThirtyTwenty; 
+  var dataset = dataIntro; 
   var h = 40; 
 
-  // set up scales 
-  var xScale = d3.scale.ordinal()      // actually y scale, since we're doing horizontal bars
-    .domain(d3.range(dataset[0].length))
-    .rangeRoundBands([0, h]);
-
-  var yScale = d3.scale.linear()       // actually x scale
-    .domain([0,       
-      d3.max(dataset, function(d) {
-        return d3.max(d, function(d) {
-          return d.y0 + d.y;
-        });
-      })
-    ])
+  // set up scale
+  var xScale = d3.scaleLinear()       // actually x scale
+    .domain([0, 200])
     .range([0, w]);
   
   // create SVG element
@@ -187,22 +182,22 @@ function drawTitle() {
   var rects = groups.selectAll("rect")
     .data(function(d) { return d; })
     .enter().append("rect")
-      .attr("x", function(d) { return yScale(d.y0); }) 
-      .attr("y", 0)   // 128 is to shift chart down to make way for annotation
-      .attr("height", xScale.rangeBand())
+      .attr("x", function(d) { return xScale(d.y); }) // fix positioning here, stack is different now, no y0....
+      .attr("y", 0)  
+      .attr("height", h)
       .attr("width", 0);
 
     d3.selectAll(".graph-title rect")
       .transition()
         .delay(function(d, i) {return (i+0.5) * 1600;}) 
         .duration(1200)
-        .attr("width", function(d) { return yScale(d.y); });  
+        .attr("width", function(d) { return xScale(d.y); });  
 }
 
 
 function drawExplain() {
 
-  var dataset = dataFiftyThirtyTwenty; 
+  var dataset = dataIntro; 
   var h = 100; 
   var lineHeight = 100;  // height of solid lines
 
