@@ -36,7 +36,6 @@ d3.csv("csv/data.csv", function(csv) {  // pull data from csv
   csv.forEach(function(d){ d['decile'] = +d['decile']; });
   data = csv; // pass csv values to the global 'data' object
   allScenarios = csv; // also pass them to this object that -doesn't- get changed in scenario setup
-  console.log(data);
   init();
 
 });
@@ -57,17 +56,6 @@ function setProps() {
   data.overneeds = Math.round(data.needs - data.fifty);
   data.overneedsperc = Math.round(data.needsperc-50);
 };
-
-
-// data for pre-scenario charts — static
-dataIntro = [
-  [{ x: 0, y: 50 }],
-  [{ x: 0, y: 30 }],
-  [{ x: 0, y: 20 }]
-];
-
-var stack = d3.stack();
-stack(dataIntro);
 
 // setup an array for each post-scenario graph
 function setupData() {
@@ -152,21 +140,27 @@ function setupAndDraw() {
 
 function drawTitle() {
 
-  var dataset = dataIntro; 
   var h = 40; 
 
-  // set up scale
-  var xScale = d3.scaleLinear()       // actually x scale
-    .domain([0, 200])
-    .range([0, w]);
-  
-  // create SVG element
-  var svg = d3.select(".graph-title")
-        .append("svg")
-        .attr("width", w)        
-        .attr("height", h);   
+  // data for pre-scenario charts — static
+  dataIntro = [
+    {needs: 50, wants: 30, saves: 20}
+  ];
 
-  // add a group for each row of data
+  var stack = d3.stack()
+    .keys(["needs", "wants", "saves"])
+    .order(d3.stackOrderNone)
+    .offset(d3.stackOffsetNone);
+
+  var dataset = stack(dataIntro); 
+
+  console.log(dataset);
+
+  var svg = d3.select(".graph-title")
+    .append("svg")
+    .attr("width", w)
+    .attr("height", h);
+
   var groups = svg.selectAll("g")
     .data(dataset)
     .enter().append("g")
@@ -178,21 +172,27 @@ function drawTitle() {
       return fillColor;      
     });
 
-  // add a rect for each data value
+  var yScale = d3.scaleLinear()
+    .domain([0, 100])
+    .range([0, w]);
+
   var rects = groups.selectAll("rect")
     .data(function(d) { return d; })
     .enter().append("rect")
-      .attr("x", function(d) { return xScale(d.y); }) // fix positioning here, stack is different now, no y0....
-      .attr("y", 0)  
+      .attr("x", function(d) { return yScale(d[0]); })
+      .attr("y", 0)
       .attr("height", h)
-      .attr("width", 0);
+      .attr("width", 0)
+    .transition()
+      .delay(function(d) {console.log(d); return d[0]*30;})
+      .duration(1200)
+      .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]) });
 
-    d3.selectAll(".graph-title rect")
-      .transition()
-        .delay(function(d, i) {return (i+0.5) * 1600;}) 
-        .duration(1200)
-        .attr("width", function(d) { return xScale(d.y); });  
 }
+
+
+
+
 
 
 function drawExplain() {
