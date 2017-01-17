@@ -176,6 +176,8 @@ function drawTitle() {
     .domain([0, 100])
     .range([0, w]);
 
+  var loopTrack = 0;
+
   var rects = groups.selectAll("rect")
     .data(function(d) { return d; })
     .enter().append("rect")
@@ -184,7 +186,7 @@ function drawTitle() {
       .attr("height", h)
       .attr("width", 0)
     .transition()
-      .delay(function(d) {console.log(d); return d[0]*30;})
+      .delay(function(d, i) {++loopTrack; return (loopTrack-1)*1400; })
       .duration(1200)
       .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]) });
 
