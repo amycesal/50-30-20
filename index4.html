@@ -118,29 +118,19 @@
         <h2>Select a scenario:</h2>
       </div>
       <div class="small-12 medium-12 large-4 columns location">
-        <h3>LOCATION:</h3>
-        <select name="city" id="city">
-          <option value="Choose a city">Choose a city</option>
-        </select>
-        <img class="cityimg" src="./img/location/null-01.svg" />
-        <p>Population: <span class="population"></span></p>
+        <h3>Scenario 1:</h3>
+        <input type="button" onclick="runScenario()" value="RUN SCENARIO 1" class="runScenario button"></input>
       </div>
-      <div class="small-12 medium-12 large-4 columns household">
-        <h3>HOUSEHOLD SIZE:</h3>
-        <select name="household" id="household">
-          <option value="Choose family size">Choose a family size</option>
-        </select>
-        <img class="hhimg" src="./img/household/null-01.svg" />
-        <p></p>
+      <div class="small-12 medium-12 large-4 columns location">
+        <h3>Scenario 2:</h3>
+        <input type="button" onclick="runScenario()" value="RUN SCENARIO 2" class="runScenario button"></input>
       </div>
-      <div class="small-12 medium-12 large-4 columns income">
-        <h3>MEDIAN INCOME:</h3>
-        <p class="blue">$<span class="incomeannual">69,402</span><span class="money-label">/year</span></p>
-        <p class="blue">$<span class="takehome">4,577</span><span class="money-label">/month after taxes</span></p>
-        <div class="graph-income"></div>
-        <input type="button" onclick="runScenario()" value="RUN SCENARIO" class="runScenario button"></input>
+      <div class="small-12 medium-12 large-4 columns location">
+        <h3>Scenario 3:</h3>
+        <input type="button" onclick="runScenario()" value="RUN SCENARIO 3" class="runScenario button"></input>
       </div>
     </div>
+
 
     <div class="row ideal post slide">
       <div class="small-12 medium-12 large-12 columns">
@@ -228,3 +218,37 @@
 
   </body>
 </html>
+
+<!-- SCENARIO SELECTION
+
+    <div class="row scenario slide">
+      <div class="small-12 medium-12 large-12 columns">
+        <h2>Select a scenario:</h2>
+      </div>
+      <div class="small-12 medium-12 large-4 columns location">
+        <h3>LOCATION:</h3>
+        <select name="city" id="city">
+          <option value="Choose a city">Choose a city</option>
+        </select>
+        <img class="cityimg" src="./img/location/null-01.svg" />
+        <p>Population: <span class="population"></span></p>
+      </div>
+      <div class="small-12 medium-12 large-4 columns household">
+        <h3>HOUSEHOLD SIZE:</h3>
+        <select name="household" id="household">
+          <option value="Choose family size">Choose a family size</option>
+        </select>
+        <img class="hhimg" src="./img/household/null-01.svg" />
+        <p></p>
+      </div>
+      <div class="small-12 medium-12 large-4 columns income">
+        <h3>MEDIAN INCOME:</h3>
+        <p class="blue">$<span class="incomeannual">69,402</span><span class="money-label">/year</span></p>
+        <p class="blue">$<span class="takehome">4,577</span><span class="money-label">/month after taxes</span></p>
+        <div class="graph-income"></div>
+        <input type="button" onclick="runScenario()" value="RUN SCENARIO" class="runScenario button"></input>
+      </div>
+    </div>
+
+ -->
+

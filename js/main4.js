@@ -9,7 +9,8 @@ w = d3.select("div.row").node().getBoundingClientRect().width - 30;
 // *** DATA SETUP ***
 // ******************
 
-d3.csv("csv/data.csv", function(csv) {  // pull data from csv
+d3.csv("csv/data.csv", function(error, csv) {  
+  if (error) throw error;
   // read numerical values as numbers not strings 
   csv.forEach(function(d){ d['income'] = +d['income']; });        // kludgy...
   csv.forEach(function(d){ d['takehome'] = +d['takehome']; });
@@ -34,13 +35,31 @@ d3.csv("csv/data.csv", function(csv) {  // pull data from csv
   csv.forEach(function(d){ d['inc8'] = +d['inc8']; });
   csv.forEach(function(d){ d['inc9'] = +d['inc9']; });
   csv.forEach(function(d){ d['decile'] = +d['decile']; });
+
   data = csv; // pass csv values to the global 'data' object
   allScenarios = csv; // also pass them to this object that -doesn't- get changed in scenario setup
+
+  console.log(data);
   init();
 
 });
 
-// I _think_ this deals with a reduced data object — surely there's a better way to handle...
+function setScenario() {
+  var selected = {};
+  selected.city = "Detroit, MI";
+  selected.household = "1 adult";
+  // select data row based on value
+  for (i=0;i<data.length;i++) {
+    if (data[i].city == selected.city) {
+      if (data[i].household == selected.household) {
+        data = data[i];   // reduce data object to selected row
+        console.log(data);
+      }
+    }
+  }
+}
+
+// assumes a data object reduced to single scenario (post setScenario)
 function setProps() {
   data.difference = data.income - 23850; // TODO: this number is diff for different household sizes
   data.fifty = Math.round(data.takehome * 0.5);
@@ -55,32 +74,6 @@ function setProps() {
   data.savesperc = Math.round((data.losaves / data.takehome)*100);
   data.overneeds = Math.round(data.needs - data.fifty);
   data.overneedsperc = Math.round(data.needsperc-50);
-};
-
-// setup an array for each post-scenario graph
-function setupData() {
-  dataIdeal = [
-    [{ x: 0, y: data.fifty, t1: "50%", t2: "Needs:" }],
-    [{ x: 0, y: data.thirty, t1: "30%", t2: "Wants:"  }],
-    [{ x: 0, y: data.twenty, t1: "20%", t2: "Saves:"  }]
-  ];
-  dataNeeds = [
-    [{ x: 0, y: data.housing, section: "Housing & Utilities", icon: "housing.svg" }],
-    [{ x: 0, y: data.health, section: "Healthcare", icon: "health.svg" }, ],
-    [{ x: 0, y: data.grocery, section: "Groceries", icon: "grocery.svg" }, ],
-    [{ x: 0, y: data.transit, section: "Transportation", icon: "transit.svg" },],
-    [{ x: 0, y: data.childcare, section: "Childcare", icon: "childcare.svg" } ],
-    [{ x: 0, y: data.lo, section: "Childcare", icon: "childcare.svg" } ]
-  ];
-  dataActual = [
-    [{ x: 0, y: data.needs, t1: data.needsperc, t2: "Needs:" }],
-    [ { x: 0, y: data.lowants, t1: data.wantsperc, t2: "Wants:"  }],
-    [{ x: 0, y: data.losaves, t1: data.savesperc, t2: "Saves:"  }]
-  ];
-  // stack each array
-  stack(dataIdeal);
-  stack(dataActual);
-  stack(dataNeeds);
 };
 
 
@@ -101,32 +94,24 @@ function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-// dispatch needed...
 
 
 // ********************
 // *** CONTROL FLOW ***
 // ********************
 
-
+// runs on completion of data load
 function init() {
-
   drawTitle();
   drawExplain();
 }
 
-/* 
-function setupAndDraw() {
-  setScenario(); // get current value of dropdowns and set 'data' to the selected scenario
-  setProps(); // set calculated properties
-  setupData(); // create a stacked array for each graph
-  addNumbers(); // overwrite numbers in HTML with correct values per scenario
-  drawIdeal(); // draw each post-scenario graph
-  drawNeeds();  
-  drawActual();
-};
-*/
-
+// runs on user selection of scenario
+function runScenario() {
+  setScenario();
+  setProps();
+  drawIdeal();
+}
 
 // **********************
 // *** DRAW FUNCTIONS ***
@@ -204,8 +189,6 @@ function drawExplain() {
     .domain([0, 100])
     .range([0, w]);
 
-  var loopTrack = 0;
-  
   // create SVG element
   var svg = d3.select("#graph-explain")
         .append("svg")
@@ -224,6 +207,8 @@ function drawExplain() {
         else if (i == 2) { fillColor = "#0C3758";}    // blue
       return fillColor;      
     });
+
+  var loopTrack = 0;
 
   var rects = groups.selectAll("rect")
     .data(function(d) { return d; })
@@ -284,56 +269,26 @@ function drawExplain() {
 }
 
 
-function drawIncome() {
-
-  dataset = dataIncome;
-  var width = 350; // d3.select("div.income").node().getBoundingClientRect().width - 30;
-  var height = 100;
-  var barPadding = 1;
-
-  var yScale = d3.scale.linear()
-    .domain([0, 25]) // use a constant > largest individual value across cities for upper bound of domain OR d3.max(dataset)...
-    .range([0,height]);
-
-  var svg = d3.select(".graph-income")
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height+20);
-
-  svg.selectAll('rect')
-    .data(dataset)
-    .enter().append('rect')
-    .attr('x', function(d,i) { return i * (width / dataset.length); })
-    .attr('y', function(d) { return height - yScale(d); })
-    .attr("width", width / dataset.length - barPadding)
-    .attr("height", function(d) { return yScale(d); })
-    .attr("fill", function(d, i) {
-      if (i == decileSelected) { return "orange"; } // highlight the correct decile
-      else { return "white"; }
-    });
-
-}
-
-
 function drawIdeal() {
 
-  var dataset = dataIdeal; 
-  var h = 100; 
+  var barHeight = 100; 
   var lineHeight = 220;  // height of solid lines
 
-  // set up scales 
-  var xScale = d3.scale.ordinal()      // actually y scale, since we're doing horizontal bars
-    .domain(d3.range(dataset[0].length))
-    .rangeRoundBands([0, h]);
+  dataIdeal = [
+    { needs: data.fifty, wants: data.thirty, saves: data.twenty }
+  ];
 
-  var yScale = d3.scale.linear()       // actually x scale
-    .domain([0,       
-      d3.max(dataset, function(d) {
-        return d3.max(d, function(d) {
-          return d.y0 + d.y;
-        });
-      })
-    ])
+  var stack = d3.stack()
+    .keys(["needs", "wants", "saves"])
+    .order(d3.stackOrderNone)
+    .offset(d3.stackOffsetNone);
+
+  var dataset = stack(dataIdeal);
+
+  console.log(dataset);
+
+  var yScale = d3.scaleLinear()
+    .domain([0, 100]) // this needs to pull the max
     .range([0, w]);
   
   // create SVG element
@@ -341,7 +296,7 @@ function drawIdeal() {
         .append("svg")
         .attr("class", "graph")
         .attr("width", w)        
-        .attr("height", h+120);   // +120 is to open up vertical space for annotation
+        .attr("height", lineHeight);   // +120 is to open up vertical space for annotation
 
   // add a group for each row of data
   var groups = svg.selectAll("g")
@@ -355,20 +310,21 @@ function drawIdeal() {
       return fillColor;      
     });
 
-  // add a rect for each data value
+  var loopTrack = 0;
+
   var rects = groups.selectAll("rect")
     .data(function(d) { return d; })
     .enter().append("rect")
-      .attr("x", function(d) { return yScale(d.y0); }) 
-      .attr("y", 128)   // 128 is to shift chart down to make way for annotation
-      .attr("height", xScale.rangeBand())
-      .attr("width", "0");
+      .attr("x", function(d) { return yScale(d[0]); })
+      .attr("y", 0)
+      .attr("height", barHeight)
+      .attr("width", 0)
+    .transition()
+      .delay(function(d, i) {++loopTrack; return (loopTrack-1)*1400; }) 
+      .duration(1200)
+      .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]) });
 
-    d3.selectAll("#graph-ideal rect")
-      .transition()
-        .delay(function(d, i) {return (i+0.5) * 1600;}) 
-        .duration(1200)
-        .attr("width", function(d) { return yScale(d.y); });  
+
 
   // draw a line over the start of each rect
   var lines = groups.selectAll("line")
@@ -376,8 +332,8 @@ function drawIdeal() {
     .enter().append("line")
     .attr("y1", 0) 
     .attr("y2", lineHeight) 
-    .attr("x1", function(d) { return yScale(d.y0); }) 
-    .attr("x2", function(d) { return yScale(d.y0); })        
+    .attr("x1", function(d) { return yScale(d[0]); })
+    .attr("x2", function(d) { return yScale(d[0]); })
     .style("stroke-width", 4)
     .style("stroke", "white")
     .style("fill", "none");
@@ -393,35 +349,9 @@ function drawIdeal() {
     .style("fill", "none");
 
   // fix the position of the first line of the graph
-  var lineFix = svg.selectAll('line'); 
-  lineFix.first()
+  var lineFix = svg.select('line')
     .attr('transform', 'translate(2,0)');
 
-  // add label line 1
-  var textLabelOne = svg.selectAll() // TODO: need to separate bold and regular text via tspans
-    .data(dataset)
-    .enter().append("text")
-    .attr("class", "graph-label")
-    .style("font-weight", 700)
-    .attr("fill", "#231f20")
-    .attr("dx", function(d) { return yScale(d[0].y0)+10; })  // position horizontally
-    .attr("dy", "60")                                        // position vertically -- TODO: base these on type size?
-    .text(function(d) { return d[0].t1; });
-
-  var textLabelOneAyy = d3.selectAll(".graph-label")
-    .append("tspan")
-    .style("font-weight", 400)
-    .text(function(d) { return " " + d[0].t2 })
-
-  // add label line 2
-  var textLabelTwo = svg.selectAll()
-    .data(dataset)
-    .enter().append("text")
-    .attr("class", "graph-label")
-    .attr("fill", "#231f20")
-    .attr("dx", function(d) { return yScale(d[0].y0)+10; })  // position horizontally
-    .attr("dy", "100")                                       // position vertically -- TODO: base these on type size?
-    .text(function(d) { return "$" + d[0].y; });
 }
 
 
@@ -780,7 +710,7 @@ function nextStep(step) {
     });
 }
 
-// stepper functions, each is called by a different button. this is obviously a bashy way to do this.
+// stepper functions, each is called by a different button in last graph. this is obviously a bashy way to do this.
 function step1() {
   // hide step 1, display step 2
   $("#step2").css("display", "block");
@@ -855,7 +785,7 @@ function getVerdict() {
 }
 
 
-// re-arrange labels to prevent overlap
+// re-arrange labels to prevent overlap in Actual graph
 function arrangeLabels() {
 
   var secondLabel = document.getElementsByClassName("actual-label")[1];
@@ -943,6 +873,39 @@ function arrangeLabels() {
 }
 
 
+
+
+// Income histogram for scenario selection
+
+function drawIncome() {
+
+  dataset = dataIncome;
+  var width = 350; // d3.select("div.income").node().getBoundingClientRect().width - 30;
+  var height = 100;
+  var barPadding = 1;
+
+  var yScale = d3.scale.linear()
+    .domain([0, 25]) // use a constant > largest individual value across cities for upper bound of domain OR d3.max(dataset)...
+    .range([0,height]);
+
+  var svg = d3.select(".graph-income")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height+20);
+
+  svg.selectAll('rect')
+    .data(dataset)
+    .enter().append('rect')
+    .attr('x', function(d,i) { return i * (width / dataset.length); })
+    .attr('y', function(d) { return height - yScale(d); })
+    .attr("width", width / dataset.length - barPadding)
+    .attr("height", function(d) { return yScale(d); })
+    .attr("fill", function(d, i) {
+      if (i == decileSelected) { return "orange"; } // highlight the correct decile
+      else { return "white"; }
+    });
+
+}
 
 
 
