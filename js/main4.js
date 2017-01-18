@@ -350,9 +350,29 @@ function drawIdeal() {
   var lineFix = svg.select('line')
     .attr('transform', 'translate(2,0)');
 
+  var textLabels1 = {};
+    textLabels1.needs = "50%";
+    textLabels1.wants = "30%";
+    textLabels1.saves = "20%";
+
+  var textLabels2 = {};
+    textLabels2.needs = "Needs:";
+    textLabels2.wants = "Wants:";
+    textLabels2.saves = "Saves:";
 
 
-    
+  // add label line 1
+  var textLabelOne = svg.selectAll() 
+    .data(dataset)
+    .enter().append("text")
+    .attr("class", "graph-label")
+    .style("font-weight", 700)
+    .attr("fill", "#231f20")
+    .attr("dx", function(d) { return yScale(d[0][0])+10; })  // position horizontally
+    .attr("dy", "60")                                     // position vertically
+    .text(function(d,i) { return d.key; });
+
+
 }
 
 
