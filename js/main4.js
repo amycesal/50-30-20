@@ -101,12 +101,6 @@ function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-// add to d3 selection - select first in a series, used for appending a line to the start of a graph
-d3.selection.prototype.first = function() {     
-  return d3.select(this[0][0]);
-};
-
-
 // dispatch needed...
 
 
@@ -118,7 +112,7 @@ d3.selection.prototype.first = function() {
 function init() {
 
   drawTitle();
-
+  drawExplain();
 }
 
 /* 
@@ -142,7 +136,6 @@ function drawTitle() {
 
   var h = 40; 
 
-  // data for pre-scenario charts — static
   dataIntro = [
     {needs: 50, wants: 30, saves: 20}
   ];
@@ -153,8 +146,6 @@ function drawTitle() {
     .offset(d3.stackOffsetNone);
 
   var dataset = stack(dataIntro); 
-
-  console.log(dataset);
 
   var svg = d3.select(".graph-title")
     .append("svg")
@@ -186,37 +177,34 @@ function drawTitle() {
       .attr("height", h)
       .attr("width", 0)
     .transition()
-      .delay(function(d, i) {++loopTrack; return (loopTrack-1)*1400; })
+      .delay(function(d, i) {++loopTrack; return (loopTrack-1)*1400; }) 
       .duration(1200)
       .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]) });
 
 }
 
 
-
-
-
-
 function drawExplain() {
 
-  var dataset = dataIntro; 
   var h = 100; 
   var lineHeight = 100;  // height of solid lines
 
-  // set up scales 
-  var xScale = d3.scale.ordinal()      // actually y scale, since we're doing horizontal bars
-    .domain(d3.range(dataset[0].length))
-    .rangeRoundBands([0, h]);
+  dataIntro = [
+    {needs: 50, wants: 30, saves: 20}
+  ];
 
-  var yScale = d3.scale.linear()       // actually x scale
-    .domain([0,       
-      d3.max(dataset, function(d) {
-        return d3.max(d, function(d) {
-          return d.y0 + d.y;
-        });
-      })
-    ])
+  var stack = d3.stack()
+    .keys(["needs", "wants", "saves"])
+    .order(d3.stackOrderNone)
+    .offset(d3.stackOffsetNone);
+
+  var dataset = stack(dataIntro); 
+
+  var yScale = d3.scaleLinear()
+    .domain([0, 100])
     .range([0, w]);
+
+  var loopTrack = 0;
   
   // create SVG element
   var svg = d3.select("#graph-explain")
@@ -237,56 +225,27 @@ function drawExplain() {
       return fillColor;      
     });
 
-  // add a rect for each data value
   var rects = groups.selectAll("rect")
     .data(function(d) { return d; })
     .enter().append("rect")
-      .attr("x", function(d) { return yScale(d.y0); }) 
-      .attr("y", 0)   // 128 is to shift chart down to make way for annotation
-      .attr("height", xScale.rangeBand())
-      .attr("width", 0);
-
-  // TODO: kill listener on success? 
-  // trigger transitions when svg is in viewport
-  $(window).scroll(function(){
-    var $elem = $("svg.explainer");
-    if (isElementInViewport($elem)) {
-      // stepped transition for bars
-      d3.selectAll(".explainer rect")
-        .transition()
-          .delay(function(d, i) {return i * 1600;}) 
-          .duration(1200)
-          .attr("width", function(d) { return yScale(d.y); })
-          .each("end", fadeInText);
-      // corresponding transition for text blocks
-      var count = 0;
-      function fadeInText() {
-        count++;
-        switch(count) {
-          case 1:
-            $(".explain-50").animate( { opacity: 1 }, 600);
-            break;
-          case 2:
-            $(".explain-30").animate( { opacity: 1 }, 600);
-            break;
-          case 3:
-            $(".explain-20").animate( { opacity: 1 }, 600);
-            $(".explain-question").delay(600).animate( { opacity: 1 }, 600)
-            break;
-        }
-      }
-    }
-  });
-
+      .attr("x", function(d) { return yScale(d[0]); })
+      .attr("y", 0)
+      .attr("height", h)
+      .attr("width", 0)
+    .transition()
+      .delay(function(d, i) {++loopTrack; return (loopTrack-1)*1400; }) 
+      .duration(1200)
+      .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]) })
+      .on("end", fadeInText);
 
   // draw a line over the start of each rect
   var lines = groups.selectAll("line")
     .data(function(d) { return d; })
     .enter().append("line")
     .attr("y1", 0) 
-    .attr("y2", lineHeight) 
-    .attr("x1", function(d) { return yScale(d.y0); }) 
-    .attr("x2", function(d) { return yScale(d.y0); })        
+    .attr("y2", h) 
+    .attr("x1", function(d) { return yScale(d[0]); })
+    .attr("x2", function(d) { return yScale(d[0]); })
     .style("stroke-width", 4)
     .style("stroke", "white")
     .style("fill", "none");
@@ -294,7 +253,7 @@ function drawExplain() {
   // add the last line at the end of the graph
   svg.append("line") 
     .attr("y1", 0) 
-    .attr("y2", lineHeight) 
+    .attr("y2", h) 
     .attr("x1", w-2)
     .attr("x2", w-2) 
     .style("stroke-width", 4)
@@ -302,9 +261,26 @@ function drawExplain() {
     .style("fill", "none");
 
   // fix the position of the first line of the graph
-  var lineFix = svg.selectAll('line'); 
-  lineFix.first()
+  var lineFix = svg.select('line')
     .attr('transform', 'translate(2,0)');
+
+  var count = 0;
+  function fadeInText() {
+    count++;
+    switch(count) {
+      case 1:
+        $(".explain-50").animate( { opacity: 1 }, 600);
+        break;
+      case 2:
+        $(".explain-30").animate( { opacity: 1 }, 600);
+        break;
+      case 3:
+        $(".explain-20").animate( { opacity: 1 }, 600);
+        $(".explain-question").delay(600).animate( { opacity: 1 }, 600)
+        break;
+    }
+  }
+
 }
 
 
