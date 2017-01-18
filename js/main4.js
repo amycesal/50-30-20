@@ -288,7 +288,7 @@ function drawIdeal() {
   console.log(dataset);
 
   var yScale = d3.scaleLinear()
-    .domain([0, 100]) // this needs to pull the max
+    .domain([0, d3.max(dataset[dataset.length - 1], function(d) { return d[1]; }) ])
     .range([0, w]);
   
   // create SVG element
@@ -324,8 +324,6 @@ function drawIdeal() {
       .duration(1200)
       .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]) });
 
-
-
   // draw a line over the start of each rect
   var lines = groups.selectAll("line")
     .data(function(d) { return d; })
@@ -352,6 +350,9 @@ function drawIdeal() {
   var lineFix = svg.select('line')
     .attr('transform', 'translate(2,0)');
 
+
+
+    
 }
 
 
