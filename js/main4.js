@@ -316,7 +316,7 @@ function drawIdeal() {
     .data(function(d) { return d; })
     .enter().append("rect")
       .attr("x", function(d) { return yScale(d[0]); })
-      .attr("y", 0)
+      .attr("y", 128) // value shifts chart down to make room for annotations
       .attr("height", barHeight)
       .attr("width", 0)
     .transition()
@@ -350,6 +350,7 @@ function drawIdeal() {
   var lineFix = svg.select('line')
     .attr('transform', 'translate(2,0)');
 
+  // text labels separated from stack, using same key...
   var textLabels1 = {};
     textLabels1.needs = "50%";
     textLabels1.wants = "30%";
@@ -360,7 +361,6 @@ function drawIdeal() {
     textLabels2.wants = "Wants:";
     textLabels2.saves = "Saves:";
 
-
   // add label line 1
   var textLabelOne = svg.selectAll() 
     .data(dataset)
@@ -370,7 +370,22 @@ function drawIdeal() {
     .attr("fill", "#231f20")
     .attr("dx", function(d) { return yScale(d[0][0])+10; })  // position horizontally
     .attr("dy", "60")                                     // position vertically
-    .text(function(d,i) { return d.key; });
+    .text(function(d,i) { return textLabels1[d.key]; });
+
+  var textLabelOneAyy = d3.selectAll(".graph-label")
+    .append("tspan")
+    .style("font-weight", 400)
+    .text(function(d) { return " " + textLabels2[d.key]; })
+
+  // add label line 2
+  var textLabelTwo = svg.selectAll()
+    .data(dataset)
+    .enter().append("text")
+    .attr("class", "graph-label")
+    .attr("fill", "#231f20")
+    .attr("dx", function(d) { return yScale(d[0][0])+10; })  // position horizontally
+    .attr("dy", "100")                                       // position vertically -- TODO: base these on type size?
+    .text(function(d) { return "$" + (d[0][1] - d[0][0]); });
 
 
 }
