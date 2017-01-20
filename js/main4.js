@@ -44,10 +44,12 @@ d3.csv("csv/data.csv", function(error, csv) {
 
 });
 
+
+// static result for testing purposes
 function setScenario() {
   var selected = {};
-  selected.city = "Detroit, MI";
-  selected.household = "1 adult";
+  selected.city = "Portland, OR";
+  selected.household = "2 adults 2 children"; // 1 adult OR 2 adults 2 children
   // select data row based on value
   for (i=0;i<data.length;i++) {
     if (data[i].city == selected.city) {
@@ -448,11 +450,21 @@ function drawActual() {
       .attr("x", function(d) { return yScale(d[0]); })
       .attr("y", barOffset) // value shifts chart down to make room for annotations
       .attr("height", barHeight) 
+      .attr("width", function(d) {
+        if (yScale(d[1]) - yScale(d[0]) >= 0) return yScale(d[1]) - yScale(d[0]);
+        else return 0;})
+      .attr("class", "actual-rect")
+    .transition() // this is to fool the bloody arrangeLabels function, trashy af
+      .delay(0)
+      .duration(0)
       .attr("width", 0)
     .transition()
       .delay(function(d, i) {++loopTrack; return (loopTrack-1)*1400; }) 
       .duration(1200)
-      .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]) });
+      .attr("width", function(d) {
+        if (yScale(d[1]) - yScale(d[0]) >= 0) return yScale(d[1]) - yScale(d[0]);
+        else return 0;
+      });
 
   var lines = groups.selectAll("line")
     .data(function(d) { return d; })
@@ -545,6 +557,114 @@ function drawActual() {
     .attr("dy", 36)
     .style("font-weight", 400)
     .text(function(d) { return "$" + (d[0][1] - d[0][0]); });
+
+  // if 'needs' exceed takehome, move 'wants' and 'saves' labels to their fallback positions
+  if (data.lowants <= 0) {
+    d3.selectAll('text.actual-label')
+      .attr('dx', function(d,i) {
+        if (i > 1) return (yScale(data.fifty) + yScale(data.thirty) + 10);
+        else if (i > 0) return (yScale(data.fifty) + 10);
+        else return yScale(d[0][0])+10;
+      });
+    d3.selectAll('tspan.labelThree')
+      .attr('x', function(d,i) {
+        if (i > 1) return (yScale(data.fifty) + yScale(data.thirty) + 10);
+        else if (i > 0) return (yScale(data.fifty) + 10);
+        else return yScale(d[0][0])+10;
+      });
+  }
+  else arrangeLabels();
+
+  // re-arrange labels to prevent overlap
+  function arrangeLabels() {
+
+    var secondLabel = document.getElementsByClassName("actual-label")[1];
+    var thirdLabel = document.getElementsByClassName("actual-label")[2];
+    var secondLabelThirdLine = document.getElementsByClassName("labelThree")[1];
+    var thirdLabelThirdLine = document.getElementsByClassName("labelThree")[2];
+
+    var a = secondLabel.getBoundingClientRect();
+    var b = thirdLabel.getBoundingClientRect();
+
+    var secondX = d3.select(secondLabel).attr("dx");
+    var secondY = d3.select(secondLabel).attr("dy");
+    var secondThirdX = d3.select(secondLabelThirdLine).attr("x");
+
+    var thirdX = d3.select(thirdLabel).attr("dx");
+    var thirdY = d3.select(thirdLabel).attr("dy");
+    var thirdThirdX = d3.select(thirdLabelThirdLine).attr("x");
+
+    // detect overlap between second and third labels
+    if((Math.abs(a.left - b.left) * 2 < (a.width + b.width)) && 
+       (Math.abs(a.top - b.top) * 2 < (a.height + b.height))) { 
+
+      d3.select(secondLabel)
+        .attr("dx", secondX-238)
+        .attr("dy", secondY-36);
+      d3.select(secondLabelThirdLine)
+        .attr("x", secondThirdX-238);
+
+      d3.select(thirdLabel)
+        .attr("dx", thirdX-104)
+        .attr("dy", thirdY-72);
+      d3.select(thirdLabelThirdLine)
+        .attr("x", thirdThirdX-104);
+
+      var thisLabel = secondLabel.getBBox();
+      var thisRect = document.getElementsByClassName('actual-rect')[1].getBBox();
+      var tspanWidth = document.getElementsByClassName('labelThree')[1].getComputedTextLength();
+
+      // draw lines from 2nd label
+      d3.select("svg.ok") // horizontal
+        .append("line")
+        .attr("x1", thisLabel.x + tspanWidth+10) 
+        .attr("y1", 90)
+        .attr("x2", thisRect.x + (thisRect.width / 2) + 2 ) 
+        .attr("y2", 90) 
+        .style("stroke-width", 4)
+        .style("stroke", "#231f20")
+        .style("fill", "none");
+
+      d3.select("svg.ok") // vertical
+        .append("line")
+        .attr("x1", thisRect.x + (thisRect.width / 2) ) 
+        .attr("y1", 90)
+        .attr("x2", thisRect.x + (thisRect.width / 2) ) 
+        .attr("y2", 140) 
+        .style("stroke-width", 4)
+        .style("stroke", "#231f20")
+        .style("fill", "none");
+
+      var thisLabel = thirdLabel.getBBox();
+      var thisRect = document.getElementsByClassName('actual-rect')[2].getBBox();
+      var tspanWidth = document.getElementsByClassName('labelThree')[2].getComputedTextLength();
+
+
+      console.log(thisRect);
+
+      // draw lines from 3rd label
+      d3.select("svg.ok") // horizontal
+        .append("line")
+        .attr("x1", thisLabel.x + tspanWidth+10) 
+        .attr("y1", 54)
+        .attr("x2", thisRect.x + (thisRect.width / 2) + 2) 
+        .attr("y2", 54) 
+        .style("stroke-width", 4)
+        .style("stroke", "#231f20")
+        .style("fill", "none");
+
+      d3.select("svg.ok") // vertical
+        .append("line")
+        .attr("x1", thisRect.x + (thisRect.width / 2)) 
+        .attr("y1", 54)
+        .attr("x2", thisRect.x + (thisRect.width / 2)) 
+        .attr("y2", 140) 
+        .style("stroke-width", 4)
+        .style("stroke", "#231f20")
+        .style("fill", "none");
+    }
+  }
+
 
 }
 
