@@ -104,6 +104,7 @@ function numberWithCommas(x) {
 function init() {
   drawTitle();
   drawExplain();
+  runScenario();
 }
 
 // runs on user selection of scenario
@@ -111,6 +112,8 @@ function runScenario() {
   setScenario();
   setProps();
   drawIdeal();
+  drawActual();
+
 }
 
 // **********************
@@ -285,7 +288,16 @@ function drawIdeal() {
 
   var dataset = stack(dataIdeal);
 
-  console.log(dataset);
+  // text labels separated from stack, using same key...
+  var textLabels1 = {};
+    textLabels1.needs = "50%";
+    textLabels1.wants = "30%";
+    textLabels1.saves = "20%";
+
+  var textLabels2 = {};
+    textLabels2.needs = "Needs:";
+    textLabels2.wants = "Wants:";
+    textLabels2.saves = "Saves:";
 
   var yScale = d3.scaleLinear()
     .domain([0, d3.max(dataset[dataset.length - 1], function(d) { return d[1]; }) ])
@@ -296,7 +308,7 @@ function drawIdeal() {
         .append("svg")
         .attr("class", "graph")
         .attr("width", w)        
-        .attr("height", lineHeight);   // +120 is to open up vertical space for annotation
+        .attr("height", lineHeight);   
 
   // add a group for each row of data
   var groups = svg.selectAll("g")
@@ -350,32 +362,19 @@ function drawIdeal() {
   var lineFix = svg.select('line')
     .attr('transform', 'translate(2,0)');
 
-  // text labels separated from stack, using same key...
-  var textLabels1 = {};
-    textLabels1.needs = "50%";
-    textLabels1.wants = "30%";
-    textLabels1.saves = "20%";
-
-  var textLabels2 = {};
-    textLabels2.needs = "Needs:";
-    textLabels2.wants = "Wants:";
-    textLabels2.saves = "Saves:";
-
   // add label line 1
   var textLabelOne = svg.selectAll() 
     .data(dataset)
     .enter().append("text")
-    .attr("class", "graph-label")
-    .style("font-weight", 700)
-    .attr("fill", "#231f20")
-    .attr("dx", function(d) { return yScale(d[0][0])+10; })  // position horizontally
-    .attr("dy", "60")                                     // position vertically
-    .text(function(d,i) { return textLabels1[d.key]; });
-
-  var textLabelOneAyy = d3.selectAll(".graph-label")
+      .attr("class", "graph-label")
+      .style("font-weight", 700)
+      .attr("fill", "#231f20")
+      .attr("dx", function(d) { return yScale(d[0][0])+10; })  // position horizontally
+      .attr("dy", "60")                                        // position vertically
+      .text(function(d,i) { return textLabels1[d.key]; })
     .append("tspan")
-    .style("font-weight", 400)
-    .text(function(d) { return " " + textLabels2[d.key]; })
+      .style("font-weight", 400)
+      .text(function(d) { return " " + textLabels2[d.key]; });
 
   // add label line 2
   var textLabelTwo = svg.selectAll()
@@ -384,40 +383,50 @@ function drawIdeal() {
     .attr("class", "graph-label")
     .attr("fill", "#231f20")
     .attr("dx", function(d) { return yScale(d[0][0])+10; })  // position horizontally
-    .attr("dy", "100")                                       // position vertically -- TODO: base these on type size?
+    .attr("dy", "100")                                      
     .text(function(d) { return "$" + (d[0][1] - d[0][0]); });
-
 
 }
 
 
 function drawActual() {
 
-  var dataset = dataActual;
-  var h = 100; 
+  var barHeight = 100; 
   var barOffset = 160;
+  var dashedHeight = 80;
 
-  // reset scales 
-  var xScale = d3.scale.ordinal()
-    .domain(d3.range(dataset[0].length))
-    .rangeRoundBands([0, h]);
+  dataActual = [
+    { needs: data.needs, wants: data.lowants, saves: data.losaves }
+  ];
 
-  var yScale = d3.scale.linear()
-    .domain([0,       
-      d3.max(dataset, function(d) {
-        return d3.max(d, function(d) {
-          return d.y0 + d.y;
-        });
-      })
-    ])
+  var stack = d3.stack()
+    .keys(["needs", "wants", "saves"])
+    .order(d3.stackOrderNone)
+    .offset(d3.stackOffsetNone);
+
+  var dataset = stack(dataActual);
+
+  var yScale = d3.scaleLinear()
+    .domain([0, d3.max(dataset[dataset.length - 1], function(d) { return d[1]; }) ])
     .range([0, w]);
+  
+  // text labels separated from stack, using same key...
+  var textLabels1 = {};
+    textLabels1.needs = data.needsperc;
+    textLabels1.wants = data.wantsperc;
+    textLabels1.saves = data.savesperc;
+
+  var textLabels2 = {};
+    textLabels2.needs = "Needs:";
+    textLabels2.wants = "Wants:";
+    textLabels2.saves = "Saves:";
 
   // create SVG element
   var svg = d3.select("#graph-actual")
         .append("svg")
         .attr("class", "graph ok")
         .attr("width", w)         
-        .attr("height", h+240);   // +240 opens up vertical space for annotation
+        .attr("height", barHeight+240);   // +240 opens up vertical space for annotation, this is weird...
 
   // add a group for each row of data
   var groups = svg.selectAll("g")
@@ -431,41 +440,33 @@ function drawActual() {
       return fillColor;      
     });
 
-  // add a rect for each data value
+  var loopTrack = 0;
+
   var rects = groups.selectAll("rect")
     .data(function(d) { return d; })
     .enter().append("rect")
-      .attr("x", function(d) { return yScale(d.y0); })
-      .attr("y", barOffset)    // set vertical position of bar inside svg
-      .attr("class", "actual-rect")    // set vertical position of bar inside svg
+      .attr("x", function(d) { return yScale(d[0]); })
+      .attr("y", barOffset) // value shifts chart down to make room for annotations
+      .attr("height", barHeight) 
       .attr("width", 0)
-      .attr("height", xScale.rangeBand());
+    .transition()
+      .delay(function(d, i) {++loopTrack; return (loopTrack-1)*1400; }) 
+      .duration(1200)
+      .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]) });
 
-    d3.selectAll("#graph-actual rect")
-      .transition()
-        .delay(function(d, i) {return (i+0.5) * 1600;}) 
-        .duration(1200)
-        .attr("width", function(d) { 
-          if (yScale(d.y) <= 0) {return 0;}
-          else {return yScale(d.y);}
-        })
-        .each("end", getVerdict);
-
-  // draw a line over the start of every rect
   var lines = groups.selectAll("line")
     .data(function(d) { return d; })
     .enter().append("line")
-    .attr("x1", function(d) { return yScale(d.y0); }) 
-    .attr("x2", function(d) { return yScale(d.y0); })        
-    .attr("y1", barOffset)  // top of line
-    .attr("y2", barOffset+h)  
+      .attr("x1", function(d) { return yScale(d[0]); }) 
+      .attr("x2", function(d) { return yScale(d[0]); })        
+      .attr("y1", barOffset)  // top of line
+      .attr("y2", barOffset+barHeight)  
     .style("stroke-width", 4)
     .style("stroke", "white")
     .style("fill", "none");
 
   // fix the position of the first line of the graph
-  var lineFix = svg.selectAll('line'); 
-  lineFix.first()
+  var lineFix = svg.select('line')
     .attr('transform', 'translate(2,0)');
 
   // add the last line at the end of the graph
@@ -473,12 +474,10 @@ function drawActual() {
     .attr("x1", w-2) 
     .attr("x2", w-2) 
     .attr("y1", barOffset) 
-    .attr("y2", barOffset+h) 
+    .attr("y2", barOffset+barHeight) 
     .style("stroke-width", 4)
     .style("stroke", "white")
     .style("fill", "none");
-
-  var dashedHeight = 80;
 
   // add dashed lines
   svg.append("line")
@@ -525,47 +524,30 @@ function drawActual() {
     .style("stroke-dasharray", ("4, 8"));
 
   // add label line 1
-  var textLabelOne = groups.selectAll("text") // TODO: need to separate bold and reg trext via tspans
-    .data(function(d) { return d; })
+  var textLabelOne = svg.selectAll() 
+    .data(dataset)
     .enter().append("text")
       .attr("class", "actual-label")
       .style("font-weight", 700)
       .attr("fill", "#231f20")
-      .attr("dx", function(d) { return yScale(d.y0)+10; })    // position horizontally
+      .attr("dx", function(d) { return yScale(d[0][0])+10; })    // position horizontally
       .attr("dy", barOffset - 60)                             // position vertically
-      .text(function(d) { return d.t1; });
-
-  var textLabelTwo = d3.selectAll(".actual-label")
+      .text(function(d) { return textLabels1[d.key]; })
     .append("tspan")
-    .style("font-weight", 400)
-    .text(function(d) { return "% " + d.t2 });
+      .style("font-weight", 400)
+      .text(function(d) { return "% " + textLabels2[d.key]; });
 
   // add label line 2
   var textLabelThree = d3.selectAll(".actual-label")
     .append("tspan")
     .attr("class", "labelThree")
-    .attr("x", function(d) { return yScale(d.y0)+10; })
+    .attr("x", function(d) { return yScale(d[0][0])+10; })
     .attr("dy", 36)
     .style("font-weight", 400)
-    .text(function(d) { return "$" + d.y });
-
-  // if needs exceed takehome, move wants and saves labels to their fallback positions
-  if (data.lowants <= 0) {
-    d3.selectAll('text.actual-label')
-      .attr('dx', function(d,i) {
-        if (i > 0) {return (yScale(d.y0)+10)-(i*200);}
-        else {return yScale(d.y0)+10;}
-      });
-    d3.selectAll('tspan.labelThree')
-      .attr('x', function(d,i) {
-        if (i > 0) {return (yScale(d.y0)+10)-(i*200);}
-        else {return yScale(d.y0)+10;}
-      });
-  }
-  // otherwise check for overlap etc. and display as normal
-  else {arrangeLabels();}
+    .text(function(d) { return "$" + (d[0][1] - d[0][0]); });
 
 }
+
 
 
 function drawNeeds() {
