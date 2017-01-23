@@ -115,7 +115,7 @@ function runScenario() {
   setProps();
   drawIdeal();
   drawActual();
-
+  drawNeeds();
 }
 
 // **********************
@@ -672,23 +672,42 @@ function drawActual() {
 
 function drawNeeds() {
 
+
+/* 
+IN CASE WE NEED THEM AGAIN....
+icon: "housing.svg"
+icon: "health.svg"
+icon: "grocery.svg"
+icon: "transit.svg"
+icon: "childcare.svg"
+icon: "childcare.svg"
+*/
+
   var graphOffset = 60;
   var h = 100; 
-  var dataset = dataNeeds;
 
-  var xScale = d3.scale.ordinal()              
-    .domain(d3.range(dataset[0].length))
-    .rangeRoundBands([0, h]); 
+  dataNeeds = [
+    { housing: data.housing, health: data.health, grocery: data.grocery, transit: data.transit, childcare: data.childcare, lo: data.lo }
+  ];
 
-  var yScale = d3.scale.linear()               
-    .domain([0,
-      d3.max(dataset, function(d) {
-        return d3.max(d, function(d) {
-          return d.y0 + d.y;
-        });
-      })
-    ])
-    .range([0, w]); 
+  var sectionLabels = {};
+    sectionLabels.housing = "Housing & Utilities";
+    sectionLabels.health = "Healthcare";
+    sectionLabels.grocery = "Groceries";  
+    sectionLabels.transit = "Transportation";
+    sectionLabels.childcare = "Childcare";
+    sectionLabels.lo = "Childcare";
+
+  var stack = d3.stack()
+    .keys(["housing", "health", "grocery", "transit", "childcare", "lo"])
+    .order(d3.stackOrderNone)
+    .offset(d3.stackOffsetNone);
+
+  var dataset = stack(dataNeeds);
+
+  var yScale = d3.scaleLinear()
+    .domain([0, d3.max(dataset[dataset.length - 1], function(d) { return d[1]; }) ])
+    .range([0, w]);
 
   // create new svg element
   var svg = d3.select("#graph-needs")
@@ -702,7 +721,7 @@ function drawNeeds() {
     .attr("x", 0) 
     .attr("y", graphOffset) 
     .attr("width", function(d) { return yScale(data.lo + data.needs); })
-    .attr("height", xScale.rangeBand())
+    .attr("height", h)
     .style("fill", "#e8e8e8")
     .style("fill-opacity", 1);
 
@@ -715,11 +734,11 @@ function drawNeeds() {
   var rects = groups.selectAll("rect")
     .data(function(d) { return d; })
     .enter().append("rect")
-      .attr("x", function(d) { return yScale(d.y0); })
-      .attr("y", function(d, i) { return xScale(i) + graphOffset; })  
+      .attr("x", function(d) { return yScale(d[0]); })
+      .attr("y", function(d, i) { return 100; })  
       .attr("class", "needs-rect")    
       .attr("width", 0)
-      .attr("height", xScale.rangeBand())
+      .attr("height", h)
       .style("fill", "url(#diagonal-stripe-2)");
 
   // transition first rect into view - subsequent rects handled via stepper, below / outside main draw function
@@ -727,35 +746,36 @@ function drawNeeds() {
     .transition()
     .delay(800)
     .duration(1200)
-    .attr("width", function(d) { return yScale(d.y); });
+    .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]); });
 
   // add a label to each row, indicating which value (housing, healthcare etc.) is being added to the cumulative total
   var textLabelOne = groups.selectAll("text")
     .data(function(d) { return d; })
     .enter().append("text")
-      .attr("x", function(d) { return yScale(d.y0)+4; })      // value adjusts horizontal position of labels
-      .attr("y", function(d, i) { return xScale(i)+48; })     // value adjusts vertical position of labels
+      .attr("x", function(d) { return yScale(d[0])+4; })      // value adjusts horizontal position of labels
+      .attr("y", function(d, i) { return 80; })     // value adjusts vertical position of labels
       .attr("fill", "#231f20")
       .attr("class", "needs-label")
       .style("opacity", "0")
       .text(function(d) { 
-        if (d.section != null) { return d.section; } // only add label if 'section' exists in the object
-        else { return null; }                        // TODO: destroy the text element instead of return null
+        if (sectionLabels[d.key] != null) return "% " + sectionLabels[d.key];  // only add label if 'section' exists in the object
+        else return null;  // TODO: destroy the text element instead of return null
       });                              
 
   // add dollar value to labels
   var textLabelTwo = d3.selectAll(".needs-label")
     .append("tspan")
     .style("font-weight", 700)
-    .text(function(d) { return " +$" + numberWithCommas(d.y) });
+    .text(function(d) { return " +$" + numberWithCommas(d[1]- d[0]) });
 
-    d3.select(".needs-label")
-      .style("opacity", "1");
+  // show the first label
+  d3.select(".needs-label")
+    .style("opacity", "1");
 
   // first dashed line - 50% of ideal budget
   svg.append("line")
-    .attr("y1", graphOffset+h) 
-    .attr("y2", graphOffset) 
+    .attr("y1", 100+h) 
+    .attr("y2", 100) 
     .attr("x1", function(d) { return yScale(data.fifty); })
     .attr("x2", function(d) { return yScale(data.fifty); })
     .style("stroke-width", 4)
@@ -765,8 +785,8 @@ function drawNeeds() {
 
   // second dashed line - next 30% of ideal budget
   svg.append("line")
-    .attr("y1", graphOffset+h) 
-    .attr("y2", graphOffset) 
+    .attr("y1", 100+h) 
+    .attr("y2", 100) 
     .attr("x1", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
     .attr("x2", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
     .style("stroke-width", 4)
