@@ -683,8 +683,9 @@ icon: "childcare.svg"
 icon: "childcare.svg"
 */
 
+  var barHeight = 100; 
   var graphOffset = 60;
-  var h = 100; 
+
 
   dataNeeds = [
     { housing: data.housing, health: data.health, grocery: data.grocery, transit: data.transit, childcare: data.childcare, lo: data.lo }
@@ -714,14 +715,14 @@ icon: "childcare.svg"
     .append("svg")
     .attr("class", "graph")
     .attr("width", w)
-    .attr("height", h+120);    
+    .attr("height", barHeight+120);    
 
   // add background rect
   svg.append("rect")
     .attr("x", 0) 
-    .attr("y", graphOffset) 
+    .attr("y", barHeight) 
     .attr("width", function(d) { return yScale(data.lo + data.needs); })
-    .attr("height", h)
+    .attr("height", barHeight)
     .style("fill", "#e8e8e8")
     .style("fill-opacity", 1);
 
@@ -735,10 +736,10 @@ icon: "childcare.svg"
     .data(function(d) { return d; })
     .enter().append("rect")
       .attr("x", function(d) { return yScale(d[0]); })
-      .attr("y", function(d, i) { return 100; })  
+      .attr("y", function(d, i) { return barHeight; })  
       .attr("class", "needs-rect")    
       .attr("width", 0)
-      .attr("height", h)
+      .attr("height", barHeight)
       .style("fill", "url(#diagonal-stripe-2)");
 
   // transition first rect into view - subsequent rects handled via stepper, below / outside main draw function
@@ -750,23 +751,20 @@ icon: "childcare.svg"
 
   // add a label to each row, indicating which value (housing, healthcare etc.) is being added to the cumulative total
   var textLabelOne = groups.selectAll("text")
-    .data(function(d) { return d; })
+    .data(dataset)
     .enter().append("text")
-      .attr("x", function(d) { return yScale(d[0])+4; })      // value adjusts horizontal position of labels
-      .attr("y", function(d, i) { return 80; })     // value adjusts vertical position of labels
+      .attr("x", function(d) { return yScale(d[0][0])+4; })      // value adjusts horizontal position of labels
+      .attr("y", function(d, i) { return barHeight-20; })     // value adjusts vertical position of labels
       .attr("fill", "#231f20")
       .attr("class", "needs-label")
       .style("opacity", "0")
-      .text(function(d) { 
-        if (sectionLabels[d.key] != null) return "% " + sectionLabels[d.key];  // only add label if 'section' exists in the object
-        else return null;  // TODO: destroy the text element instead of return null
-      });                              
+      .text(function(d) { return sectionLabels[d.key]; });                              
 
   // add dollar value to labels
   var textLabelTwo = d3.selectAll(".needs-label")
     .append("tspan")
     .style("font-weight", 700)
-    .text(function(d) { return " +$" + numberWithCommas(d[1]- d[0]) });
+    .text(function(d) { return " +$" + numberWithCommas(d[0][1] - d[0][0]) });
 
   // show the first label
   d3.select(".needs-label")
@@ -774,8 +772,8 @@ icon: "childcare.svg"
 
   // first dashed line - 50% of ideal budget
   svg.append("line")
-    .attr("y1", 100+h) 
-    .attr("y2", 100) 
+    .attr("y1", barHeight) 
+    .attr("y2", barHeight+100) 
     .attr("x1", function(d) { return yScale(data.fifty); })
     .attr("x2", function(d) { return yScale(data.fifty); })
     .style("stroke-width", 4)
@@ -785,8 +783,8 @@ icon: "childcare.svg"
 
   // second dashed line - next 30% of ideal budget
   svg.append("line")
-    .attr("y1", 100+h) 
-    .attr("y2", 100) 
+    .attr("y1", barHeight) 
+    .attr("y2", barHeight+100) 
     .attr("x1", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
     .attr("x2", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
     .style("stroke-width", 4)
@@ -828,24 +826,24 @@ d3.selectAll('.replaycue')
 
 function nextStep(step) {
 
-  // set variables and scales, identical to code in drawNeeds()
+  // set positioning, data and scales, identical to drawNeeds()
+  var barHeight = 100; 
   var graphOffset = 60;
-  var h = 100; 
-  var dataset = dataNeeds;
 
-  var xScale = d3.scale.ordinal()              
-    .domain(d3.range(dataset[0].length))
-    .rangeRoundBands([0, h]); 
+  dataNeeds = [
+    { housing: data.housing, health: data.health, grocery: data.grocery, transit: data.transit, childcare: data.childcare, lo: data.lo }
+  ];
 
-  var yScale = d3.scale.linear()               
-    .domain([0,
-      d3.max(dataset, function(d) {
-        return d3.max(d, function(d) {
-          return d.y0 + d.y;
-        });
-      })
-    ])
-    .range([0, w]); 
+  var stack = d3.stack()
+    .keys(["housing", "health", "grocery", "transit", "childcare", "lo"])
+    .order(d3.stackOrderNone)
+    .offset(d3.stackOffsetNone);
+
+  var dataset = stack(dataNeeds);
+
+  var yScale = d3.scaleLinear()
+    .domain([0, d3.max(dataset[dataset.length - 1], function(d) { return d[1]; }) ])
+    .range([0, w]);
 
   // draw next rect
   d3.selectAll("rect.needs-rect")
@@ -856,7 +854,7 @@ function nextStep(step) {
     })
     .transition().duration(800) // TODO: this only fires correctly on steps 1 and 2
       .attr("width", function(d, i) {
-        if (i <= step) {return yScale(d.y);}
+        if (i <= step) {return yScale(d[1]) - yScale(d[0]);}
       });  
 
   // add next label
@@ -940,94 +938,6 @@ function getVerdict() {
     }, 3200);
   }
 
-}
-
-
-// re-arrange labels to prevent overlap in Actual graph
-function arrangeLabels() {
-
-  var secondLabel = document.getElementsByClassName("actual-label")[1];
-  var thirdLabel = document.getElementsByClassName("actual-label")[2];
-  var secondLabelThirdLine = document.getElementsByClassName("labelThree")[1];
-  var thirdLabelThirdLine = document.getElementsByClassName("labelThree")[2];
-
-  var a = secondLabel.getBoundingClientRect();
-  var b = thirdLabel.getBoundingClientRect();
-
-  var secondX = d3.select(secondLabel).attr("dx");
-  var secondY = d3.select(secondLabel).attr("dy");
-  var secondThirdX = d3.select(secondLabelThirdLine).attr("x");
-
-  var thirdX = d3.select(thirdLabel).attr("dx");
-  var thirdY = d3.select(thirdLabel).attr("dy");
-  var thirdThirdX = d3.select(thirdLabelThirdLine).attr("x");
-
-  // detect overlap between second and third labels
-  if((Math.abs(a.left - b.left) * 2 < (a.width + b.width)) && 
-     (Math.abs(a.top - b.top) * 2 < (a.height + b.height))) { 
-
-    d3.select(secondLabel)
-      .attr("dx", secondX-208)
-      .attr("dy", secondY-36);
-    d3.select(secondLabelThirdLine)
-      .attr("x", secondThirdX-208);
-
-    d3.select(thirdLabel)
-      .attr("dx", thirdX-104)
-      .attr("dy", thirdY-72);
-    d3.select(thirdLabelThirdLine)
-      .attr("x", thirdThirdX-104);
-
-    var thisLabel = secondLabel.getBBox();
-    var thisRect = document.getElementsByClassName('actual-rect')[1].getBBox();
-    var tspanWidth = document.getElementsByClassName('labelThree')[1].getComputedTextLength();
-
-    // draw lines from 2nd label
-    d3.select("svg.ok") // horizontal
-      .append("line")
-      .attr("x1", thisLabel.x + tspanWidth+10) 
-      .attr("y1", 90)
-      .attr("x2", thisRect.x + (thisRect.width / 2) + 2 ) 
-      .attr("y2", 90) 
-      .style("stroke-width", 4)
-      .style("stroke", "#231f20")
-      .style("fill", "none");
-
-    d3.select("svg.ok") // vertical
-      .append("line")
-      .attr("x1", thisRect.x + (thisRect.width / 2) ) 
-      .attr("y1", 90)
-      .attr("x2", thisRect.x + (thisRect.width / 2) ) 
-      .attr("y2", 140) 
-      .style("stroke-width", 4)
-      .style("stroke", "#231f20")
-      .style("fill", "none");
-
-    var thisLabel = thirdLabel.getBBox();
-    var thisRect = document.getElementsByClassName('actual-rect')[2].getBBox();
-    var tspanWidth = document.getElementsByClassName('labelThree')[2].getComputedTextLength();
-
-    // draw lines from 3rd label
-    d3.select("svg.ok") // horizontal
-      .append("line")
-      .attr("x1", thisLabel.x + tspanWidth+10) 
-      .attr("y1", 54)
-      .attr("x2", thisRect.x + (thisRect.width / 2) + 2 ) 
-      .attr("y2", 54) 
-      .style("stroke-width", 4)
-      .style("stroke", "#231f20")
-      .style("fill", "none");
-
-    d3.select("svg.ok") // vertical
-      .append("line")
-      .attr("x1", thisRect.x + (thisRect.width / 2) ) 
-      .attr("y1", 54)
-      .attr("x2", thisRect.x + (thisRect.width / 2) ) 
-      .attr("y2", 140) 
-      .style("stroke-width", 4)
-      .style("stroke", "#231f20")
-      .style("fill", "none");
-  }
 }
 
 
