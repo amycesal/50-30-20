@@ -464,7 +464,10 @@ function drawActual() {
       .attr("width", function(d) {
         if (yScale(d[1]) - yScale(d[0]) >= 0) return yScale(d[1]) - yScale(d[0]);
         else return 0;
-      });
+      })
+      .on("end", getVerdict);
+
+
 
   var lines = groups.selectAll("line")
     .data(function(d) { return d; })
@@ -745,7 +748,7 @@ icon: "childcare.svg"
   // transition first rect into view - subsequent rects handled via stepper, below / outside main draw function
   d3.select("rect.needs-rect")
     .transition()
-    .delay(800)
+    .delay(200)
     .duration(1200)
     .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]); });
 
@@ -868,6 +871,7 @@ function nextStep(step) {
 
 // stepper functions, each is called by a different button in last graph. this is obviously a bashy way to do this.
 function step1() {
+  console.log("step 1");
   // hide step 1, display step 2
   $("#step2").css("display", "block");
   $("#needs-copy2").css("display", "block");
@@ -877,6 +881,7 @@ function step1() {
 }
 
 function step2() {
+  console.log("step 2");
   // hide step 2, display step 3
   $("#step3").css("display", "block");
   $("#needs-copy3").css("display", "block");
@@ -886,6 +891,7 @@ function step2() {
 }
 
 function step3() {
+  console.log("step 3");
   // hide step 3, display step 4
   $("#step4").css("display", "block");
   $("#needs-copy4").css("display", "block");
@@ -895,20 +901,16 @@ function step3() {
 }
 
 function step4() {
+  console.log("step 4");
   // hide step 4, display step 5
-  $("#step5").css("display", "block");
-  $("#needs-copy5").css("display", "block");
-  nextStep(4);
   $("#step4").css("display", "none");
   $("#needs-copy4").css("display", "none");
-}
-
-function step5() {
-  // hide stepper, show next section, show replay
+  nextStep(4);
   $(".hidey").css("display", "block");
   $("#step5").css("display", "none");
   $("#needs-copy5").css("display", "none");
 }
+
 
 
 function getVerdict() {
@@ -933,7 +935,7 @@ function getVerdict() {
    setTimeout(function() {
       $(".verdict .icon").html("<img src='img/verdict-1.svg' />");
       $(".verdict .text")
-      .html("Following 50-30-20 is <span class='yellow'>basically possible</span> in this situation. <span class='strong'>The average needs of this household are under 50%.</span> The household needs to stay within the average, and control their spending on their wants.");
+      .html("Following 50-30-20 is <span class='yellow'>probably possible</span> in this situation. <span class='strong'>The average needs of this household are under 50%.</span> The household needs to stay within the average, and control their spending on their wants.");
       $(".verdict").animate( { opacity: 1 }, 600);
     }, 3200);
   }
