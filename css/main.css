@@ -60,6 +60,9 @@ p, li {font-weight:400; font-size:1.2em;}
 .strong {font-weight:700;}
 .emph {font-style:italic;}
 
+.location-img {}
+.household-img {}
+
 .explain p {padding-right:0.25em; padding-left: 4px;}
 .explain-50, .explain-30, .explain-20 {float: left;}
 .explain-50 {width:50%; opacity:0;}

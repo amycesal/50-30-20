@@ -19,14 +19,14 @@
 
     <title>50-30-20</title>
 
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/what-input.js"></script>
     <script src="js/vendor/foundation.js"></script>
     <script src="js/app.js"></script>
 
     <link rel="stylesheet" href="css/foundation.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/main4.css">
     <link rel="stylesheet" href="css/app.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700" rel="stylesheet">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -35,7 +35,7 @@
   </head>
   <body>
 
-    <div id="cover"></div>
+    <!-- <div id="cover"></div> -->
     <div class="row nav">
       <div class="small-12 medium-12 large-12 columns">
         <ul>
@@ -115,32 +115,40 @@
 
     <div class="row scenario slide">
       <div class="small-12 medium-12 large-12 columns">
-        <h2>Select a scenario:</h2>
+        <h2>Select a situation:</h2>
       </div>
       <div class="small-12 medium-12 large-4 columns location">
-        <h3>LOCATION:</h3>
-        <select name="city" id="city">
-          <option value="Choose a city">Choose a city</option>
-        </select>
-        <img class="cityimg" src="./img/location/null-01.svg" />
-        <p>Population: <span class="population"></span></p>
+        <p>2 adults 2 children</p>
+        <img src="img/household/family-01.svg" class="household-img" />
+        <p>Baltimore, MD</p>
+        <img src="img/location/baltimore-01.svg" class="location-img" />
+        <p>Median Income:</p>
+        <p>$69.402/year</p>
+        <p>$4,577/month after taxes</p>
+        <input type="button" onclick="runScenario()" value="SELECT" class="runScenario button"></input>
       </div>
-      <div class="small-12 medium-12 large-4 columns household">
-        <h3>HOUSEHOLD SIZE:</h3>
-        <select name="household" id="household">
-          <option value="Choose family size">Choose a family size</option>
-        </select>
-        <img class="hhimg" src="./img/household/null-01.svg" />
-        <p></p>
+      <div class="small-12 medium-12 large-4 columns location">
+        <p>1 adult man</p>
+        <img src="img/household/single-01.svg" class="household-img" />
+        <p>St. Louis, MO</p>
+        <img src="img/location/stlouis-01.svg" class="location-img" />
+        <p>Median Income:</p>
+        <p>$30,293/year</p>
+        <p>$1,936/month after taxes</p>
+        <input type="button" onclick="runScenario()" value="SELECT" class="runScenario button"></input>
       </div>
-      <div class="small-12 medium-12 large-4 columns income">
-        <h3>MEDIAN INCOME:</h3>
-        <p class="blue">$<span class="incomeannual">69,402</span><span class="money-label">/year</span></p>
-        <p class="blue">$<span class="takehome">4,577</span><span class="money-label">/month after taxes</span></p>
-        <div class="graph-income"></div>
-        <input type="button" onclick="runScenario()" value="RUN SCENARIO" class="runScenario button"></input>
+      <div class="small-12 medium-12 large-4 columns location">
+        <p>2 adults 2 children</p>
+        <img src="img/household/family-01.svg" class="household-img" />
+        <p>Oakland, CA</p>
+        <img src="img/location/oakland-01.svg" class="location-img" />
+        <p>Median Income:</p>
+        <p>$69.402/year</p>
+        <p>$5,392/month after taxes</p>
+        <input type="button" onclick="runScenario()" value="SELECT" class="runScenario button"></input>
       </div>
     </div>
+
 
     <div class="row ideal post slide">
       <div class="small-12 medium-12 large-12 columns">
@@ -173,11 +181,11 @@
       <div class="small-12 medium-12 large-12 columns">
         <div id="graph-needs"></div>
         <div>
-          <p id="needs-copy1" class="needs-copy">Based on a two-bedroom apartment for families with two children or a studio apartment for a single adult. <a href="http://www.epi.org/resources/budget/" target="blank">Source</a></p>
-          <p id="needs-copy2" class="needs-copy">Includes insurance premiums and out-of-pocket expenditures. <a href="http://www.epi.org/resources/budget/" target="blank">Source</a></p>
-          <p id="needs-copy3" class="needs-copy">Based on the “low-cost plan” which assumes almost all food is bought at the grocery store and prepared at home. <a href="http://www.epi.org/resources/budget/"  target="blank">Source</a></p>
+          <p id="needs-copy1" class="needs-copy">Based on a two-bedroom apartment for families with two children or a studio apartment for a single adult.<a href="http://www.epi.org/resources/budget/">Source.</a></p>
+          <p id="needs-copy2" class="needs-copy">Includes insurance premiums and out-of-pocket expenditures. <a href="http://www.epi.org/resources/budget/">Source.</a></p>
+          <p id="needs-copy3" class="needs-copy">Based on the “low-cost plan” which assumes almost all food is bought at the grocery store and prepared at home. <a href="http://www.epi.org/resources/budget/">Source.</a></p>
           <p id="needs-copy4" class="needs-copy">The cost of a monthly transportation pass for each adult.</p>
-          <p id="needs-copy5" class="needs-copy">Based on center-based child care and family-based care for four-year-olds and school-age children. <a href="http://www.epi.org/resources/budget/"  target="blank">Source</a></p>
+          <p id="needs-copy5" class="needs-copy">Based on center-based child care and family-based care for four-year-olds and school-age children. <a href="http://www.epi.org/resources/budget/">Source.</a></p>
         </div>
         <div id="needs-nav">
           <a id="step1" class="step-link" onclick="step1()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
@@ -224,7 +232,41 @@
       </defs> 
     </svg>
 
-    <script src="js/main.js"></script>
+    <script src="js/main4.js"></script>
 
   </body>
 </html>
+
+<!-- SCENARIO SELECTION
+
+    <div class="row scenario slide">
+      <div class="small-12 medium-12 large-12 columns">
+        <h2>Select a scenario:</h2>
+      </div>
+      <div class="small-12 medium-12 large-4 columns location">
+        <h3>LOCATION:</h3>
+        <select name="city" id="city">
+          <option value="Choose a city">Choose a city</option>
+        </select>
+        <img class="cityimg" src="./img/location/null-01.svg" />
+        <p>Population: <span class="population"></span></p>
+      </div>
+      <div class="small-12 medium-12 large-4 columns household">
+        <h3>HOUSEHOLD SIZE:</h3>
+        <select name="household" id="household">
+          <option value="Choose family size">Choose a family size</option>
+        </select>
+        <img class="hhimg" src="./img/household/null-01.svg" />
+        <p></p>
+      </div>
+      <div class="small-12 medium-12 large-4 columns income">
+        <h3>MEDIAN INCOME:</h3>
+        <p class="blue">$<span class="incomeannual">69,402</span><span class="money-label">/year</span></p>
+        <p class="blue">$<span class="takehome">4,577</span><span class="money-label">/month after taxes</span></p>
+        <div class="graph-income"></div>
+        <input type="button" onclick="runScenario()" value="RUN SCENARIO" class="runScenario button"></input>
+      </div>
+    </div>
+
+ -->
+
