@@ -106,7 +106,6 @@ function numberWithCommas(x) {
 function init() {
   drawTitle();
   drawExplain();
-  runScenario();
 }
 
 // runs on user selection of scenario
