@@ -1,7 +1,7 @@
 // declare global variables
 var w, h, allScenarios, data, dataExplain, dataIncome, dataIdeal, dataNeeds, dataActual, decileSelected;
 
-var selectedScenario = 0;
+var scenarioSelected = 0;
 
 // get page width and store in global variable for graph sizing
 w = d3.select("div.row").node().getBoundingClientRect().width - 30; 
@@ -145,7 +145,7 @@ $( window ).on('scroll', function() {
           }, timeoutTime);
           break;
         case "sec-ideal":
-          if (selectedScenario == 1) {
+          if (scenarioSelected == 1) {
             console.log("firing sec-ideal");
             setTimeout(function() {
               d3.select("#sec-ideal").transition().duration(1200).style("opacity",1);
@@ -154,7 +154,7 @@ $( window ).on('scroll', function() {
           }
           break;
         case "sec-needs":
-          if (selectedScenario == 1) {
+          if (scenarioSelected == 1) {
             console.log("firing sec-needs");
             setTimeout(function() {
               d3.select("#sec-needs").transition().duration(1200).style("opacity",1);
@@ -163,7 +163,7 @@ $( window ).on('scroll', function() {
           }
           break;
         case "sec-end":
-          if (selectedScenario == 1) {
+          if (scenarioSelected == 1) {
             console.log("firing sec-end");
             setTimeout(function() {
               d3.select("#sec-end").transition().duration(1200).style("opacity",1);
@@ -206,7 +206,7 @@ function runScenario() {
   drawNeeds();
 
   getPositions();
-  selectedScenario = 1;
+  scenarioSelected = 1;
 
 }
 
