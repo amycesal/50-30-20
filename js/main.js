@@ -97,6 +97,42 @@ function numberWithCommas(x) {
 }
 
 
+// ****************
+// *** DISPATCH ***
+// ****************
+
+var dispatch = d3.dispatch("sec-explain");
+
+var graphPositions = [
+  {name: "sec-explain", position: null, fired: 0}
+];
+
+function getPositions() {   // called from init after draw functions to ensure we get correct Y vals
+  for (i=0;i<graphPositions.length;i++) {   // get the position of the graph, update the array with it
+    graphPositions[i].position = $("#" + graphPositions[i].name).offset().top + (0.45 * $("#" + graphPositions[i].name).height());  
+  }
+}
+
+$( window ).on('scroll', function() {
+  var scrollPosition = window.pageYOffset;  // get the window position
+  var windowHeight = $( window ).height();  // get the window height
+  var windowBottom = scrollPosition + windowHeight; // position of bottom of the window
+  var timeoutTime = 200; // how much time to wait before firing the dispatch
+
+  for (i=0;i<graphPositions.length;i++) {
+    if (graphPositions[i].position < windowBottom && graphPositions[i].position > scrollPosition && graphPositions[i].fired == 0) {
+      graphPositions[i].fired = 1;
+      switch (graphPositions[i].name) {
+        case "sec-explain":
+          setTimeout(function(){
+            d3.select("#sec-explain").transition().duration(1200).style("opacity",1);
+            dispatch.call("sec-explain");
+          }, timeoutTime);
+          break;
+      }
+    }
+  }
+});
 
 // ********************
 // *** CONTROL FLOW ***
@@ -106,6 +142,7 @@ function numberWithCommas(x) {
 function init() {
   drawTitle();
   drawExplain();
+  getPositions();
 }
 
 // runs on user selection of scenario
@@ -220,12 +257,15 @@ function drawExplain() {
       .attr("x", function(d) { return yScale(d[0]); })
       .attr("y", 0)
       .attr("height", h)
-      .attr("width", 0)
-    .transition()
+      .attr("width", 0);
+
+  dispatch.on('sec-explain', function() {
+    rects.transition()
       .delay(function(d, i) {++loopTrack; return (loopTrack-1)*1400; }) 
       .duration(1200)
       .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]) })
       .on("end", fadeInText);
+  });
 
   // draw a line over the start of each rect
   var lines = groups.selectAll("line")
