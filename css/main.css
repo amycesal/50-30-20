@@ -70,6 +70,13 @@ p, li {font-weight:400; font-size:1.2em;}
 .explain-20 {width:20%; opacity:0;}
 .explain-question {opacity:0;}
 
+/* hidden things */
+.scenario {opacity:0;}
+.explain {opacity:0;}
+.ideal, .needs, .end {
+	display:none;
+}
+
 img {display: block; margin: 0.5em auto 1em auto;}
 
 .left {float:left;}
