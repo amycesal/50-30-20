@@ -101,15 +101,16 @@ function numberWithCommas(x) {
 // *** DISPATCH ***
 // ****************
 
-var dispatch = d3.dispatch("sec-explain");
+var dispatch = d3.dispatch("sec-explain", "sec-scenario");
 
 var graphPositions = [
-  {name: "sec-explain", position: null, fired: 0}
+  {name: "sec-explain", position: null, fired: 0},
+  {name: "sec-scenario", position: null, fired: 0},
 ];
 
 function getPositions() {   // called from init after draw functions to ensure we get correct Y vals
   for (i=0;i<graphPositions.length;i++) {   // get the position of the graph, update the array with it
-    graphPositions[i].position = $("#" + graphPositions[i].name).offset().top + (0.45 * $("#" + graphPositions[i].name).height());  
+    graphPositions[i].position = $("#" + graphPositions[i].name).offset().top + (0.25 * $("#" + graphPositions[i].name).height());  
   }
 }
 
@@ -117,7 +118,7 @@ $( window ).on('scroll', function() {
   var scrollPosition = window.pageYOffset;  // get the window position
   var windowHeight = $( window ).height();  // get the window height
   var windowBottom = scrollPosition + windowHeight; // position of bottom of the window
-  var timeoutTime = 200; // how much time to wait before firing the dispatch
+  var timeoutTime = 100; // how much time to wait before firing the dispatch
 
   for (i=0;i<graphPositions.length;i++) {
     if (graphPositions[i].position < windowBottom && graphPositions[i].position > scrollPosition && graphPositions[i].fired == 0) {
@@ -129,6 +130,12 @@ $( window ).on('scroll', function() {
             dispatch.call("sec-explain");
           }, timeoutTime);
           break;
+        case "sec-scenario":
+          setTimeout(function(){
+            d3.select("#sec-scenario").transition().duration(1200).style("opacity",1);
+            dispatch.call("sec-scenario");
+          }, timeoutTime);
+          break;          
       }
     }
   }
