@@ -925,6 +925,9 @@ d3.selectAll('.replaycue')
     // reset needs visualization and redraw in initial state
     d3.select("#graph-needs svg").remove()
     drawNeeds();
+    dispatch.call("sec-needs"); // re-draws that first rect
+
+
 });
 
 function nextStep(step) {
