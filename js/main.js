@@ -1,7 +1,7 @@
 // declare global variables
 var w, h, allScenarios, data, dataExplain, dataIncome, dataIdeal, dataNeeds, dataActual, decileSelected;
 
-var selectedScenario = false;
+var selectedScenario = 0;
 
 // get page width and store in global variable for graph sizing
 w = d3.select("div.row").node().getBoundingClientRect().width - 30; 
@@ -103,7 +103,7 @@ function numberWithCommas(x) {
 // *** DISPATCH ***
 // ****************
 
-var dispatch = d3.dispatch("sec-explain", "sec-scenario");
+var dispatch = d3.dispatch("sec-explain", "sec-scenario", "sec-ideal", "sec-needs", "sec-end");
 
 var graphPositions = [
   {name: "sec-explain", position: null, fired: 0},
@@ -117,6 +117,7 @@ function getPositions() {   // called from init after draw functions to ensure w
   for (i=0;i<graphPositions.length;i++) {   // get the position of the graph, update the array with it
     graphPositions[i].position = $("#" + graphPositions[i].name).offset().top + (0.25 * $("#" + graphPositions[i].name).height());  
   }
+  console.log(graphPositions);
 }
 
 $( window ).on('scroll', function() {
@@ -130,41 +131,46 @@ $( window ).on('scroll', function() {
       graphPositions[i].fired = 1;
       switch (graphPositions[i].name) {
         case "sec-explain":
-          setTimeout(function(){
+          console.log("firing sec-explain");
+          setTimeout(function() {
             d3.select("#sec-explain").transition().duration(1200).style("opacity",1);
             dispatch.call("sec-explain");
           }, timeoutTime);
           break;
         case "sec-scenario":
-          setTimeout(function(){
+          console.log("firing sec-scenario");
+          setTimeout(function() {
             d3.select("#sec-scenario").transition().duration(1200).style("opacity",1);
             dispatch.call("sec-scenario");
           }, timeoutTime);
           break;
         case "sec-ideal":
-          if (selectedScenario == true) {
-            setTimeout(function(){
+          if (selectedScenario == 1) {
+            console.log("firing sec-ideal");
+            setTimeout(function() {
               d3.select("#sec-ideal").transition().duration(1200).style("opacity",1);
               dispatch.call("sec-ideal");
             }, timeoutTime);
-            break;      
           }
+          break;
         case "sec-needs":
-          if (selectedScenario == true) {
-            setTimeout(function(){
+          if (selectedScenario == 1) {
+            console.log("firing sec-needs");
+            setTimeout(function() {
               d3.select("#sec-needs").transition().duration(1200).style("opacity",1);
               dispatch.call("sec-needs");
             }, timeoutTime);
-            break;     
           }
+          break;
         case "sec-end":
-          if (selectedScenario == true) {
-            setTimeout(function(){
+          if (selectedScenario == 1) {
+            console.log("firing sec-end");
+            setTimeout(function() {
               d3.select("#sec-end").transition().duration(1200).style("opacity",1);
               dispatch.call("sec-end");
             }, timeoutTime);
-            break;             
           }
+          break;
       }
     }
   }
@@ -176,29 +182,32 @@ $( window ).on('scroll', function() {
 
 // runs on completion of data load
 function init() {
-
   drawTitle();
   drawExplain();
-
   getPositions();
 }
 
 // runs on user selection of scenario
 function runScenario() {
 
-  selectedScenario = true;
+  d3.select("#sec-ideal").style("display", "block");
+  d3.select("#sec-needs").style("display", "block");
+  d3.select("#sec-end").style("display", "block");
 
-  d3.select("#sec-ideal").style("display", "block").transition().duration(1200).style("opacity",1);
-  d3.select("#sec-needs").style("display", "block").transition().duration(1200).style("opacity",1);
-  d3.select("#sec-end").style("display", "block").transition().duration(1200).style("opacity",1);
+  graphPositions[2].fired = 0;
+  graphPositions[3].fired = 0;
+  graphPositions[4].fired = 0;
 
-  getPositions();
   setScenario();
   setProps();
 
   drawIdeal();
   drawActual();
   drawNeeds();
+
+  getPositions();
+  selectedScenario = 1;
+
 }
 
 // **********************
@@ -418,11 +427,14 @@ function drawIdeal() {
       .attr("x", function(d) { return yScale(d[0]); })
       .attr("y", 128) // value shifts chart down to make room for annotations
       .attr("height", barHeight)
-      .attr("width", 0)
-    .transition()
+      .attr("width", 0);
+
+  dispatch.on('sec-ideal.first', function() {
+    rects.transition()
       .delay(function(d, i) {++loopTrack; return (loopTrack-1)*1400; }) 
       .duration(1200)
       .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]) });
+  });
 
   // draw a line over the start of each rect
   var lines = groups.selectAll("line")
@@ -539,8 +551,10 @@ function drawActual() {
       .attr("width", function(d) {
         if (yScale(d[1]) - yScale(d[0]) >= 0) return yScale(d[1]) - yScale(d[0]);
         else return 0;})
-      .attr("class", "actual-rect")
-    .transition() // this is to fool the bloody arrangeLabels function, trashy af
+      .attr("class", "actual-rect");
+
+  dispatch.on('sec-ideal.second', function() {
+    rects.transition() 
       .delay(0)
       .duration(0)
       .attr("width", 0)
@@ -552,8 +566,7 @@ function drawActual() {
         else return 0;
       })
       .on("end", getVerdict);
-
-
+  });
 
   var lines = groups.selectAll("line")
     .data(function(d) { return d; })
@@ -761,7 +774,6 @@ function drawActual() {
 
 function drawNeeds() {
 
-
 /* 
 IN CASE WE NEED THEM AGAIN....
 icon: "housing.svg"
@@ -774,7 +786,6 @@ icon: "childcare.svg"
 
   var barHeight = 100; 
   var graphOffset = 60;
-
 
   dataNeeds = [
     { housing: data.housing, health: data.health, grocery: data.grocery, transit: data.transit, childcare: data.childcare, lo: data.lo }
@@ -832,11 +843,14 @@ icon: "childcare.svg"
       .style("fill", "url(#diagonal-stripe-2)");
 
   // transition first rect into view - subsequent rects handled via stepper, below / outside main draw function
-  d3.select("rect.needs-rect")
-    .transition()
-    .delay(200)
-    .duration(1200)
-    .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]); });
+
+   dispatch.on('sec-needs', function() {
+    d3.select("rect.needs-rect")
+      .transition()
+      .delay(200)
+      .duration(1200)
+      .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]); });
+  }); 
 
   // add a label to each row, indicating which value (housing, healthcare etc.) is being added to the cumulative total
   var textLabelOne = groups.selectAll("text")

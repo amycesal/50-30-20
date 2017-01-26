@@ -75,6 +75,7 @@ p, li {font-weight:400; font-size:1.2em;}
 .explain {opacity:0;}
 .ideal, .needs, .end {
 	display:none;
+	opacity:0;
 }
 
 img {display: block; margin: 0.5em auto 1em auto;}
