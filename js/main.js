@@ -1,6 +1,8 @@
 // declare global variables
 var w, h, allScenarios, data, dataExplain, dataIncome, dataIdeal, dataNeeds, dataActual, decileSelected;
 
+var selectedScenario = false;
+
 // get page width and store in global variable for graph sizing
 w = d3.select("div.row").node().getBoundingClientRect().width - 30; 
 
@@ -106,6 +108,9 @@ var dispatch = d3.dispatch("sec-explain", "sec-scenario");
 var graphPositions = [
   {name: "sec-explain", position: null, fired: 0},
   {name: "sec-scenario", position: null, fired: 0},
+  {name: "sec-ideal", position: null, fired: 0},
+  {name: "sec-needs", position: null, fired: 0},
+  {name: "sec-end", position: null, fired: 0},
 ];
 
 function getPositions() {   // called from init after draw functions to ensure we get correct Y vals
@@ -135,7 +140,31 @@ $( window ).on('scroll', function() {
             d3.select("#sec-scenario").transition().duration(1200).style("opacity",1);
             dispatch.call("sec-scenario");
           }, timeoutTime);
-          break;          
+          break;
+        case "sec-ideal":
+          if (selectedScenario == true) {
+            setTimeout(function(){
+              d3.select("#sec-ideal").transition().duration(1200).style("opacity",1);
+              dispatch.call("sec-ideal");
+            }, timeoutTime);
+            break;      
+          }
+        case "sec-needs":
+          if (selectedScenario == true) {
+            setTimeout(function(){
+              d3.select("#sec-needs").transition().duration(1200).style("opacity",1);
+              dispatch.call("sec-needs");
+            }, timeoutTime);
+            break;     
+          }
+        case "sec-end":
+          if (selectedScenario == true) {
+            setTimeout(function(){
+              d3.select("#sec-end").transition().duration(1200).style("opacity",1);
+              dispatch.call("sec-end");
+            }, timeoutTime);
+            break;             
+          }
       }
     }
   }
@@ -147,15 +176,26 @@ $( window ).on('scroll', function() {
 
 // runs on completion of data load
 function init() {
+
   drawTitle();
   drawExplain();
+
   getPositions();
 }
 
 // runs on user selection of scenario
 function runScenario() {
+
+  selectedScenario = true;
+
+  d3.select("#sec-ideal").style("display", "block").transition().duration(1200).style("opacity",1);
+  d3.select("#sec-needs").style("display", "block").transition().duration(1200).style("opacity",1);
+  d3.select("#sec-end").style("display", "block").transition().duration(1200).style("opacity",1);
+
+  getPositions();
   setScenario();
   setProps();
+
   drawIdeal();
   drawActual();
   drawNeeds();
