@@ -440,8 +440,6 @@ function drawIdeal() {
       return fillColor;      
     });
 
-  var loopTrack = 0;
-
   var rects = groups.selectAll("rect")
     .data(function(d) { return d; })
     .enter().append("rect")
@@ -449,13 +447,6 @@ function drawIdeal() {
       .attr("y", 128) // value shifts chart down to make room for annotations
       .attr("height", barHeight)
       .attr("width", 0);
-
-  dispatch.on('sec-ideal.first', function() {
-    rects.transition()
-      .delay(function(d, i) {++loopTrack; return (loopTrack-1)*1400; }) 
-      .duration(1200)
-      .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]) });
-  });
 
   // draw a line over the start of each rect
   var lines = groups.selectAll("line")
@@ -477,7 +468,9 @@ function drawIdeal() {
   var textLabelOne = svg.selectAll() 
     .data(dataset)
     .enter().append("text")
+      .style("opacity", 0)
       .attr("class", "graph-label")
+      .attr("id", "graph-label1")
       .style("font-weight", 700)
       .attr("fill", "#231f20")
       .attr("dx", function(d) { return yScale(d[0][0])+2; })  // position horizontally
@@ -491,11 +484,36 @@ function drawIdeal() {
   var textLabelTwo = svg.selectAll()
     .data(dataset)
     .enter().append("text")
-    .attr("class", "graph-label")
-    .attr("fill", "#231f20")
-    .attr("dx", function(d) { return yScale(d[0][0])+2; })  // position horizontally
-    .attr("dy", "100")                                      
-    .text(function(d) { return "$" + (d[0][1] - d[0][0]); });
+      .style("opacity", 0)
+      .attr("class", "graph-label")
+      .attr("id", "graph-label2")
+      .attr("fill", "#231f20")
+      .attr("dx", function(d) { return yScale(d[0][0])+2; })  // position horizontally
+      .attr("dy", "100")                                      
+      .text(function(d) { return "$" + (d[0][1] - d[0][0]); });
+
+  dispatch.on('sec-ideal.first', function() {
+
+    var loopTrack = 0;  // this is obviously dumb
+    var loopTrack2 = 0;
+    var loopTrack3 = 0;
+
+    rects.transition()
+      .delay(function(d, i) {++loopTrack; return (loopTrack-1)*1400; }) 
+      .duration(1200)
+      .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]) });
+
+    svg.selectAll("#graph-label1").transition()
+      .delay(function(d, i) {++loopTrack2; return (loopTrack2-1)*1400 + 50; }) 
+      .duration(1200) 
+      .style("opacity", 1);
+
+    svg.selectAll("#graph-label2").transition()
+      .delay(function(d, i) {++loopTrack3; return (loopTrack3-1)*1400 + 50; }) 
+      .duration(1200) 
+      .style("opacity", 1);
+  });
+
 
 }
 
