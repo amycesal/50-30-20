@@ -1,5 +1,5 @@
 // declare global variables
-var w, h, allScenarios, data, dataExplain, dataIncome, dataIdeal, dataNeeds, dataActual, decileSelected;
+var w, h, allScenarios, data, dataExplain, dataIncome, dataIdeal, dataNeeds, dataActual, decileSelected, thisCity, thisHousehold;
 
 var scenarioSelected = 0;
 
@@ -50,8 +50,8 @@ d3.csv("csv/data.csv", function(error, csv) {
 // static result for testing purposes
 function setScenario() {
   var selected = {};
-  selected.city = "Portland, OR";
-  selected.household = "2 adults 2 children"; // 1 adult OR 2 adults 2 children
+  selected.city = thisCity;
+  selected.household = thisHousehold; // 1 adult OR 2 adults 2 children
   // select data row based on value
   for (i=0;i<data.length;i++) {
     if (data[i].city == selected.city) {
@@ -228,8 +228,28 @@ function runScenario() {
   scenarioSelected = 1;
 
   $('html, body').animate({scrollTop: $("#sec-ideal").offset().top}, 1200);
-
 }
+
+// captures the three pre-set scenarios
+function runScenario1() {
+  thisCity = "Baltimore, MD"
+  thisHousehold = "2 adults 2 children"
+  runScenario();
+}
+
+function runScenario2() {
+  thisCity = "St. Louis, MO"
+  thisHousehold = "1 adult"
+  runScenario();
+}
+
+function runScenario3() {
+  thisCity = "Oakland, CA"
+  thisHousehold = "2 adults 2 children"
+  runScenario();
+}
+
+
 
 // **********************
 // *** DRAW FUNCTIONS ***
@@ -793,7 +813,6 @@ function drawActual() {
         .style("fill", "none");
     }
   }
-
 
 }
 
