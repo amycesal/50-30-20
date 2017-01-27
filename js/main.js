@@ -227,6 +227,8 @@ function runScenario() {
   getPositions();
   scenarioSelected = 1;
 
+  $('html, body').animate({scrollTop: $("#sec-ideal").offset().top}, 1200);
+
 }
 
 // **********************
