@@ -99,6 +99,25 @@ function numberWithCommas(x) {
 }
 
 
+// *****************
+// *** SCROLLING ***
+// *****************
+
+d3.selectAll('.scrollcue')
+  .on('click', function() {
+    $('html, body').animate({
+      scrollTop: $(this).parent().parent().parent().next(".row").offset().top}, 1200);
+});
+
+// kludge for last section
+d3.selectAll('.scrollcue2')
+  .on('click', function() {
+    $('html, body').animate({
+      scrollTop: $(".end").offset().top}, 1200);
+});
+
+
+
 // ****************
 // *** DISPATCH ***
 // ****************
@@ -124,7 +143,7 @@ $( window ).on('scroll', function() {
   var scrollPosition = window.pageYOffset;  // get the window position
   var windowHeight = $( window ).height();  // get the window height
   var windowBottom = scrollPosition + windowHeight; // position of bottom of the window
-  var timeoutTime = 100; // how much time to wait before firing the dispatch
+  var timeoutTime = 160; // how much time to wait before firing the dispatch
 
   for (i=0;i<graphPositions.length;i++) {
     if (graphPositions[i].position < windowBottom && graphPositions[i].position > scrollPosition && graphPositions[i].fired == 0) {
