@@ -469,19 +469,9 @@ function drawIdeal() {
     .style("stroke", "white")
     .style("fill", "none");
 
-  // add the last line at the end of the graph
-  svg.append("line") 
-    .attr("y1", 0) 
-    .attr("y2", lineHeight) 
-    .attr("x1", w-2)
-    .attr("x2", w-2) 
-    .style("stroke-width", 4)
-    .style("stroke", "white")
-    .style("fill", "none");
-
-  // fix the position of the first line of the graph
+  // hide the first line
   var lineFix = svg.select('line')
-    .attr('transform', 'translate(2,0)');
+    .style("stroke-width", 0);
 
   // add label line 1
   var textLabelOne = svg.selectAll() 
@@ -600,32 +590,11 @@ function drawActual() {
     .style("stroke", "white")
     .style("fill", "none");
 
-  // fix the position of the first line of the graph
+  // hide the first line
   var lineFix = svg.select('line')
-    .attr('transform', 'translate(2,0)');
-
-  // add the last line at the end of the graph
-  svg.append("line")
-    .attr("x1", w-2) 
-    .attr("x2", w-2) 
-    .attr("y1", barOffset) 
-    .attr("y2", barOffset+barHeight) 
-    .style("stroke-width", 4)
-    .style("stroke", "white")
-    .style("fill", "none");
+    .style("stroke-width", 0);
 
   // add dashed lines
-  svg.append("line")
-    .attr("y1", barOffset-60)   // 60 extends dashed line above bar
-    .attr("y2", barOffset+140) // 240 extends dashed line to bottom of svg
-    .attr("x1", 2) 
-    .attr("x2", 2) 
-    .style("stroke-width", 4)
-    .style("stroke", "white")
-    .style("fill", "none")
-    .style("stroke-dasharray", ("4, 8"));
-
-  // second dashed line
   svg.append("line")
     .attr("y1", barOffset-60)   // 60 extends dashed line above bar
     .attr("y2", barOffset+140) // 240 extends dashed line to bottom of svg
@@ -636,23 +605,11 @@ function drawActual() {
     .style("fill", "none")
     .style("stroke-dasharray", ("4, 8"));
 
-  // third dashed line
   svg.append("line")
     .attr("y1", barOffset-60)   // 60 extends dashed line above bar
     .attr("y2", barOffset+140) // 240 extends dashed line to bottom of svg
     .attr("x1", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
     .attr("x2", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
-    .style("stroke-width", 4)
-    .style("stroke", "white")
-    .style("fill", "none")
-    .style("stroke-dasharray", ("4, 8"));
-
-  // fourth dashed line
-  svg.append("line")
-    .attr("y1", barOffset-60)   // 60 extends dashed line above bar
-    .attr("y2", barOffset+140) // 240 extends dashed line to bottom of svg
-    .attr("x1", w-2)
-    .attr("x2", w-2)
     .style("stroke-width", 4)
     .style("stroke", "white")
     .style("fill", "none")
