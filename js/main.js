@@ -582,21 +582,6 @@ function drawActual() {
         else return 0;})
       .attr("class", "actual-rect");
 
-  dispatch.on('sec-ideal.second', function() {
-    rects.transition() 
-      .delay(0)
-      .duration(0)
-      .attr("width", 0)
-    .transition()
-      .delay(function(d, i) {++loopTrack; return (loopTrack-1)*1400; }) 
-      .duration(1200)
-      .attr("width", function(d) {
-        if (yScale(d[1]) - yScale(d[0]) >= 0) return yScale(d[1]) - yScale(d[0]);
-        else return 0;
-      })
-      .on("end", getVerdict);
-  });
-
   var lines = groups.selectAll("line")
     .data(function(d) { return d; })
     .enter().append("line")
@@ -638,8 +623,10 @@ function drawActual() {
     .data(dataset)
     .enter().append("text")
       .attr("class", "actual-label")
+      .attr("id", "actual-label1")
       .style("font-weight", 700)
       .attr("fill", "#231f20")
+      .style("opacity", 0)
       .attr("dx", function(d) { return yScale(d[0][0])+2; })    // position horizontally
       .attr("dy", barOffset - 60)                             // position vertically
       .text(function(d) { return textLabels1[d.key]; })
@@ -672,6 +659,45 @@ function drawActual() {
       });
   }
   else arrangeLabels();
+
+  dispatch.on('sec-ideal.second', function() {
+
+    var loopTrack = 0;  // this is obviously dumb
+    var loopTrack2 = 0;
+
+    svg.selectAll("#actual-label1").transition()
+      .delay(function(d, i) {++loopTrack2; return (loopTrack2-1)*1400 + 50; }) 
+      .duration(1200) 
+      .style("opacity", 1);
+
+    svg.selectAll("#line-first").transition()
+      .delay(1450) 
+      .duration(1200) 
+      .style("opacity", 1);
+
+    svg.selectAll("#line-second").transition()
+      .delay(2900) 
+      .duration(1200) 
+      .style("opacity", 1);
+
+
+    rects.transition() 
+      .delay(0)
+      .duration(0)
+      .attr("width", 0)
+    .transition()
+      .delay(function(d, i) {++loopTrack; return (loopTrack-1)*1400; }) 
+      .duration(1200)
+      .attr("width", function(d) {
+        if (yScale(d[1]) - yScale(d[0]) >= 0) return yScale(d[1]) - yScale(d[0]);
+        else return 0;
+      })
+      .on("end", getVerdict);
+
+
+
+  });
+
 
   // re-arrange labels to prevent overlap
   function arrangeLabels() {
@@ -715,20 +741,24 @@ function drawActual() {
       // draw lines from 2nd label
       d3.select("svg.ok") // horizontal
         .append("line")
+        .attr("id", "line-first")
         .attr("x1", thisLabel.x + tspanWidth+10) 
         .attr("y1", 90)
         .attr("x2", thisRect.x + (thisRect.width / 2) + 2 ) 
         .attr("y2", 90) 
+        .style("opacity", 0)
         .style("stroke-width", 4)
         .style("stroke", "#231f20")
         .style("fill", "none");
 
       d3.select("svg.ok") // vertical
         .append("line")
+        .attr("id", "line-first")
         .attr("x1", thisRect.x + (thisRect.width / 2) ) 
         .attr("y1", 90)
         .attr("x2", thisRect.x + (thisRect.width / 2) ) 
         .attr("y2", 140) 
+        .style("opacity", 0)
         .style("stroke-width", 4)
         .style("stroke", "#231f20")
         .style("fill", "none");
@@ -737,26 +767,27 @@ function drawActual() {
       var thisRect = document.getElementsByClassName('actual-rect')[2].getBBox();
       var tspanWidth = document.getElementsByClassName('labelThree')[2].getComputedTextLength();
 
-
-      console.log(thisRect);
-
       // draw lines from 3rd label
       d3.select("svg.ok") // horizontal
         .append("line")
+        .attr("id", "line-second")
         .attr("x1", thisLabel.x + tspanWidth+10) 
         .attr("y1", 54)
         .attr("x2", thisRect.x + (thisRect.width / 2) + 2) 
         .attr("y2", 54) 
+        .style("opacity", 0)
         .style("stroke-width", 4)
         .style("stroke", "#231f20")
         .style("fill", "none");
 
       d3.select("svg.ok") // vertical
         .append("line")
+        .attr("id", "line-second")
         .attr("x1", thisRect.x + (thisRect.width / 2)) 
         .attr("y1", 54)
         .attr("x2", thisRect.x + (thisRect.width / 2)) 
         .attr("y2", 140) 
+        .style("opacity", 0)
         .style("stroke-width", 4)
         .style("stroke", "#231f20")
         .style("fill", "none");
