@@ -480,7 +480,7 @@ function drawIdeal() {
       .attr("class", "graph-label")
       .style("font-weight", 700)
       .attr("fill", "#231f20")
-      .attr("dx", function(d) { return yScale(d[0][0])+10; })  // position horizontally
+      .attr("dx", function(d) { return yScale(d[0][0])+2; })  // position horizontally
       .attr("dy", "60")                                        // position vertically
       .text(function(d,i) { return textLabels1[d.key]; })
     .append("tspan")
@@ -493,7 +493,7 @@ function drawIdeal() {
     .enter().append("text")
     .attr("class", "graph-label")
     .attr("fill", "#231f20")
-    .attr("dx", function(d) { return yScale(d[0][0])+10; })  // position horizontally
+    .attr("dx", function(d) { return yScale(d[0][0])+2; })  // position horizontally
     .attr("dy", "100")                                      
     .text(function(d) { return "$" + (d[0][1] - d[0][0]); });
 
@@ -622,7 +622,7 @@ function drawActual() {
       .attr("class", "actual-label")
       .style("font-weight", 700)
       .attr("fill", "#231f20")
-      .attr("dx", function(d) { return yScale(d[0][0])+10; })    // position horizontally
+      .attr("dx", function(d) { return yScale(d[0][0])+2; })    // position horizontally
       .attr("dy", barOffset - 60)                             // position vertically
       .text(function(d) { return textLabels1[d.key]; })
     .append("tspan")
@@ -633,7 +633,7 @@ function drawActual() {
   var textLabelThree = d3.selectAll(".actual-label")
     .append("tspan")
     .attr("class", "labelThree")
-    .attr("x", function(d) { return yScale(d[0][0])+10; })
+    .attr("x", function(d) { return yScale(d[0][0])+2; })
     .attr("dy", 36)
     .style("font-weight", 400)
     .text(function(d) { return "$" + (d[0][1] - d[0][0]); });
@@ -642,15 +642,15 @@ function drawActual() {
   if (data.lowants <= 0) {
     d3.selectAll('text.actual-label')
       .attr('dx', function(d,i) {
-        if (i > 1) return (yScale(data.fifty) + yScale(data.thirty) + 10);
-        else if (i > 0) return (yScale(data.fifty) + 10);
-        else return yScale(d[0][0])+10;
+        if (i > 1) return (yScale(data.fifty) + yScale(data.thirty) + 2);
+        else if (i > 0) return (yScale(data.fifty) + 2);
+        else return yScale(d[0][0])+2;
       });
     d3.selectAll('tspan.labelThree')
       .attr('x', function(d,i) {
-        if (i > 1) return (yScale(data.fifty) + yScale(data.thirty) + 10);
-        else if (i > 0) return (yScale(data.fifty) + 10);
-        else return yScale(d[0][0])+10;
+        if (i > 1) return (yScale(data.fifty) + yScale(data.thirty) + 2);
+        else if (i > 0) return (yScale(data.fifty) + 2);
+        else return yScale(d[0][0])+2;
       });
   }
   else arrangeLabels();
