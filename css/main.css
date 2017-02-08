@@ -9,6 +9,21 @@
 	z-index:9999;
 }
 
+/* hidden things */
+.scenario, .explain, .verdict {
+	opacity:0;
+}
+.ideal, .needs, .end {
+	display:none;
+	opacity:0;
+}
+
+/* LAYOUT */
+
+.left {float:left;}
+.right {float:right;}
+.clear {clear:both;}
+
 .graph-title {
 	margin: 1em 0;
 }
@@ -31,6 +46,17 @@
 	text-align: right;
 }
 
+div#graph-ideal, div#graph-needs {margin-bottom: 40px;}
+
+div.scenario div {padding-bottom: 1em;} 
+
+select {max-width:300px;}
+
+hr {border-top: 2px solid #d8d8d8;}
+
+
+/* TYPOGRAPHY */
+
 h1, h2, h3, p, li, svg text {
   font-family: 'Roboto Condensed', sans-serif;
   color: #231f20;}
@@ -41,12 +67,19 @@ a {
   text-decoration: underline;
   margin-left:1em;}
 
-
 h1 {font-weight:400; font-size:4.8em; }
 .title p {font-size: 1.6em; margin-bottom:2em;}
 h2 {font-weight:300; font-size:2.4em; margin:0.4em 0 0.1em 0;}
 h3 {font-weight:700; font-size:1.2em; text-align:left; margin-top: 1em;}
 p, li {font-weight:400; font-size:1.2em;}
+
+h1 {
+	font-weight: 300;
+}
+
+h2 {
+	font-weight: 600;
+}
 
 .nav ul {list-style: none; margin: 0; padding:0;}
 .nav ul li {display:inline;} 
@@ -60,9 +93,6 @@ p, li {font-weight:400; font-size:1.2em;}
 .strong {font-weight:700;}
 .emph {font-style:italic;}
 
-.location-img {}
-.household-img {}
-
 .explain p {padding-right:0.25em; padding-left: 4px;}
 .explain-50, .explain-30, .explain-20 {float: left;}
 .explain-50 {width:50%; opacity:0;}
@@ -70,46 +100,57 @@ p, li {font-weight:400; font-size:1.2em;}
 .explain-20 {width:20%; opacity:0;}
 .explain-question {opacity:0;}
 
-/* hidden things */
-.scenario {opacity:0;}
-.explain {opacity:0;}
-.ideal, .needs, .end {
-	display:none;
-	opacity:0;
+
+.red {color:#C14849; font-weight:700;}
+.yellow {color:#FAAF40; font-weight:700;}
+
+.blue {
+	color: #000;
 }
+
+.light {
+	font-weight: 300;
+}
+
+a {
+	color: #115AA0;
+	text-decoration: none;
+	border-bottom: #115AA0 2px dotted;
+	margin-left: 0;
+}
+
+.nav a {
+	color: #e5e5e5;
+	border-bottom: none;
+	margin-left: 1em;
+}
+
+
+/* IMAGES, BUTTONS AND CUES */
 
 img {display: block; margin: 0.5em auto 1em auto;}
 
-.left {float:left;}
-.right {float:right;}
-.clear {clear:both;}
-
-div#graph-ideal, div#graph-needs {margin-bottom: 40px;}
-
-div.scenario div {padding-bottom: 1em;} /* width of column contents in scenario section */
-select {max-width:300px;}
 .hhimg, .cityimg {max-width:300px; margin:0;}
-
-.verdict {opacity:0;}
-
-.icon {
-	float: left;
-	width: 10%;
-}
-
-.icon img {
-	width:30px;
-	height:30px;
-}
-
-.text {
-	float: right;
-	width: 90%;
-}
 
 .scrollcue, .scrollcue2 {
 	margin:0 auto;
 	cursor: pointer;
+}
+
+img.steppercue {
+	margin: 0 20px 0 0;
+	padding-top: 0;
+	max-width: 2em;
+	width: 10%;
+}
+
+.scrollcue, .scrollcue2, .replaycue, .steppercue {
+	display: inline;
+	background-color: #115AA0;
+	float: left;
+	margin-right: 20px;
+	max-width: 2.5em;
+    width: 10%;
 }
 
 .steppercue {
@@ -130,9 +171,6 @@ select {max-width:300px;}
 	cursor: pointer;
 }
 
-.red {color:#C14849; font-weight:700;}
-.yellow {color:#FAAF40; font-weight:700;}
-
 .location-img {
 	max-width: 200px;
 }
@@ -141,11 +179,88 @@ select {max-width:300px;}
 	max-width: 230px;
 }
 
+.button {
+	background-color: #115AA0;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-weight: bold;
+	font-family: 'Roboto Condensed', sans-serif;
+}
 
 
+/* SCENARIO SECTION */
+
+.scenario {
+	margin-bottom: 70px;
+}
+
+.post {
+	padding-top: 100px;
+}
+
+/* IDEAL + ACTUAL SECTION */
+
+.icon {
+	float: left;
+	width: 10%;
+}
+
+.icon img {
+	width:30px;
+	height:30px;
+}
+
+.text {
+	float: right;
+	width: 90%;
+}
+
+.text {
+	clear: all;
+}
 
 
+/* NEEDS BREAKDOWN SECTION */
 
+.scroll-box {
+	border-top: 3px solid #d8d8d8;
+	padding-top: 15px;
+	margin-bottom: 100px;
+	padding-bottom: 15px;
+	border-bottom: 3px solid #d8d8d8;
+	margin-top: 15px;
+}
+
+.scroll-box p {
+	margin-bottom: 0px;
+	font-size: 1.6em;
+}
+
+#needs-nav a, .replay-box p {
+	color: #000;
+	text-decoration: none;
+	font-weight: 700;
+	text-transform: uppercase;
+	font-size: 1.2em;
+	vertical-align: middle;
+	min-height: 50px;
+	margin-left: 0;
+	border-bottom: 0;
+
+}
+
+#needs-nav {
+	clear: all;
+}
+
+div.needs #graph-needs {
+	margin-bottom: 0;
+}
+
+.replay-box {
+	clear: all;
+	min-height: 50px;
+}
 
 
 
