@@ -515,7 +515,7 @@ function drawIdeal() {
       .attr("fill", "#231f20")
       .attr("dx", function(d) { return yScale(d[0][0])+2; })  // position horizontally
       .attr("dy", "100")                                      
-      .text(function(d) { return "$" + (d[0][1] - d[0][0]); });
+      .text(function(d) { return "$" + numberWithCommas(d[0][1] - d[0][0]); });
 
   dispatch.on('sec-ideal.first', function() {
 
@@ -666,7 +666,7 @@ function drawActual() {
     .attr("x", function(d) { return yScale(d[0][0])+2; })
     .attr("dy", 36)
     .style("font-weight", 400)
-    .text(function(d) { return "$" + (d[0][1] - d[0][0]); });
+    .text(function(d) { return "$" + numberWithCommas(d[0][1] - d[0][0]); });
 
   // if 'needs' exceed takehome, move 'wants' and 'saves' labels to their fallback positions
   if (data.lowants <= 0) {
