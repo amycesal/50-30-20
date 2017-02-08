@@ -918,7 +918,7 @@ icon: "childcare.svg"
   var textLabelTwo = d3.selectAll(".needs-label")
     .append("tspan")
     .style("font-weight", 700)
-    .text(function(d) { return " +$" + numberWithCommas(d[0][1] - d[0][0]) });
+    .text(function(d) { return " $" + numberWithCommas(d[0][1] - d[0][0]) });
 
   // show the first label
   d3.select(".needs-label")
