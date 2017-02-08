@@ -1,4 +1,6 @@
 
+/* HIDDEN STUFF */ 
+
 #cover {
 	position: fixed; 
 	height: 100%; 
@@ -9,14 +11,9 @@
 	z-index:9999;
 }
 
-.scenario, .explain, .verdict {
-	opacity:0;
-}
-.ideal, .needs, .end {
-	display:none;
-	opacity:0;
-}
+.scenario, .explain, .verdict, .ideal, .needs, .end {opacity:0;}
 
+.ideal, .needs, .end {display:none;}
 
 
 /* LAYOUT */
@@ -27,15 +24,7 @@
 
 .graph-title {margin: 1em 0;}
 
-.scenario {margin-top:1em;}
-
 .row {margin-bottom:1em;}
-
-.nav {
-	width:100%;
-	background:#111111;
-	text-align: right;
-}
 
 div#graph-ideal, div#graph-needs {margin-bottom: 40px;}
 
@@ -49,7 +38,6 @@ img {
 	display: block; 
 	margin: 0.5em auto 1em auto;
 }
-
 
 
 /* TYPOGRAPHY */
@@ -90,16 +78,9 @@ a {
 	margin-left: 0;
 }
 
-.nav a {
-	color: #e5e5e5;
-	border-bottom: none;
-	margin-left: 1em;
-}
-
-.red {color:#C14849; font-weight:700;}
-.yellow {color:#FAAF40; font-weight:700;}		/* are we using these colors? */
+.red {color:#C14849; font-weight:700;}			/* are we using these colors? */
+.yellow {color:#FAAF40; font-weight:700;}		
 .blue {color: #000;}
-
 
 
 /* BUTTONS AND CUES */
@@ -134,6 +115,20 @@ img.steppercue {
 }
 
 
+/* NAV HEADER */
+
+.nav {
+	width:100%;
+	background:#111111;
+	text-align: right;
+}
+
+.nav a {
+	color: #e5e5e5;
+	border-bottom: none;
+	margin-left: 1em;
+}
+
 
 /* EXPLAINER SECTION */
 
@@ -145,10 +140,9 @@ img.steppercue {
 .explain-question {opacity:0;}
 
 
-
 /* SCENARIO SECTION */
 
-.scenario {margin-bottom: 70px;}
+.scenario {margin-top:1em; margin-bottom:70px;}
 .post {padding-top: 100px;}
 .income {background:#e8e8e8;}
 
@@ -161,7 +155,6 @@ img.steppercue {
 .household-img {
 	max-width: 230px;
 }
-
 
 
 /* IDEAL + ACTUAL SECTION */
@@ -181,7 +174,6 @@ img.steppercue {
 	width: 90%;
 	clear: all;
 }
-
 
 
 /* NEEDS BREAKDOWN SECTION */
@@ -225,7 +217,4 @@ div.needs #graph-needs {
 	clear: all;
 	min-height: 50px;
 }
-
-
-
 
