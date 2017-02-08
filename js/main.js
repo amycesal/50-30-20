@@ -112,6 +112,7 @@ d3.selectAll('.scrollcue')
 // kludge for last section
 d3.selectAll('.scrollcue2')
   .on('click', function() {
+    displayEnd();
     $('html, body').animate({
       scrollTop: $(".end").offset().top}, 1200);
 });
@@ -211,11 +212,9 @@ function runScenario() {
 
   d3.select("#sec-ideal").style("display", "block");
   d3.select("#sec-needs").style("display", "block");
-  d3.select("#sec-end").style("display", "block");
 
   graphPositions[2].fired = 0;
   graphPositions[3].fired = 0;
-  graphPositions[4].fired = 0;
 
   setScenario();
   setProps();
@@ -249,6 +248,12 @@ function runScenario3() {
   runScenario();
 }
 
+function displayEnd() {
+  d3.select("#sec-end").style("display", "block");
+  graphPositions[4].fired = 0;
+  getPositions();
+  $('html, body').animate({scrollTop: $("#sec-end").offset().top}, 1200);
+}
 
 
 // **********************
