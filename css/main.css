@@ -9,7 +9,6 @@
 	z-index:9999;
 }
 
-/* hidden things */
 .scenario, .explain, .verdict {
 	opacity:0;
 }
@@ -18,27 +17,19 @@
 	opacity:0;
 }
 
+
+
 /* LAYOUT */
 
 .left {float:left;}
 .right {float:right;}
 .clear {clear:both;}
 
-.graph-title {
-	margin: 1em 0;
-}
+.graph-title {margin: 1em 0;}
 
-.scenario {
-  margin-top:1em;
-}
+.scenario {margin-top:1em;}
 
-.income {
-  background:#e8e8e8;
-}
-
-.row {
-  margin-bottom:1em;
-}
+.row {margin-bottom:1em;}
 
 .nav {
 	width:100%;
@@ -54,6 +45,12 @@ select {max-width:300px;}
 
 hr {border-top: 2px solid #d8d8d8;}
 
+img {
+	display: block; 
+	margin: 0.5em auto 1em auto;
+}
+
+
 
 /* TYPOGRAPHY */
 
@@ -67,19 +64,11 @@ a {
   text-decoration: underline;
   margin-left:1em;}
 
-h1 {font-weight:400; font-size:4.8em; }
+h1 {font-weight:300; font-size:4.8em; }
 .title p {font-size: 1.6em; margin-bottom:2em;}
-h2 {font-weight:300; font-size:2.4em; margin:0.4em 0 0.1em 0;}
+h2 {font-weight:600; font-size:2.4em; margin:0.4em 0 0.1em 0;}
 h3 {font-weight:700; font-size:1.2em; text-align:left; margin-top: 1em;}
 p, li {font-weight:400; font-size:1.2em;}
-
-h1 {
-	font-weight: 300;
-}
-
-h2 {
-	font-weight: 600;
-}
 
 .nav ul {list-style: none; margin: 0; padding:0;}
 .nav ul li {display:inline;} 
@@ -91,26 +80,8 @@ h2 {
 .actual-label {font-weight:400; font-size:1.8em; color:#231f20;}
 .needs-label {font-weight:400; font-size:1.5em; color:#231f20;}
 .strong {font-weight:700;}
+.light {font-weight:300;}
 .emph {font-style:italic;}
-
-.explain p {padding-right:0.25em; padding-left: 4px;}
-.explain-50, .explain-30, .explain-20 {float: left;}
-.explain-50 {width:50%; opacity:0;}
-.explain-30 {width:30%; opacity:0;}
-.explain-20 {width:20%; opacity:0;}
-.explain-question {opacity:0;}
-
-
-.red {color:#C14849; font-weight:700;}
-.yellow {color:#FAAF40; font-weight:700;}
-
-.blue {
-	color: #000;
-}
-
-.light {
-	font-weight: 300;
-}
 
 a {
 	color: #115AA0;
@@ -125,23 +96,16 @@ a {
 	margin-left: 1em;
 }
 
+.red {color:#C14849; font-weight:700;}
+.yellow {color:#FAAF40; font-weight:700;}		/* are we using these colors? */
+.blue {color: #000;}
 
-/* IMAGES, BUTTONS AND CUES */
 
-img {display: block; margin: 0.5em auto 1em auto;}
 
-.hhimg, .cityimg {max-width:300px; margin:0;}
+/* BUTTONS AND CUES */
 
 .scrollcue, .scrollcue2 {
 	margin:0 auto;
-	cursor: pointer;
-}
-
-img.steppercue {
-	margin: 0 20px 0 0;
-	padding-top: 0;
-	max-width: 2em;
-	width: 10%;
 }
 
 .scrollcue, .scrollcue2, .replaycue, .steppercue {
@@ -150,33 +114,15 @@ img.steppercue {
 	float: left;
 	margin-right: 20px;
 	max-width: 2.5em;
-    width: 10%;
+  width: 10%;
+  cursor: pointer;
 }
 
-.steppercue {
-	display: inline;
-	background-color: #115AA0;
-	float: left;
-	margin-right: 20px;
-	max-width: 2.5em;
-	cursor: pointer;
-}
-
-.replaycue {
-	display: inline;
-	background-color: #115AA0;
-	float: left;
-	margin-right: 20px;
-	max-width: 2.5em;
-	cursor: pointer;
-}
-
-.location-img {
-	max-width: 200px;
-}
-
-.household-img {
-	max-width: 230px;
+img.steppercue {
+	margin: 0 20px 0 0;
+	padding-top: 0;
+	max-width: 2em;
+	width: 10%;
 }
 
 .button {
@@ -188,15 +134,35 @@ img.steppercue {
 }
 
 
+
+/* EXPLAINER SECTION */
+
+.explain p {padding-right:0.25em; padding-left: 4px;}
+.explain-50, .explain-30, .explain-20 {float: left;}
+.explain-50 {width:50%; opacity:0;}
+.explain-30 {width:30%; opacity:0;}
+.explain-20 {width:20%; opacity:0;}
+.explain-question {opacity:0;}
+
+
+
 /* SCENARIO SECTION */
 
-.scenario {
-	margin-bottom: 70px;
+.scenario {margin-bottom: 70px;}
+.post {padding-top: 100px;}
+.income {background:#e8e8e8;}
+
+.hhimg, .cityimg {max-width:300px; margin:0;}
+
+.location-img {
+	max-width: 200px;
 }
 
-.post {
-	padding-top: 100px;
+.household-img {
+	max-width: 230px;
 }
+
+
 
 /* IDEAL + ACTUAL SECTION */
 
@@ -213,11 +179,9 @@ img.steppercue {
 .text {
 	float: right;
 	width: 90%;
-}
-
-.text {
 	clear: all;
 }
+
 
 
 /* NEEDS BREAKDOWN SECTION */
