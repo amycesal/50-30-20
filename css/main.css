@@ -67,6 +67,8 @@ p, li {font-weight:400; font-size:1.2em;}
 .graph-label {font-weight:400; font-size:1.7em; color:#231f20;}
 .actual-label {font-weight:400; font-size:1.8em; color:#231f20;}
 .needs-label {font-weight:400; font-size:1.5em; color:#231f20;}
+
+.big {font-size: 1.25em;}
 .strong {font-weight:700;}
 .light {font-weight:300;}
 .emph {font-style:italic;}
@@ -112,6 +114,8 @@ img.steppercue {
 	text-transform: uppercase;
 	font-weight: bold;
 	font-family: 'Roboto Condensed', sans-serif;
+	height:3.5em;
+	margin-top: 1em;
 }
 
 
@@ -148,13 +152,9 @@ img.steppercue {
 
 .hhimg, .cityimg {max-width:300px; margin:0;}
 
-.location-img {
-	max-width: 200px;
-}
+.location-img {max-width: 200px;}
 
-.household-img {
-	max-width: 230px;
-}
+.household-img {max-width: 230px;}
 
 
 /* IDEAL + ACTUAL SECTION */
@@ -192,6 +192,11 @@ img.steppercue {
 	font-size: 1.6em;
 }
 
+.replay-box {
+	clear: all;
+	min-height: 50px;
+}
+
 #needs-nav a, .replay-box p {
 	color: #000;
 	text-decoration: none;
@@ -205,16 +210,8 @@ img.steppercue {
 
 }
 
-#needs-nav {
-	clear: all;
-}
+#needs-nav {clear: all;}
 
-div.needs #graph-needs {
-	margin-bottom: 0;
-}
+div.needs #graph-needs {margin-bottom: 0;}
 
-.replay-box {
-	clear: all;
-	min-height: 50px;
-}
 

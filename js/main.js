@@ -46,8 +46,7 @@ d3.csv("csv/data.csv", function(error, csv) {
 
 });
 
-
-// static result for testing purposes
+// subsets the scenario data based on user selection
 function setScenario() {
   var selected = {};
   selected.city = thisCity;
@@ -63,7 +62,7 @@ function setScenario() {
   }
 }
 
-// assumes a data object reduced to single scenario (post setScenario)
+// runs post setScenario, creates derivative properties based on selected scenario
 function setProps() {
   data.difference = data.income - 23850; // TODO: this number is diff for different household sizes
   data.fifty = Math.round(data.takehome * 0.5);
@@ -98,6 +97,19 @@ function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+function displayEnd() {
+  d3.select("#sec-end").style("display", "block");
+  graphPositions[4].fired = 0;
+  getPositions();
+  $('html, body').animate({scrollTop: $("#sec-end").offset().top}, 1200);
+}
+
+function setButtons() {
+  var colWidth = d3.select(".location").node().getBoundingClientRect().width;
+  d3.selectAll(".runScenario").style("width", colWidth-30 + "px");
+}
+
+
 
 // *****************
 // *** SCROLLING ***
@@ -112,7 +124,7 @@ d3.selectAll('.scrollcue')
 // kludge for last section
 d3.selectAll('.scrollcue2')
   .on('click', function() {
-    displayEnd();
+    displayEnd(); // unhides last section before scroll
     $('html, body').animate({
       scrollTop: $(".end").offset().top}, 1200);
 });
@@ -163,6 +175,7 @@ $( window ).on('scroll', function() {
             d3.select("#sec-scenario").transition().duration(1200).style("opacity",1);
             dispatch.call("sec-scenario");
           }, timeoutTime);
+            setButtons();
           break;
         case "sec-ideal":
           if (scenarioSelected == 1) {
@@ -210,9 +223,10 @@ function init() {
 // runs on user selection of scenario
 function runScenario() {
 
+  // reveal post-scenario sections
   d3.select("#sec-ideal").style("display", "block");
   d3.select("#sec-needs").style("display", "block");
-
+  // reset dispatch events for same
   graphPositions[2].fired = 0;
   graphPositions[3].fired = 0;
 
@@ -247,14 +261,6 @@ function runScenario3() {
   thisHousehold = "2 adults 2 children"
   runScenario();
 }
-
-function displayEnd() {
-  d3.select("#sec-end").style("display", "block");
-  graphPositions[4].fired = 0;
-  getPositions();
-  $('html, body').animate({scrollTop: $("#sec-end").offset().top}, 1200);
-}
-
 
 // **********************
 // *** DRAW FUNCTIONS ***
