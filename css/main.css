@@ -133,7 +133,13 @@ select {max-width:300px;}
 .red {color:#C14849; font-weight:700;}
 .yellow {color:#FAAF40; font-weight:700;}
 
+.location-img {
+	max-width: 200px;
+}
 
+.household-img {
+	max-width: 230px;
+}
 
 
 
