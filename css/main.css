@@ -34,10 +34,7 @@ select {max-width:300px;}
 
 hr {border-top: 2px solid #d8d8d8;}
 
-img {
-	display: block; 
-	margin: 0.5em auto 1em auto;
-}
+img {display: block;}
 
 
 /* TYPOGRAPHY */
@@ -150,11 +147,11 @@ img.steppercue {
 .post {padding-top: 100px;}
 .income {background:#e8e8e8;}
 
-.hhimg, .cityimg {max-width:300px; margin:0;}
+.location-img, .household-img {
+	margin: 0 auto;
+	max-width: 240px;
+}
 
-.location-img {max-width: 200px;}
-
-.household-img {max-width: 230px;}
 
 
 /* IDEAL + ACTUAL SECTION */
