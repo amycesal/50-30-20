@@ -1148,6 +1148,8 @@ function step4() {
   $(".hidey").css("display", "block");
   $("#step5").css("display", "none");
   $("#needs-copy5").css("display", "none");
+  $(".needs-question").delay(600).animate( { opacity: 1 }, 600);
+
 }
 
 
