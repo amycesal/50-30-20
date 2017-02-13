@@ -9,6 +9,7 @@
 	left: 0; 
 	background: #ffffff; 
 	z-index:9999;
+	opacity:1;
 }
 
 .scenario, .explain, .verdict, .ideal, .needs, .end {opacity:0;}

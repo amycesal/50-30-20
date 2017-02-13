@@ -215,6 +215,14 @@ $( window ).on('scroll', function() {
 
 // runs on completion of data load
 function init() {
+
+  /* fade in page */
+  d3.select("#cover")
+    .transition()
+      .duration(1200)
+      .style("opacity",0)
+      .on("end", function() {this.remove();} );
+
   drawTitle();
   drawExplain();
   getPositions();
@@ -375,8 +383,9 @@ function drawExplain() {
       .delay(function(d, i) {++loopTrack; return (loopTrack-1)*1400; }) 
       .duration(1200)
       .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]) })
-      .on("end", fadeInText);
+      .on("end", fadeInText)
   });
+
 
   // draw a line over the start of each rect
   var lines = groups.selectAll("line")
