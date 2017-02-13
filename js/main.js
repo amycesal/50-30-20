@@ -424,7 +424,7 @@ function drawExplain() {
 function drawIdeal() {
 
   var barHeight = 100; 
-  var lineHeight = 220;  // height of solid lines
+  var lineHeight = 260;  // height of solid lines
 
   dataIdeal = [
     { needs: data.fifty, wants: data.thirty, saves: data.twenty }
@@ -475,7 +475,7 @@ function drawIdeal() {
     .data(function(d) { return d; })
     .enter().append("rect")
       .attr("x", function(d) { return yScale(d[0]); })
-      .attr("y", 128) // value shifts chart down to make room for annotations
+      .attr("y", 168) // value shifts chart down to make room for annotations
       .attr("height", barHeight)
       .attr("width", 0);
 
@@ -495,6 +495,22 @@ function drawIdeal() {
   var lineFix = svg.select('line')
     .style("stroke-width", 0);
 
+  // add header h2
+  svg.append("text")
+      .attr("x", 0)
+      .attr("dy", 40)  
+      .attr("class", "actual-header")
+      .text("")
+      .append("tspan")
+        .style("font-weight", 300)
+        .text("What they")
+      .append("tspan")
+        .style("font-weight", 700)
+        .text(" should ")
+      .append("tspan")
+        .style("font-weight", 300)
+        .text("be spending:");
+
   // add label line 1
   var textLabelOne = svg.selectAll() 
     .data(dataset)
@@ -505,7 +521,7 @@ function drawIdeal() {
       .style("font-weight", 700)
       .attr("fill", "#231f20")
       .attr("dx", function(d) { return yScale(d[0][0])+2; })  // position horizontally
-      .attr("dy", "60")                                        // position vertically
+      .attr("dy", "100")                                        // position vertically
       .text(function(d,i) { return textLabels1[d.key]; })
     .append("tspan")
       .style("font-weight", 400)
@@ -520,7 +536,7 @@ function drawIdeal() {
       .attr("id", "graph-label2")
       .attr("fill", "#231f20")
       .attr("dx", function(d) { return yScale(d[0][0])+2; })  // position horizontally
-      .attr("dy", "100")                                      
+      .attr("dy", "140")                                      
       .text(function(d) { return "$" + numberWithCommas(d[0][1] - d[0][0]); });
 
   dispatch.on('sec-ideal.first', function() {
@@ -648,6 +664,22 @@ function drawActual() {
     .style("stroke", "white")
     .style("fill", "none")
     .style("stroke-dasharray", ("4, 8"));
+
+  // add header h2
+  svg.append("text")
+      .attr("x", 0)
+      .attr("dy", barOffset-120) 
+      .attr("class", "actual-header")
+      .text("")
+      .append("tspan")
+        .style("font-weight", 300)
+        .text("What they")
+      .append("tspan")
+        .style("font-weight", 700)
+        .text(" are actually ")
+      .append("tspan")
+        .style("font-weight", 300)
+        .text("spending:");
 
   // add label line 1
   var textLabelOne = svg.selectAll() 

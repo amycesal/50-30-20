@@ -39,6 +39,11 @@ img {display: block;}
 
 /* TYPOGRAPHY */
 
+.actual-header {
+  font-family: 'Roboto Condensed', sans-serif;
+  color: #231f20;
+	font-weight:600; font-size:2em;}
+
 h1, h2, h3, p, li, svg text {
   font-family: 'Roboto Condensed', sans-serif;
   color: #231f20;}
@@ -62,6 +67,7 @@ p, li {font-weight:400; font-size:1.2em;}
 .blue {font-weight:700; font-size:33px; line-height: 43px; color:#00a79d;} 
 .money-label {font-weight:400; font-size:0.5em; color:#231f20;}
 .graph-label {font-weight:400; font-size:1.7em; color:#231f20;}
+.actual-header {font-family: 'Roboto Condensed', sans-serif; color: #231f20;font-size:2em;}
 .actual-label {font-weight:400; font-size:1.8em; color:#231f20;}
 .needs-label {font-weight:400; font-size:1.5em; color:#231f20;}
 
@@ -175,11 +181,9 @@ img.steppercue {
 /* NEEDS BREAKDOWN SECTION */
 
 .scroll-box {
-	border-top: 3px solid #d8d8d8;
 	padding-top: 15px;
 	margin-bottom: 100px;
 	padding-bottom: 15px;
-	border-bottom: 3px solid #d8d8d8;
 	margin-top: 15px;
 }
 
