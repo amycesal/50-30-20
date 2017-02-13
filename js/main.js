@@ -423,8 +423,8 @@ function drawExplain() {
 
 function drawIdeal() {
 
-  var barHeight = 100; 
-  var lineHeight = 260;  // height of solid lines
+  var barHeight = 50; 
+  var lineHeight = 240;  // height of solid lines
 
   dataIdeal = [
     { needs: data.fifty, wants: data.thirty, saves: data.twenty }
