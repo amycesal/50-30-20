@@ -181,6 +181,7 @@ img.steppercue {
 /* NEEDS BREAKDOWN SECTION */
 
 .scroll-box {
+	opacity:0;
 	padding-top: 15px;
 	margin-bottom: 100px;
 	padding-bottom: 15px;

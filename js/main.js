@@ -313,7 +313,10 @@ function drawTitle() {
     .transition()
       .delay(function(d, i) {++loopTrack; return (loopTrack-1)*1400; }) 
       .duration(1200)
-      .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]) });
+      .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]) })
+      .on("end", function() {
+        d3.select(".scroll-box").transition().delay(2800).duration(1200).style("opacity", 1);
+      });
 
 }
 
