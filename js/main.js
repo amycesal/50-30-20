@@ -602,7 +602,7 @@ function drawActual() {
         .append("svg")
         .attr("class", "graph ok")
         .attr("width", w)         
-        .attr("height", barHeight+240);   // +240 opens up vertical space for annotation, this is weird...
+        .attr("height", barHeight+160);   // +240 opens up vertical space for annotation, this is weird...
 
   // add a group for each row of data
   var groups = svg.selectAll("g")
