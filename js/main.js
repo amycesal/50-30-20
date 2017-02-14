@@ -201,7 +201,7 @@ $( window ).on('scroll', function() {
           }
           break;
         case "sec-needs":
-          if (scenarioSelected == 1) {
+          if (scenarioSelected == 1 && complete.ideal == 1) {
             setTimeout(function() {
               d3.select("#sec-needs").transition().duration(1200).style("opacity",1);
               dispatch.call("sec-needs");
@@ -210,7 +210,7 @@ $( window ).on('scroll', function() {
           }
           break;
         case "sec-end":
-          if (scenarioSelected == 1) {
+          if (scenarioSelected == 1 && complete.needs == 1) {
             setTimeout(function() {
               d3.select("#sec-end").transition().duration(1200).style("opacity",1);
               dispatch.call("sec-end");
@@ -802,6 +802,8 @@ function drawActual() {
         .html("Following 50-30-20 is <span class='red'>virtually impossible</span> in this situation. <span class='strong'>The average needs of this household exceed the income.</span> This harms the household’s ability to not only save for the future, but take care of their necessities.");
         $(".verdict").animate( { opacity: 1 }, 600);
         $(".ideal-question").delay(1200).animate( { opacity: 1 }, 600);
+          complete.ideal = 1;
+
       }, 3200);
     }
     else if (data.needs > data.fifty) {
@@ -812,6 +814,7 @@ function drawActual() {
           data.overneedsperc + "%</span>, which reduces the ability for this household to save for the future.");
         $(".verdict").animate( { opacity: 1 }, 600);
         $(".ideal-question").delay(1200).animate( { opacity: 1 }, 600);
+          complete.ideal = 1;
 
       }, 3200);
     }
@@ -822,6 +825,7 @@ function drawActual() {
         .html("Following 50-30-20 is <span class='yellow'>probably possible</span> in this situation. <span class='strong'>The average needs of this household are under 50%.</span> The household needs to stay within the average, and control their spending on their wants.");
         $(".verdict").animate( { opacity: 1 }, 600);
         $(".ideal-question").delay(1200).animate( { opacity: 1 }, 600);
+          complete.ideal = 1;
 
       }, 3200);
     }
