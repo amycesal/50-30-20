@@ -1,11 +1,16 @@
 // declare global variables
-var w, h, allScenarios, data, dataExplain, dataIncome, dataIdeal, dataNeeds, dataActual, decileSelected, thisCity, thisHousehold;
+var w, h, screenHeight, allScenarios, data, dataExplain, dataIncome, dataIdeal, dataNeeds, dataActual, decileSelected, thisCity, thisHousehold;
 
 var scenarioSelected = 0;
 var drawTitleComplete = 0;
 
 // get page width and store in global variable for graph sizing
 w = d3.select("div.row").node().getBoundingClientRect().width - 30; 
+
+// set whitespace between sections ugh
+screenHeight = $( window ).height();
+$(".scroll-box").css("margin-bottom", screenHeight/3 + "px");
+$(".footer").css("margin-top", screenHeight/3 + "px");
 
 
 // ******************
@@ -99,7 +104,6 @@ function numberWithCommas(x) {
 }
 
 function displayEnd() {
-  d3.select("#sec-end").style("display", "block");
   graphPositions[4].fired = 0;
   getPositions();
   $('html, body').animate({scrollTop: $("#sec-end").offset().top}, 1200);
@@ -243,6 +247,7 @@ function runScenario() {
   // reveal post-scenario sections
   d3.select("#sec-ideal").style("display", "block");
   d3.select("#sec-needs").style("display", "block");
+  d3.select("#sec-end").style("display", "block");
   // reset dispatch events for same
   graphPositions[2].fired = 0;
   graphPositions[3].fired = 0;
