@@ -186,10 +186,10 @@ $( window ).on('scroll', function() {
               d3.select("#sec-scenario").transition().duration(1200).style("opacity",1);
               dispatch.call("sec-scenario");
             }, timeoutTime);
-              setButtons();
-              graphPositions[i].fired = 1;
+            setButtons();
+            graphPositions[i].fired = 1;
+            console.log("scenario done");
           };
-          console.log("scenario done");
           break;
         case "sec-ideal":
           if (scenarioSelected == 1) {
@@ -337,8 +337,7 @@ function drawTitle() {
       .duration(1200)
       .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]) })
       .on("end", function(d) {
-        console.log(d);
-        if (d[0]==80) {
+        if (d[0]==80) { // horrific kludge but works — only fires on the third segment
           d3.select(".scroll-box").transition().delay(0).duration(1200).style("opacity", function() {
             complete.titlegraph = 1;
             console.log("title done");
@@ -346,7 +345,6 @@ function drawTitle() {
           });
         };
       });
-
 }
 
 
@@ -405,7 +403,6 @@ function drawExplain() {
       .duration(1200)
       .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]) })
       .on("end", fadeInText);
-
   });
 
 
@@ -436,6 +433,7 @@ function drawExplain() {
     .attr('transform', 'translate(2,0)');
 
   var count = 0;
+
   function fadeInText() {
     count++;
     switch(count) {
@@ -448,14 +446,12 @@ function drawExplain() {
       case 3:
         $(".explain-20").animate( { opacity: 1 }, 600);
         $(".explain-question").delay(600).animate( { opacity: 1 }, 600)
-        graphPositions[0].complete = 1;
+        complete.explain = 1;
         console.log("explainer done");
         break;
     }
   }
-
 }
-
 
 function drawIdeal() {
 
