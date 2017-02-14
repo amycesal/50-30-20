@@ -2,6 +2,7 @@
 var w, h, allScenarios, data, dataExplain, dataIncome, dataIdeal, dataNeeds, dataActual, decileSelected, thisCity, thisHousehold;
 
 var scenarioSelected = 0;
+var drawTitleComplete = 0;
 
 // get page width and store in global variable for graph sizing
 w = d3.select("div.row").node().getBoundingClientRect().width - 30; 
@@ -142,14 +143,23 @@ var graphPositions = [
   {name: "sec-scenario", position: null, fired: 0},
   {name: "sec-ideal", position: null, fired: 0},
   {name: "sec-needs", position: null, fired: 0},
-  {name: "sec-end", position: null, fired: 0},
+  {name: "sec-end", position: null, fired: 0}
 ];
+
+// track graph draw completion to enable triggering of subsequent graphs
+var complete = {
+  titlegraph: 0,
+  explain: 0,
+  scenario: 0,
+  ideal: 0,
+  needs: 0,
+  end: 0
+};
 
 function getPositions() {   // called from init after draw functions to ensure we get correct Y vals
   for (i=0;i<graphPositions.length;i++) {   // get the position of the graph, update the array with it
     graphPositions[i].position = $("#" + graphPositions[i].name).offset().top + (0.25 * $("#" + graphPositions[i].name).height());  
   }
-  console.log(graphPositions);
 }
 
 $( window ).on('scroll', function() {
@@ -160,48 +170,52 @@ $( window ).on('scroll', function() {
 
   for (i=0;i<graphPositions.length;i++) {
     if (graphPositions[i].position < windowBottom && graphPositions[i].position > scrollPosition && graphPositions[i].fired == 0) {
-      graphPositions[i].fired = 1;
       switch (graphPositions[i].name) {
         case "sec-explain":
-          console.log("firing sec-explain");
-          setTimeout(function() {
-            d3.select("#sec-explain").transition().duration(1200).style("opacity",1);
-            dispatch.call("sec-explain");
-          }, timeoutTime);
+          if (complete.titlegraph == 1) {
+            setTimeout(function() {
+              d3.select("#sec-explain").transition().duration(1200).style("opacity",1);
+              dispatch.call("sec-explain");
+            }, timeoutTime);
+            graphPositions[i].fired = 1;
+          };
           break;
         case "sec-scenario":
-          console.log("firing sec-scenario");
-          setTimeout(function() {
-            d3.select("#sec-scenario").transition().duration(1200).style("opacity",1);
-            dispatch.call("sec-scenario");
-          }, timeoutTime);
-            setButtons();
+          if (complete.explain == 1) {
+            setTimeout(function() {
+              d3.select("#sec-scenario").transition().duration(1200).style("opacity",1);
+              dispatch.call("sec-scenario");
+            }, timeoutTime);
+              setButtons();
+              graphPositions[i].fired = 1;
+          };
+          console.log("scenario done");
           break;
         case "sec-ideal":
           if (scenarioSelected == 1) {
-            console.log("firing sec-ideal");
             setTimeout(function() {
               d3.select("#sec-ideal").transition().duration(1200).style("opacity",1);
               dispatch.call("sec-ideal");
             }, timeoutTime);
+            graphPositions[i].fired = 1;
           }
           break;
         case "sec-needs":
           if (scenarioSelected == 1) {
-            console.log("firing sec-needs");
             setTimeout(function() {
               d3.select("#sec-needs").transition().duration(1200).style("opacity",1);
               dispatch.call("sec-needs");
             }, timeoutTime);
+            graphPositions[i].fired = 1;
           }
           break;
         case "sec-end":
           if (scenarioSelected == 1) {
-            console.log("firing sec-end");
             setTimeout(function() {
               d3.select("#sec-end").transition().duration(1200).style("opacity",1);
               dispatch.call("sec-end");
             }, timeoutTime);
+            graphPositions[i].fired = 1;
           }
           break;
       }
@@ -322,8 +336,15 @@ function drawTitle() {
       .delay(function(d, i) {++loopTrack; return (loopTrack-1)*1400; }) 
       .duration(1200)
       .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]) })
-      .on("end", function() {
-        d3.select(".scroll-box").transition().delay(2800).duration(1200).style("opacity", 1);
+      .on("end", function(d) {
+        console.log(d);
+        if (d[0]==80) {
+          d3.select(".scroll-box").transition().delay(0).duration(1200).style("opacity", function() {
+            complete.titlegraph = 1;
+            console.log("title done");
+            return 1;
+          });
+        };
       });
 
 }
@@ -383,7 +404,8 @@ function drawExplain() {
       .delay(function(d, i) {++loopTrack; return (loopTrack-1)*1400; }) 
       .duration(1200)
       .attr("width", function(d) { return yScale(d[1]) - yScale(d[0]) })
-      .on("end", fadeInText)
+      .on("end", fadeInText);
+
   });
 
 
@@ -426,6 +448,8 @@ function drawExplain() {
       case 3:
         $(".explain-20").animate( { opacity: 1 }, 600);
         $(".explain-question").delay(600).animate( { opacity: 1 }, 600)
+        graphPositions[0].complete = 1;
+        console.log("explainer done");
         break;
     }
   }
