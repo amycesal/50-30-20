@@ -340,6 +340,22 @@ function drawTitle() {
           });
         };
       });
+
+  var lines = groups.selectAll("line")
+    .data(function(d) { return d; })
+    .enter().append("line")
+      .attr("x1", function(d) { return yScale(d[0]); }) 
+      .attr("x2", function(d) { return yScale(d[0]); })        
+      .attr("y1", 0)  // top of line
+      .attr("y2", 40)  
+    .style("stroke-width", 4)
+    .style("stroke", "white")
+    .style("fill", "none");
+
+  // hide the first line
+  var lineFix = svg.select('line')
+    .style("stroke-width", 0);    
+
 }
 
 
@@ -400,7 +416,6 @@ function drawExplain() {
       .on("end", fadeInText);
   });
 
-
   // draw a line over the start of each rect
   var lines = groups.selectAll("line")
     .data(function(d) { return d; })
@@ -423,9 +438,9 @@ function drawExplain() {
     .style("stroke", "white")
     .style("fill", "none");
 
-  // fix the position of the first line of the graph
+  // hide the first line
   var lineFix = svg.select('line')
-    .attr('transform', 'translate(2,0)');
+    .style("stroke-width", 0);
 
   var count = 0;
 
