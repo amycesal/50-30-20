@@ -965,12 +965,12 @@ icon: "childcare.svg"
     .append("svg")
     .attr("class", "graph")
     .attr("width", w)
-    .attr("height", barHeight+120);    
+    .attr("height", barHeight+80);    
 
   // add background rect
   svg.append("rect")
     .attr("x", 0) 
-    .attr("y", barHeight) 
+    .attr("y", barHeight-40) 
     .attr("width", function(d) { return yScale(data.lo + data.needs); })
     .attr("height", barHeight)
     .style("fill", "#e8e8e8")
@@ -986,15 +986,14 @@ icon: "childcare.svg"
     .data(function(d) { return d; })
     .enter().append("rect")
       .attr("x", function(d) { return yScale(d[0]); })
-      .attr("y", function(d, i) { return barHeight; })  
+      .attr("y", function(d, i) { return barHeight-40; })  
       .attr("class", "needs-rect")    
       .attr("width", 0)
       .attr("height", barHeight)
       .style("fill", "url(#diagonal-stripe-2)");
 
   // transition first rect into view - subsequent rects handled via stepper, below / outside main draw function
-
-   dispatch.on('sec-needs', function() {
+  dispatch.on('sec-needs', function() {
     d3.select("rect.needs-rect")
       .transition()
       .delay(200)
@@ -1007,7 +1006,7 @@ icon: "childcare.svg"
     .data(dataset)
     .enter().append("text")
       .attr("x", function(d) { return yScale(d[0][0])+4; })      // value adjusts horizontal position of labels
-      .attr("y", function(d, i) { return barHeight-20; })     // value adjusts vertical position of labels
+      .attr("y", function(d, i) { return barHeight-60; })     // value adjusts vertical position of labels
       .attr("fill", "#231f20")
       .attr("class", "needs-label")
       .style("opacity", "0")
@@ -1025,8 +1024,8 @@ icon: "childcare.svg"
 
   // first dashed line - 50% of ideal budget
   svg.append("line")
-    .attr("y1", barHeight) 
-    .attr("y2", barHeight+100) 
+    .attr("y1", barHeight-40) 
+    .attr("y2", barHeight+60) 
     .attr("x1", function(d) { return yScale(data.fifty); })
     .attr("x2", function(d) { return yScale(data.fifty); })
     .style("stroke-width", 4)
@@ -1036,8 +1035,8 @@ icon: "childcare.svg"
 
   // second dashed line - next 30% of ideal budget
   svg.append("line")
-    .attr("y1", barHeight) 
-    .attr("y2", barHeight+100) 
+    .attr("y1", barHeight-40) 
+    .attr("y2", barHeight+60) 
     .attr("x1", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
     .attr("x2", function(d) { return yScale(data.fifty) + yScale(data.thirty); })
     .style("stroke-width", 4)
