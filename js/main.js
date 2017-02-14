@@ -1175,7 +1175,7 @@ function step4() {
   nextStep(4);
   $(".hidey").css("display", "block");
   $("#step5").css("display", "none");
-  $("#needs-copy5").css("display", "none");
+  $("#needs-copy5").css("display", "block");
   $(".needs-question").delay(600).animate( { opacity: 1 }, 600);
 
 }
