@@ -103,6 +103,7 @@ function displayEnd() {
   graphPositions[4].fired = 0;
   getPositions();
   $('html, body').animate({scrollTop: $("#sec-end").offset().top}, 1200);
+  d3.select("#sec-end").transition().delay(0).duration(1200).style("opacity", 1);
 }
 
 function setButtons() {
@@ -110,12 +111,7 @@ function setButtons() {
   d3.selectAll(".runScenario").style("width", colWidth-30 + "px");
 }
 
-
-
-// *****************
-// *** SCROLLING ***
-// *****************
-
+// scrollcues
 d3.selectAll('.scrollcue')
   .on('click', function() {
     $('html, body').animate({
@@ -129,7 +125,6 @@ d3.selectAll('.scrollcue2')
     $('html, body').animate({
       scrollTop: $(".end").offset().top}, 1200);
 });
-
 
 
 // ****************
@@ -793,7 +788,7 @@ function drawActual() {
 
   });
 
-  // check if selected household situation meets 50-30-20 rule or no
+  // check if selected household situation meets 50-30-20 rule or no, and update text and icon in verdict section
   function getVerdict() {
     if (data.needs > data.takehome) {
      setTimeout(function() {
@@ -803,7 +798,6 @@ function drawActual() {
         $(".verdict").animate( { opacity: 1 }, 600);
         $(".ideal-question").delay(1200).animate( { opacity: 1 }, 600);
           complete.ideal = 1;
-
       }, 3200);
     }
     else if (data.needs > data.fifty) {
@@ -815,7 +809,6 @@ function drawActual() {
         $(".verdict").animate( { opacity: 1 }, 600);
         $(".ideal-question").delay(1200).animate( { opacity: 1 }, 600);
           complete.ideal = 1;
-
       }, 3200);
     }
     else {
@@ -826,12 +819,9 @@ function drawActual() {
         $(".verdict").animate( { opacity: 1 }, 600);
         $(".ideal-question").delay(1200).animate( { opacity: 1 }, 600);
           complete.ideal = 1;
-
       }, 3200);
     }
-
   }
-
 
   // re-arrange labels to prevent overlap
   function arrangeLabels() {
