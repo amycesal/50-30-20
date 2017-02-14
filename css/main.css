@@ -29,7 +29,7 @@
 
 div#graph-ideal, div#graph-needs {margin-bottom: 40px;}
 
-div.scenario div {padding-bottom: 1em;} 
+div.scenario div {padding-bottom: 1em;}
 
 select {max-width:300px;}
 
@@ -88,6 +88,7 @@ a {
 .yellow {color:#FAAF40; font-weight:700;}		
 .blue {color: #000;}
 
+.kludge {font-size: 0.9rem;padding:0.85em 0;} /* match button styles from foundation */
 
 /* BUTTONS AND CUES */
 
