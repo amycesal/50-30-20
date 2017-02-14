@@ -10,7 +10,7 @@ w = d3.select("div.row").node().getBoundingClientRect().width - 30;
 // set whitespace between sections ugh
 screenHeight = $( window ).height();
 $(".scroll-box").css("margin-bottom", screenHeight/3 + "px");
-$(".footer").css("margin-top", screenHeight/3 + "px");
+$(".footer").css("margin-top", screenHeight/3.5 + "px");
 
 
 // ******************
@@ -978,7 +978,7 @@ icon: "childcare.svg"
 
   var yScale = d3.scaleLinear()
     .domain([0, d3.max(dataset[dataset.length - 1], function(d) { return d[1]; }) ])
-    .range([0, w]);
+    .rangeRound([0, w]);
 
   // create new svg element
   var svg = d3.select("#graph-needs")
@@ -1118,7 +1118,7 @@ function nextStep(step) {
 
   var yScale = d3.scaleLinear()
     .domain([0, d3.max(dataset[dataset.length - 1], function(d) { return d[1]; }) ])
-    .range([0, w]);
+    .rangeRound([0, w]);
 
   // draw next rect
   d3.selectAll("rect.needs-rect")
