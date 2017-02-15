@@ -49,9 +49,36 @@ d3.csv("csv/data.csv", function(error, csv) {
   allScenarios = csv; // also pass them to this object that -doesn't- get changed in scenario setup
 
   console.log(data);
+
+  getUniques('city');      
+  getUniques('household');
+  getUniques('level');
+
   init();
 
 });
+
+// gathers unqiue values to populate dropdowns, drive scenario selection
+function getUniques(dd) {
+  var unique = {};
+  var distinct = [];
+  for (var i in data) {
+    if (typeof(unique[data[i][dd]]) == "undefined") {
+      distinct.push(data[i][dd]);
+    }
+    unique[data[i][dd]] = 0;
+  }
+  $('#' + dd + ' option').each(function(i) {     // clear dropdown options
+    if (i > 0) {
+      $(this).remove();  
+    }        
+  });
+  var option = '';
+  for (var i = 0; i < distinct.length; i++) {   // populate dropdown with unique values
+    option += '<option value="' + distinct[i] + '">' + distinct[i] + '</option>';
+  }
+  $('#' + dd).append(option);    
+};
 
 // subsets the scenario data based on user selection
 function setScenario() {
@@ -129,14 +156,6 @@ d3.selectAll('.scrollcue2')
     displayEnd(); // unhides last section before scroll
     $('html, body').animate({
       scrollTop: $(".end").offset().top}, 1200);
-});
-
-// scenario reset
-$('#backToScenario').click(function() {
-  $('html, body').animate({scrollTop: $("#sec-scenario").offset().top}, 1200);
-  $('#scen-initial').css('display', 'none');
-  $('#scen-open').css('display', 'block');
-
 });
 
 
@@ -292,6 +311,64 @@ function runScenario3() {
   thisHousehold = "2 adults 2 children"
   runScenario();
 }
+
+// scenario reset and expose open scenario selection
+$('#backToScenario').click(function() {
+  $('#scen-initial').css('display', 'none');
+  $('#scen-open').css('display', 'block');
+  $('html, body').animate({scrollTop: $("#sec-scenario").offset().top}, 800);
+  // clear post-scenario graphs
+  d3.selectAll("svg.post-scen-graph").remove(); 
+  // hide post-scenario sections
+  d3.select("#sec-ideal").transition().delay(1600).style("display", "none");
+  d3.select("#sec-needs").transition().delay(1600).style("display", "none");
+  d3.select("#sec-end").transition().delay(1600).style("display", "none");
+  // reset position tracking
+  graphPositions[2].fired = 0;
+  graphPositions[3].fired = 0;
+  graphPositions[4].fired = 0;
+  scenarioSelected = 0;
+
+});
+
+// listen for scenario selection events and update display numbers, income data & graph
+d3.selectAll('select')
+  .on('change.numbers', function() { // note the .numbers namespace after "change", prevents collision with other listeners below
+    var interimSelected = {};
+    interimSelected.city = $('select#city option:selected').val();
+    interimSelected.household = $('select#household option:selected').val();
+    for (i=0;i<allScenarios.length;i++) {
+      if (allScenarios[i].city == interimSelected.city) {
+        $('span.population').html(numberWithCommas(allScenarios[i].population));
+        $('.cityimg').attr('src', 'img/location/' + allScenarios[i].cityimg);
+        if (allScenarios[i].household == interimSelected.household) {
+          $('span.incomeannual').html(numberWithCommas(allScenarios[i].income));
+          $('span.takehome').html(numberWithCommas(allScenarios[i].takehome));
+          $('.hhimg').attr('src', 'img/household/' + allScenarios[i].hhimg);
+          // if the income graph exists, remove it
+          if ($(".graph-income svg").length) { d3.select(".graph-income svg").remove(); }
+          // setup data for income graph
+          dataIncome = [
+            allScenarios[i].inc0, 
+            allScenarios[i].inc1, 
+            allScenarios[i].inc2, 
+            allScenarios[i].inc3, 
+            allScenarios[i].inc4, 
+            allScenarios[i].inc5, 
+            allScenarios[i].inc6, 
+            allScenarios[i].inc7, 
+            allScenarios[i].inc8, 
+            allScenarios[i].inc9];
+          // store income decile from selected scenario
+          decileSelected = allScenarios[i].decile;
+          // draw income graph
+          // drawIncome();
+        };
+      };
+    };
+  });
+
+
 
 // **********************
 // *** DRAW FUNCTIONS ***
@@ -511,7 +588,7 @@ function drawIdeal() {
   // create SVG element
   var svg = d3.select("#graph-ideal")
         .append("svg")
-        .attr("class", "graph")
+        .attr("class", "post-scen-graph")
         .attr("width", w)        
         .attr("height", lineHeight);   
 
@@ -656,7 +733,7 @@ function drawActual() {
   // create SVG element
   var svg = d3.select("#graph-actual")
         .append("svg")
-        .attr("class", "graph ok")
+        .attr("class", "ok post-scen-graph")
         .attr("width", w)         
         .attr("height", barHeight+160);   // +240 opens up vertical space for annotation, this is weird...
 
@@ -992,7 +1069,7 @@ icon: "childcare.svg"
   // create new svg element
   var svg = d3.select("#graph-needs")
     .append("svg")
-    .attr("class", "graph")
+    .attr("class", "post-scen-graph")
     .attr("width", w)
     .attr("height", barHeight+80);    
 
@@ -1197,6 +1274,77 @@ function step4() {
 
 
 
+
+
+
+
+
+
+
+/*
+
+
+// on resize, redraw all present graphs
+window.onresize = reDrawAll;
+
+function reDrawAll() {
+  // get page width and update global width variable for graph sizing
+  w = d3.select("div.row").node().getBoundingClientRect().width - 30; 
+
+  // reset height of each section to screen height
+  $("div.slide").css("height", $(window).height()+"px");  
+
+  // redraw the explainer graph
+  d3.select("svg.explainer").remove()
+  drawExplain();  // TODO: no need to do the transitions on resize...
+
+  // redraw the post-scenario graphs, but only if they've been drawn already
+  if (d3.selectAll("svg.graph").empty() == false) {
+    d3.selectAll("svg.graph").remove()
+    setupAndDraw();
+  }
+};
+
+
+// listen for scenario selection events and reveal next section if necessary
+d3.selectAll('.scenario .location select')
+  .on('change.sections', function() { 
+    $(".scenario .household").css("display", "block"); // reveal the household section
+});
+d3.selectAll('.scenario .household select')
+  .on('change.sections', function() {
+    $(".scenario .income").css("display", "block"); // reveal the income section
+});
+
+
+function setScenario() {
+  var selected = {};
+    selected.city = $('select#city option:selected').val();
+    selected.household = $('select#household option:selected').val();
+  // select data row based on value
+  for (i=0;i<data.length;i++) {
+    if (data[i].city == selected.city) {
+      if (data[i].household == selected.household) {
+        data = data[i];   // reduce data object to selected row
+      }
+    }
+  }
+};
+
+// when user clicks run scenario button...
+function runScenario() {
+  data = allScenarios; // reset 'data' to include all scenarios 
+  $(".ideal").css("display", "block"); // display all post-scenario sections
+  $(".needs").css("display", "block");
+  $(".actual").css("display", "block");  
+  $(".end").css("display", "block");
+  d3.selectAll("svg.graph").remove(); // clear any existing post-scenario graphs (redundant?)
+  setupAndDraw(); // get the selected scenario, setup the data, draw the graphs
+  $('html, body').animate({ // send user to first post-scenario graph section
+    scrollTop: $(".ideal").offset().top}, 1200);
+};
+
+
 // Income histogram for scenario selection
 
 function drawIncome() {
@@ -1228,6 +1376,16 @@ function drawIncome() {
     });
 
 }
+
+
+
+
+
+
+*/
+
+
+
 
 
 
