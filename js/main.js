@@ -1,6 +1,7 @@
 // declare global variables
 var w, h, screenHeight, allScenarios, data, dataExplain, dataIncome, dataIdeal, dataNeeds, dataActual, decileSelected, thisCity, thisHousehold;
 
+var openSelection = 0;
 var scenarioSelected = 0;
 var drawTitleComplete = 0;
 
@@ -58,7 +59,7 @@ d3.csv("csv/data.csv", function(error, csv) {
 
 });
 
-// gathers unqiue values to populate dropdowns, drive scenario selection
+// gathers unique values to populate dropdowns, drive scenario selection
 function getUniques(dd) {
   var unique = {};
   var distinct = [];
@@ -78,39 +79,6 @@ function getUniques(dd) {
     option += '<option value="' + distinct[i] + '">' + distinct[i] + '</option>';
   }
   $('#' + dd).append(option);    
-};
-
-// subsets the scenario data based on user selection
-function setScenario() {
-  var selected = {};
-  selected.city = thisCity;
-  selected.household = thisHousehold; // 1 adult OR 2 adults 2 children
-  // select data row based on value
-  for (i=0;i<data.length;i++) {
-    if (data[i].city == selected.city) {
-      if (data[i].household == selected.household) {
-        data = data[i];   // reduce data object to selected row
-        console.log(data);
-      }
-    }
-  }
-}
-
-// runs post setScenario, creates derivative properties based on selected scenario
-function setProps() {
-  data.difference = data.income - 23850; // TODO: this number is diff for different household sizes
-  data.fifty = Math.round(data.takehome * 0.5);
-  data.thirty = Math.round(data.takehome * 0.3);
-  data.twenty = Math.round(data.takehome * 0.2);
-  data.needs = data.housing + data.health + data.grocery + data.transit + data.childcare;
-  data.lo = data.takehome - data.needs;
-  data.lowants = Math.round(data.lo * 0.6);
-  data.losaves = Math.round(data.lo * 0.4);
-  data.needsperc = Math.round((data.needs / data.takehome)*100);
-  data.wantsperc = Math.round((data.lowants / data.takehome)*100);
-  data.savesperc = Math.round((data.losaves / data.takehome)*100);
-  data.overneeds = Math.round(data.needs - data.fifty);
-  data.overneedsperc = Math.round(data.needsperc-50);
 };
 
 
@@ -272,6 +240,14 @@ function init() {
 // runs on user selection of scenario
 function runScenario() {
 
+  // clear post-scenario graphs
+  d3.selectAll("svg.post-scen-graph").remove(); 
+
+  if (openSelection == 1) {
+    thisCity = $('select#city option:selected').val();
+    thisHousehold = $('select#household option:selected').val();
+  };
+
   // reveal post-scenario sections
   d3.select("#sec-ideal").style("display", "block");
   d3.select("#sec-needs").style("display", "block");
@@ -312,13 +288,47 @@ function runScenario3() {
   runScenario();
 }
 
+// subsets the scenario data based on user selection
+function setScenario() {
+  // reset data object to contain all scenarios
+  data = allScenarios;
+  // select data row based on value
+  for (i=0;i<data.length;i++) {
+    if (data[i].city == thisCity) {
+      if (data[i].household == thisHousehold) {
+        data = data[i];   // reduce data object to selected row
+        console.log(data);
+      }
+    }
+  }
+}
+
+// runs post setScenario, creates derivative properties based on selected scenario
+function setProps() {
+  data.difference = data.income - 23850; // TODO: this number is diff for different household sizes
+  data.fifty = Math.round(data.takehome * 0.5);
+  data.thirty = Math.round(data.takehome * 0.3);
+  data.twenty = Math.round(data.takehome * 0.2);
+  data.needs = data.housing + data.health + data.grocery + data.transit + data.childcare;
+  data.lo = data.takehome - data.needs;
+  data.lowants = Math.round(data.lo * 0.6);
+  data.losaves = Math.round(data.lo * 0.4);
+  data.needsperc = Math.round((data.needs / data.takehome)*100);
+  data.wantsperc = Math.round((data.lowants / data.takehome)*100);
+  data.savesperc = Math.round((data.losaves / data.takehome)*100);
+  data.overneeds = Math.round(data.needs - data.fifty);
+  data.overneedsperc = Math.round(data.needsperc-50);
+};
+
+
+
+
 // scenario reset and expose open scenario selection
 $('#backToScenario').click(function() {
   $('#scen-initial').css('display', 'none');
   $('#scen-open').css('display', 'block');
+  $('.verdict').css('opacity', 0);
   $('html, body').animate({scrollTop: $("#sec-scenario").offset().top}, 800);
-  // clear post-scenario graphs
-  d3.selectAll("svg.post-scen-graph").remove(); 
   // hide post-scenario sections
   d3.select("#sec-ideal").transition().delay(1600).style("display", "none");
   d3.select("#sec-needs").transition().delay(1600).style("display", "none");
@@ -328,7 +338,7 @@ $('#backToScenario').click(function() {
   graphPositions[3].fired = 0;
   graphPositions[4].fired = 0;
   scenarioSelected = 0;
-
+  openSelection = 1;
 });
 
 // listen for scenario selection events and update display numbers, income data & graph
@@ -837,7 +847,11 @@ function drawActual() {
     .attr("x", function(d) { return yScale(d[0][0])+2; })
     .attr("dy", 36)
     .style("font-weight", 400)
-    .text(function(d) { return "$" + numberWithCommas(d[0][1] - d[0][0]); });
+    .text(function(d) { 
+      var thisValue = d[0][1] - d[0][0];
+      if (thisValue > 0) return "$" + numberWithCommas(thisValue);
+      else return "$0"; 
+    });
 
   // if 'needs' exceed takehome, move 'wants' and 'saves' labels to their fallback positions
   if (data.lowants <= 0) {
@@ -1317,19 +1331,7 @@ d3.selectAll('.scenario .household select')
 });
 
 
-function setScenario() {
-  var selected = {};
-    selected.city = $('select#city option:selected').val();
-    selected.household = $('select#household option:selected').val();
-  // select data row based on value
-  for (i=0;i<data.length;i++) {
-    if (data[i].city == selected.city) {
-      if (data[i].household == selected.household) {
-        data = data[i];   // reduce data object to selected row
-      }
-    }
-  }
-};
+
 
 // when user clicks run scenario button...
 function runScenario() {
