@@ -9,8 +9,9 @@ w = d3.select("div.row").node().getBoundingClientRect().width - 30;
 
 // set whitespace between sections ugh
 screenHeight = $( window ).height();
-$(".scroll-box").css("margin-bottom", screenHeight/3 + "px");
-$(".footer").css("margin-top", screenHeight/3.5 + "px");
+$(".scroll-box").css("margin-bottom", screenHeight/3.5 + "px");
+$(".scenario").css("margin-bottom", screenHeight/3.5 + "px");
+$(".footer").css("margin-top", screenHeight/4.5 + "px");
 
 
 // ******************
@@ -128,6 +129,14 @@ d3.selectAll('.scrollcue2')
     displayEnd(); // unhides last section before scroll
     $('html, body').animate({
       scrollTop: $(".end").offset().top}, 1200);
+});
+
+// scenario reset
+$('#backToScenario').click(function() {
+  $('html, body').animate({scrollTop: $("#sec-scenario").offset().top}, 1200);
+  $('#scen-initial').css('display', 'none');
+  $('#scen-open').css('display', 'block');
+
 });
 
 

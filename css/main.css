@@ -143,6 +143,14 @@ a {
 
 /* SCENARIO SECTION */
 
+#scen-initial {
+	display:block;
+}
+
+#scen-open {
+	display:none;
+}
+
 .scenario {margin-top:1em; margin-bottom:70px;}
 .income {background:#e8e8e8;}
 
