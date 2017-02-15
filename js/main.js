@@ -320,9 +320,6 @@ function setProps() {
   data.overneedsperc = Math.round(data.needsperc-50);
 };
 
-
-
-
 // scenario reset and expose open scenario selection
 $('#backToScenario').click(function() {
   $('#scen-initial').css('display', 'none');
@@ -333,6 +330,17 @@ $('#backToScenario').click(function() {
   d3.select("#sec-ideal").transition().delay(1600).style("display", "none");
   d3.select("#sec-needs").transition().delay(1600).style("display", "none");
   d3.select("#sec-end").transition().delay(1600).style("display", "none");
+  // reset needs stepper
+  $("#step1").css("display", "block");
+  $("#needs-copy1").css("display", "block");
+  $("#step2").css("display", "none");
+  $("#needs-copy2").css("display", "none");
+  $("#step3").css("display", "none");
+  $("#needs-copy3").css("display", "none");
+  $("#step4").css("display", "none");
+  $("#needs-copy4").css("display", "none");
+  $(".replay-box").css("display", "none");
+  $("#needs-copy5").css("display", "none");
   // reset position tracking
   graphPositions[2].fired = 0;
   graphPositions[3].fired = 0;
@@ -1243,7 +1251,6 @@ function nextStep(step) {
 
 // stepper functions, each is called by a different button in last graph. this is obviously a bashy way to do this.
 function step1() {
-  console.log("step 1");
   // hide step 1, display step 2
   $("#step2").css("display", "block");
   $("#needs-copy2").css("display", "block");
@@ -1253,7 +1260,6 @@ function step1() {
 }
 
 function step2() {
-  console.log("step 2");
   // hide step 2, display step 3
   $("#step3").css("display", "block");
   $("#needs-copy3").css("display", "block");
@@ -1263,7 +1269,6 @@ function step2() {
 }
 
 function step3() {
-  console.log("step 3");
   // hide step 3, display step 4
   $("#step4").css("display", "block");
   $("#needs-copy4").css("display", "block");
@@ -1273,7 +1278,6 @@ function step3() {
 }
 
 function step4() {
-  console.log("step 4");
   // hide step 4, display step 5
   $("#step4").css("display", "none");
   $("#needs-copy4").css("display", "none");
@@ -1284,9 +1288,6 @@ function step4() {
   $(".needs-question").delay(600).animate( { opacity: 1 }, 600);
 
 }
-
-
-
 
 
 
