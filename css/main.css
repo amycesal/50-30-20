@@ -218,4 +218,27 @@ a {
 
 div.needs #graph-needs {margin-bottom: 0;}
 
+.verdict {
+	background-color: #e5e5e5;
+	padding-top: 1rem ;
+	padding-bottom: 1rem;
+	margin-top: 2rem;
+	margin-bottom: 1rem;
+	border-top: #B43236 3px solid;
+	border-bottom: #B43236 3px solid;
 
+}
+
+.icon {
+	width: 5%;
+	min-width: 30px;
+}
+
+.text {
+	width: 95%;
+	padding-left: 10px;
+}
+
+.text h3 {
+	margin-top: 0;
+}
