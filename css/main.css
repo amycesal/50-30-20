@@ -201,11 +201,10 @@ a {
 	min-height: 50px;
 }
 
-#needs-nav a, .replay-box p {
+#needs-nav a, .replay-box p, .replay-box a {
 	color: #000;
 	text-decoration: none;
-	font-weight: 700;
-	text-transform: uppercase;
+	font-weight: 300;
 	font-size: 1.2em;
 	vertical-align: middle;
 	min-height: 50px;
