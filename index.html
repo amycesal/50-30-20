@@ -60,7 +60,7 @@
     <div class="row explain slide" id="sec-explain">
       <div class="small-12 medium-12 large-12 columns">
         <h2>The 50/30/20 Financial Guideline</h2>
-        <p>People can achieve greater financial stability by spending their monthly income in 3 categories:</p>
+        <p>Created by <a target="blank" href="https://www.amazon.com/All-Your-Worth-Ultimate-Lifetime/dp/0743269888">Elizabeth Warren</a>, this rule helps people achieve greater financial stability by spending their monthly income in 3 categories:</p>
       </div>
       <div class="small-12 medium-12 large-12 columns">
         <div id="graph-explain"></div>
@@ -73,7 +73,7 @@
                 <li>mortgage or rent</li>
                 <li>utilities</li>
                 <li>health care</li>
-                <li>groceries</li>
+                <li>basic groceries</li>
                 <li>transportation</li>
                 <li>childcare</li>
             </ul>
@@ -116,13 +116,13 @@
     <div class="row scenario slide" id="sec-scenario">
       <div id="scen-initial">
         <div class="small-12 medium-12 large-12 columns">
-          <h2>Select a situation:</h2>
+          <h2>Look at the situation of an average American:</h2>
         </div>
         <div class="small-12 medium-4 large-4 columns location">
           <p class="big">Married couple with two children</p>
           <img src="img/household/family-01.svg" class="household-img" />
           <p class="big">Baltimore, MD</p>
-          <img src="img/location/baltimore-01.svg" class="location-img" />
+          <img src="img/location/baltimore-01.svg" class=" location-img" />
           <p class="big">Median Income:</p>
           <p class="light">$69,402/year</p>
           <p class="light">$4,577/month after taxes</p>
@@ -151,7 +151,7 @@
       </div>
       <div id="scen-open">
         <div class="small-12 medium-12 large-12 columns">
-          <h2>Select a scenario:</h2>
+          <h2>Look at the life of an average American:</h2>
         </div>
         <div class="small-12 medium-12 large-4 columns location">
           <h3>LOCATION:</h3>
@@ -159,7 +159,8 @@
             <option value="Choose a city">Choose a city</option>
           </select>
           <img class="cityimg" src="./img/location/null-01.svg" />
-          <p>Population: <span class="population"></span></p>
+          <!-- <p>Population: <span class="population"></span></p> -->
+
         </div>
         <div class="small-12 medium-12 large-4 columns household">
           <h3>HOUSEHOLD SIZE:</h3>
@@ -174,9 +175,13 @@
           <p class="blue">$<span class="incomeannual">69,402</span><span class="money-label">/year</span></p>
           <p class="blue">$<span class="takehome">4,577</span><span class="money-label">/month after taxes</span></p>
           <div class="graph-income"></div>
-          <input type="button" onclick="runScenario()" value="RUN SCENARIO" class="runScenario button"></input>
         </div>
+        <div class="small-12 medium-12 large-12 columns">
+          <input type="button" onclick="runScenario()" value="SELECT" class="runScenario button"></input>
+        </div>
+
       </div>
+
     </div>
 
     <div class="row ideal post slide" id="sec-ideal">
@@ -212,15 +217,15 @@
           <p id="needs-copy5" class="needs-copy">Based on center-based child care and family-based care for four-year-olds and school-age children. <a href="http://www.epi.org/resources/budget/" target="_blank">Source.</a></p>
         </div>
         <div id="needs-nav">
-          <a id="step1" class="step-link" onclick="step1()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
-          <a id="step2" class="step-link" onclick="step2()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
-          <a id="step3" class="step-link" onclick="step3()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
-          <a id="step4" class="step-link" onclick="step4()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
+          <a id="step1" class="step-link" onclick="step1()"><img src="./img/nextcue.png" class="steppercue" /><strong>Click</strong> to add health care costs</a>
+          <a id="step2" class="step-link" onclick="step2()"><img src="./img/nextcue.png" class="steppercue" /><strong>Click</strong> to add groceries costs</a>
+          <a id="step3" class="step-link" onclick="step3()"><img src="./img/nextcue.png" class="steppercue" /><strong>Click</strong> to add transportation costs</a>
+          <a id="step4" class="step-link" onclick="step4()"><img src="./img/nextcue.png" class="steppercue" /><strong>Click</strong> to add childcare costs</a>
           <a id="step5" class="step-link" onclick="step5()"><img src="./img/nextcue.png" class="steppercue" />Next item</a>
         </div>
         <div class="replay-box">
           <img src="./img/replaycue.png" class="replaycue" />
-          <p>Back to the start</p> 
+          <p><strong>Click</strong> to go back to cost of groceries</p> 
         </div>
         <div class="scroll-box needs-question">
           <img src="./img/scrollcue.png" class="scrollcue2" />
@@ -234,13 +239,12 @@
         <h2>The bottom line</h2>
         <p>This looks at median household income, which suggests that growing needs and lack of savings is the rule rather than the exception. Housing, child care, health care, debt, and other expenses weigh heavily on American households which causes them to live paycheck to paycheck. The 50/30/20 guideline doesn't add-up for most Americans and there's a growing lack of financial stability and security. It's hard to build a nest egg when you can barely afford the nest.</p>
         <p>
-          <a class="button" id="backToScenario">SELECT ANOTHER SCENARIO</a>
+          <a class="button" id="backToScenario">Look at more average Americans</a>
           <span class="kludge">&nbsp; or &nbsp;</span>
-                    <a class="button" href="https://www.amazon.com/All-Your-Worth-Ultimate-Lifetime/dp/0743269888" target="_blank">Elizabeth Warren's book on the subject</a>
+                    <a class="button" href="https://www.amazon.com/All-Your-Worth-Ultimate-Lifetime/dp/0743269888" target="_blank">Elizabeth Warren's book</a>
 </p>
       </div>
       <div class="small-12 medium-12 large-12 columns footer">
-        <hr>
         <p><a href="/about.html">About the project</a> | <a href="/methodology">Methodology</a></p>
       </div>
     </div>

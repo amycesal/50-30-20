@@ -152,11 +152,11 @@ a {
 }
 
 .scenario {margin-top:1em; margin-bottom:70px;}
-.income {background:#e8e8e8;}
+.income {}
 
 .location-img, .household-img {
 	margin: 0 auto;
-	max-width: 240px;
+	max-width: 200px;
 }
 
 
@@ -165,19 +165,39 @@ a {
 
 .icon {
 	float: left;
-	width: 10%;
+	width: 5%;
+	min-width: 30px;
 }
 
 .icon img {
 	width:30px;
 	height:30px;
+
 }
 
 .text {
 	float: right;
-	width: 90%;
+	width: 95%;
+	padding-left: 10px;
 	clear: all;
 }
+
+
+.text h3 {
+	margin-top: 0;
+}
+
+.verdict {
+	background-color: #e5e5e5;
+	padding-top: 1rem ;
+	padding-bottom: 1rem;
+	margin-top: 2rem;
+	margin-bottom: 1rem;
+	border-top: #B43236 3px solid;
+	border-bottom: #B43236 3px solid;
+
+}
+
 
 
 /* NEEDS BREAKDOWN SECTION */
@@ -201,11 +221,10 @@ a {
 	min-height: 50px;
 }
 
-#needs-nav a, .replay-box p {
+#needs-nav a, .replay-box p, .replay-box a {
 	color: #000;
 	text-decoration: none;
-	font-weight: 700;
-	text-transform: uppercase;
+	font-weight: 400;
 	font-size: 1.2em;
 	vertical-align: middle;
 	min-height: 50px;
@@ -218,27 +237,4 @@ a {
 
 div.needs #graph-needs {margin-bottom: 0;}
 
-.verdict {
-	background-color: #e5e5e5;
-	padding-top: 1rem ;
-	padding-bottom: 1rem;
-	margin-top: 2rem;
-	margin-bottom: 1rem;
-	border-top: #B43236 3px solid;
-	border-bottom: #B43236 3px solid;
 
-}
-
-.icon {
-	width: 5%;
-	min-width: 30px;
-}
-
-.text {
-	width: 95%;
-	padding-left: 10px;
-}
-
-.text h3 {
-	margin-top: 0;
-}
