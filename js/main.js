@@ -269,7 +269,7 @@ function runScenario1() {
 
 function runScenario2() {
   thisCity = "St. Louis, MO";
-  thisHousehold = "1 adult";
+  thisHousehold = "single man";
   runScenario();
 }
 
