@@ -22,29 +22,20 @@ $(".footer").css("margin-top", screenHeight/4.5 + "px");
 d3.csv("csv/data.csv", function(error, csv) {  
   if (error) throw error;
   // read numerical values as numbers not strings 
-  csv.forEach(function(d){ d['income'] = +d['income']; });        // kludgy...
+  csv.forEach(function(d){ d['population'] = +d['population']; });
+  csv.forEach(function(d){ d['area'] = +d['area']; });
+  csv.forEach(function(d){ d['income'] = +d['income']; });       
+  csv.forEach(function(d){ d['difference'] = +d['difference']; });
   csv.forEach(function(d){ d['takehome'] = +d['takehome']; });
+  csv.forEach(function(d){ d['fifty'] = +d['fifty']; });
+  csv.forEach(function(d){ d['thirty'] = +d['thirty']; });
+  csv.forEach(function(d){ d['twenty'] = +d['twenty']; });
   csv.forEach(function(d){ d['housing'] = +d['housing']; });
   csv.forEach(function(d){ d['health'] = +d['health']; });
   csv.forEach(function(d){ d['grocery'] = +d['grocery']; });
   csv.forEach(function(d){ d['transit'] = +d['transit']; });
   csv.forEach(function(d){ d['childcare'] = +d['childcare']; });
-  csv.forEach(function(d){ d['fifty'] = +d['fifty']; });
-  csv.forEach(function(d){ d['thirty'] = +d['thirty']; });
-  csv.forEach(function(d){ d['twenty'] = +d['twenty']; });
-  csv.forEach(function(d){ d['population'] = +d['population']; });
-  csv.forEach(function(d){ d['difference'] = +d['difference']; });
-  csv.forEach(function(d){ d['inc0'] = +d['inc0']; });
-  csv.forEach(function(d){ d['inc1'] = +d['inc1']; });
-  csv.forEach(function(d){ d['inc2'] = +d['inc2']; });
-  csv.forEach(function(d){ d['inc3'] = +d['inc3']; });
-  csv.forEach(function(d){ d['inc4'] = +d['inc4']; });
-  csv.forEach(function(d){ d['inc5'] = +d['inc5']; });
-  csv.forEach(function(d){ d['inc6'] = +d['inc6']; });
-  csv.forEach(function(d){ d['inc7'] = +d['inc7']; });
-  csv.forEach(function(d){ d['inc8'] = +d['inc8']; });
-  csv.forEach(function(d){ d['inc9'] = +d['inc9']; });
-  csv.forEach(function(d){ d['decile'] = +d['decile']; });
+
 
   data = csv; // pass csv values to the global 'data' object
   allScenarios = csv; // also pass them to this object that -doesn't- get changed in scenario setup
@@ -271,20 +262,20 @@ function runScenario() {
 
 // captures the three pre-set scenarios
 function runScenario1() {
-  thisCity = "Baltimore, MD"
-  thisHousehold = "2 adults 2 children"
+  thisCity = "Baltimore, MD";
+  thisHousehold = "married couple 2 children";
   runScenario();
 }
 
 function runScenario2() {
-  thisCity = "St. Louis, MO"
-  thisHousehold = "1 adult"
+  thisCity = "St. Louis, MO";
+  thisHousehold = "1 adult";
   runScenario();
 }
 
 function runScenario3() {
-  thisCity = "Oakland, CA"
-  thisHousehold = "2 adults 2 children"
+  thisCity = "Oakland, CA";
+  thisHousehold = "single mother, 1 child";
   runScenario();
 }
 
@@ -293,10 +284,12 @@ function setScenario() {
   // reset data object to contain all scenarios
   data = allScenarios;
   // select data row based on value
+  console.log(thisCity + " " + thisHousehold);
   for (i=0;i<data.length;i++) {
     if (data[i].city == thisCity) {
       if (data[i].household == thisHousehold) {
         data = data[i];   // reduce data object to selected row
+        console.log("setScenario successful:");
         console.log(data);
       }
     }
@@ -318,6 +311,8 @@ function setProps() {
   data.savesperc = Math.round((data.losaves / data.takehome)*100);
   data.overneeds = Math.round(data.needs - data.fifty);
   data.overneedsperc = Math.round(data.needsperc-50);
+  console.log("post setProps");
+  console.log(data);
 };
 
 // scenario reset and expose open scenario selection
@@ -363,29 +358,10 @@ d3.selectAll('select')
           $('span.incomeannual').html(numberWithCommas(allScenarios[i].income));
           $('span.takehome').html(numberWithCommas(allScenarios[i].takehome));
           $('.hhimg').attr('src', 'img/household/' + allScenarios[i].hhimg);
-          // if the income graph exists, remove it
-          if ($(".graph-income svg").length) { d3.select(".graph-income svg").remove(); }
-          // setup data for income graph
-          dataIncome = [
-            allScenarios[i].inc0, 
-            allScenarios[i].inc1, 
-            allScenarios[i].inc2, 
-            allScenarios[i].inc3, 
-            allScenarios[i].inc4, 
-            allScenarios[i].inc5, 
-            allScenarios[i].inc6, 
-            allScenarios[i].inc7, 
-            allScenarios[i].inc8, 
-            allScenarios[i].inc9];
-          // store income decile from selected scenario
-          decileSelected = allScenarios[i].decile;
-          // draw income graph
-          // drawIncome();
         };
       };
     };
   });
-
 
 
 // **********************
@@ -580,6 +556,7 @@ function drawIdeal() {
   dataIdeal = [
     { needs: data.fifty, wants: data.thirty, saves: data.twenty }
   ];
+  console.log(dataIdeal);
 
   var stack = d3.stack()
     .keys(["needs", "wants", "saves"])
@@ -587,6 +564,7 @@ function drawIdeal() {
     .offset(d3.stackOffsetNone);
 
   var dataset = stack(dataIdeal);
+  console.log(dataset);
 
   // text labels separated from stack, using same key...
   var textLabels1 = {};
@@ -623,7 +601,7 @@ function drawIdeal() {
     });
 
   var rects = groups.selectAll("rect")
-    .data(function(d) { return d; })
+    .data(function(d) { console.log(d); return d; })
     .enter().append("rect")
       .attr("x", function(d) { return yScale(d[0]); })
       .attr("y", 168) // value shifts chart down to make room for annotations
