@@ -898,6 +898,8 @@ function drawActual() {
   function getVerdict() {
     if (data.needs > data.takehome) {
      setTimeout(function() {
+        $(".verdict").css("border-top", "#B43236 3px solid");
+        $(".verdict").css("border-bottom", "#B43236 3px solid");        
         $(".verdict .icon").html("<img src='img/verdict-3.svg' />");
         $(".verdict .text")
         .html("<h3>Following the 50/30/20 guideline is <span class='red'>virtually impossible</span> in this situation. </h3> <span class='strong'>The average needs of this household exceed the income.</span> This harms the household’s ability to not only save for the future, but take care of their necessities.");
@@ -908,6 +910,8 @@ function drawActual() {
     }
     else if (data.needs > data.fifty) {
       setTimeout(function() {
+        $(".verdict").css("border-top", "#B43236 3px solid");
+        $(".verdict").css("border-bottom", "#B43236 3px solid");  
         $(".verdict .icon").html("<img src='img/verdict-2.svg' />");
         $(".verdict .text")
         .html("<h3>Following the 50/30/20 guideline <span class='red'>isn't possible</span> in this situation. </h3>The average needs of this household exceed 50% of the income by <span class='strong'>" + 
@@ -919,6 +923,8 @@ function drawActual() {
     }
     else {
      setTimeout(function() {
+        $(".verdict").css("border-top", "#FAAF40 3px solid");
+        $(".verdict").css("border-bottom", "#FAAF40 3px solid");        
         $(".verdict .icon").html("<img src='img/verdict-1.svg' />");
         $(".verdict .text")
         .html("<h3>Following the 50/30/20 guideline is <span class='yellow'>probably possible</span> in this situation.</h3> <span class='strong'>The average needs of this household are under 50%.</span> The household needs to stay within the average, and control their spending on their wants.");
