@@ -1172,7 +1172,7 @@ $("#needs-copy1").css("display", "block");
 $(".hidey").css("display", "none");
 
 // listen for replay-cue click and reset needs section
-d3.selectAll('.replaycue')
+d3.selectAll('.replay-box')
   .on('click', function() {
     // hide all step links in the "needs" section, except the first one
     $(".step-link").css("display", "none");
