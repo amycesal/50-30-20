@@ -1117,7 +1117,9 @@ icon: "childcare.svg"
   var textLabelOne = groups.selectAll("text")
     .data(dataset)
     .enter().append("text")
-      .attr("x", function(d) { return yScale(d[0][0])+4; })      // value adjusts horizontal position of labels
+      .attr("x", function(d) { 
+        if (yScale(d[0][0])+4 > yScale(data.lo + data.needs)-200) return yScale(data.lo + data.needs)-200; // kludge to keep labels from exiting svg
+        else return yScale(d[0][0])+4; })      // +4 value adjusts horizontal position of labels relative to rects
       .attr("y", function(d, i) { return barHeight-60; })     // value adjusts vertical position of labels
       .attr("fill", "#231f20")
       .attr("class", "needs-label")
