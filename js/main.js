@@ -262,19 +262,19 @@ function runScenario() {
 
 // captures the three pre-set scenarios
 function runScenario1() {
-  thisCity = "Baltimore, MD";
+  thisCity = "Boise, MD";
   thisHousehold = "married couple 2 children";
   runScenario();
 }
 
 function runScenario2() {
-  thisCity = "St. Louis, MO";
+  thisCity = "Chicago, IL";
   thisHousehold = "single man";
   runScenario();
 }
 
 function runScenario3() {
-  thisCity = "Oakland, CA";
+  thisCity = "Philadelphia, PA";
   thisHousehold = "single mother, 1 child";
   runScenario();
 }
