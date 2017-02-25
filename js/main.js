@@ -359,6 +359,8 @@ d3.selectAll('select')
         };
       };
     };
+    if (document.getElementById("city").selectedIndex != 0 && document.getElementById("household").selectedIndex != 0) $('input.openExplore').css("display", "block");
+    else $('input.openExplore').css("display", "none");
   });
 
 
@@ -1185,7 +1187,6 @@ d3.selectAll('.replaycue')
     d3.select("#graph-needs svg").remove()
     drawNeeds();
     dispatch.call("sec-needs"); // re-draws that first rect
-
 
 });
 

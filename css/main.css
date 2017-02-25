@@ -14,7 +14,7 @@
 
 .scenario, .explain, .verdict, .ideal, .needs, .end {opacity:0;}
 
-.ideal, .needs, .end {display:none;}
+.ideal, .needs, .end, .hidden {display:none;}
 
 
 /* LAYOUT */
