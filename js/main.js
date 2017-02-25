@@ -40,8 +40,6 @@ d3.csv("csv/data.csv", function(error, csv) {
   data = csv; // pass csv values to the global 'data' object
   allScenarios = csv; // also pass them to this object that -doesn't- get changed in scenario setup
 
-  console.log(data);
-
   getUniques('city');      
   getUniques('household');
   getUniques('level');
@@ -55,7 +53,7 @@ function getUniques(dd) {
   var unique = {};
   var distinct = [];
   for (var i in data) {
-    if (typeof(unique[data[i][dd]]) == "undefined") {
+    if (typeof(unique[data[i][dd]]) == "undefined" && data[i][dd] != null) {
       distinct.push(data[i][dd]);
     }
     unique[data[i][dd]] = 0;
@@ -262,7 +260,7 @@ function runScenario() {
 
 // captures the three pre-set scenarios
 function runScenario1() {
-  thisCity = "Boise, MD";
+  thisCity = "Boise, ID";
   thisHousehold = "married couple 2 children";
   runScenario();
 }
