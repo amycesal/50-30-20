@@ -58,6 +58,14 @@ function getUniques(dd) {
     }
     unique[data[i][dd]] = 0;
   }
+
+  if (distinct.length > 3 && distinct.length < 10) { // kludge to only act on households
+    distinct.sort(function(a, b) {
+      return b.length - a.length;
+    });
+  }
+  console.log(distinct);
+
   $('#' + dd + ' option').each(function(i) {     // clear dropdown options
     if (i > 0) {
       $(this).remove();  
