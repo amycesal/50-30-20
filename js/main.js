@@ -59,12 +59,11 @@ function getUniques(dd) {
     unique[data[i][dd]] = 0;
   }
 
-  if (distinct.length > 3 && distinct.length < 10) { // kludge to only act on households
+  if (distinct.length > 3 && distinct.length < 10) { // kludge to only sort on households
     distinct.sort(function(a, b) {
       return b.length - a.length;
     });
   }
-  console.log(distinct);
 
   $('#' + dd + ' option').each(function(i) {     // clear dropdown options
     if (i > 0) {
@@ -73,7 +72,10 @@ function getUniques(dd) {
   });
   var option = '';
   for (var i = 0; i < distinct.length; i++) {   // populate dropdown with unique values
-    option += '<option value="' + distinct[i] + '">' + distinct[i] + '</option>';
+    if (distinct.length < 10) { // kludge to only capitalize on households and income levels
+      option += '<option value="' + distinct[i] + '">' + toTitleCase(distinct[i]) + '</option>';
+    }
+    else option += '<option value="' + distinct[i] + '">' + distinct[i] + '</option>';
   }
   $('#' + dd).append(option);    
 };
@@ -82,6 +84,11 @@ function getUniques(dd) {
 // ********************
 // *** MISC HELPERS ***
 // ********************
+
+function toTitleCase(str) {
+  return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
+
 
 // update various display numbers with the correct values for selected scenario
 function addNumbers() {
