@@ -261,7 +261,7 @@ function runScenario() {
 // captures the three pre-set scenarios
 function runScenario1() {
   thisCity = "Boise, ID";
-  thisHousehold = "married couple 2 children";
+  thisHousehold = "married couple, 2 children";
   runScenario();
 }
 
